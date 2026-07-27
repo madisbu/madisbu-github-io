@@ -1,0 +1,21 @@
+---
+const navItems = [
+  { label: "Projects", href: "/#projects" },
+  { label: "About", href: "/about" },
+];
+---
+
+<header class="border-b border-border bg-body">
+  <div class="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-6">
+    <a href="/" class="text-lg font-semibold tracking-tight text-text-dark">YourName</a>
+    <nav class="flex items-center gap-6 text-sm text-text-light">
+      {
+        navItems.map((item) => (
+          <a href={item.href} class="hover:text-primary">
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
