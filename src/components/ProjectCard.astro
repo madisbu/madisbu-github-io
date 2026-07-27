@@ -1,0 +1,18 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  image: string;
+  slug: string;
+}
+
+const { title, description, image, slug } = Astro.props;
+---
+
+<article class="rounded-lg border border-border bg-body p-4 transition-shadow duration-200 hover:shadow-sm">
+  <a href={slug} class="block">
+    <img src={image} alt={title} class="mb-4 h-48 w-full rounded object-cover" loading="lazy" />
+    <h3 class="mb-2 text-xl text-text-dark">{title}</h3>
+    <p class="text-sm text-text-light">{description}</p>
+  </a>
+</article>
