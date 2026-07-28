@@ -1,21 +1,174 @@
 ---
 const navItems = [
+  { label: "Home", href: "/" },
   { label: "Projects", href: "/#projects" },
   { label: "About", href: "/about" },
+  { label: "Resume", href: "/resume" },
+  { label: "Contact", href: "/contact" },
 ];
+
+const githubUrl = "https://github.com/madisbu";
+
+const { pathname } = Astro.url;
+const isActive = (href: string) => {
+  if (href === "/") return pathname === "/";
+  return pathname === href;
+};
 ---
 
 <header class="border-b border-border bg-body">
-  <div class="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-6">
-    <a href="/" class="text-lg font-semibold tracking-tight text-text-dark">YourName</a>
-    <nav class="flex items-center gap-6 text-sm text-text-light">
+  <div class="relative mx-auto flex w-full max-w-5xl items-center px-4 py-3 sm:py-4">
+    <!-- Logo -->
+    <a href="/" class="inline-flex shrink-0 items-center" aria-label="Mabux Home">
+      <picture>
+        <source srcset="/mabux_logo_transparent.webp" type="image/webp" />
+        <img src="/mabux_logo.png" alt="Mabux" class="h-20 w-auto sm:h-20" loading="eager" decoding="async" />
+      </picture>
+    </a>
+
+    <!-- Desktop: centered nav -->
+    <nav class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-xs font-bold tracking-widest uppercase sm:flex">
       {
         navItems.map((item) => (
-          <a href={item.href} class="hover:text-primary">
+          <a
+            href={item.href}
+            class:list={[
+              "rounded px-2 py-1 transition-colors",
+              isActive(item.href)
+                ? "bg-[#EFF93B] text-black"
+                : "text-text-dark hover:text-primary",
+            ]}
+          >
             {item.label}
           </a>
         ))
       }
     </nav>
+
+    <!-- Right side -->
+    <div class="ml-auto flex items-center gap-3">
+      <!-- Desktop: My GitHub button -->
+      <a
+        href={githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden items-center rounded-sm border border-text-light px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-text-dark transition-colors hover:bg-text-dark hover:text-body sm:inline-flex"
+      >
+        My GitHub
+      </a>
+
+      <!-- Mobile: hamburger button -->
+      <button
+        id="mobile-menu-open"
+        class="sm:hidden p-2 text-text-dark"
+        aria-label="Open menu"
+      >
+        <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
+          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+        </svg>
+      </button>
+    </div>
   </div>
 </header>
+
+<!-- Mobile: full-screen overlay menu -->
+<div
+  id="mobile-menu-overlay"
+  class="fixed inset-0 z-50 hidden flex-col bg-body"
+>
+  <!-- Close button -->
+  <button
+    id="mobile-menu-close"
+    class="absolute right-5 top-5 text-2xl font-light text-text-dark"
+    aria-label="Close menu"
+  >
+    ✕
+  </button>
+
+  <!-- Nav items -->
+  <nav class="flex flex-1 flex-col items-center justify-center gap-4">
+    <p class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">Menu</p>
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            "w-64 rounded px-6 py-3 text-center text-sm font-bold tracking-widest uppercase transition-colors",
+            isActive(item.href)
+              ? "bg-[#EFF93B] text-black"
+              : "text-text-dark hover:bg-light",
+          ]}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</div>
+
+<script>
+  const openBtn = document.getElementById("mobile-menu-open");
+  const closeBtn = document.getElementById("mobile-menu-close");
+  const overlay = document.getElementById("mobile-menu-overlay")!;
+
+  const focusableSelectors = 'a[href], button:not([disabled])';
+
+  const openMenu = () => {
+    overlay.classList.remove("hidden");
+    overlay.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    // Move focus to the close button when overlay opens
+    (overlay.querySelector("#mobile-menu-close") as HTMLElement)?.focus();
+  };
+
+  const closeMenu = () => {
+    overlay.classList.add("hidden");
+    overlay.classList.remove("flex");
+    document.body.style.overflow = "";
+    // Return focus to the hamburger button
+    (openBtn as HTMLElement)?.focus();
+  };
+
+  openBtn?.addEventListener("click", openMenu);
+  closeBtn?.addEventListener("click", closeMenu);
+
+  overlay?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  // Close on Escape key — named handler so it can be removed
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
+      closeMenu();
+    }
+  };
+
+  document.addEventListener("keydown", onKeyDown);
+
+  // Clean up before Astro View Transitions swap to avoid stacking listeners
+  document.addEventListener("astro:before-swap", () => {
+    document.removeEventListener("keydown", onKeyDown);
+  }, { once: true });
+
+  // Focus trap: keep Tab/Shift+Tab inside the overlay while it is open
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab") return;
+    const focusable = Array.from(
+      overlay.querySelectorAll<HTMLElement>(focusableSelectors)
+    ).filter((el) => !el.closest("[hidden]"));
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+</script>

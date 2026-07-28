@@ -6,12 +6,23 @@ import "../styles/global.css";
 export interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  canonicalUrl?: string;
 }
 
+const siteName = "Mabux";
+const baseUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://www.mabux.me";
+
 const {
-  title = "YourName",
+  title = siteName,
   description = "Personal site built with a lean Astroplate-inspired design.",
+  ogImage,
+  canonicalUrl,
 } = Astro.props;
+
+const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
+const resolvedCanonicalUrl = canonicalUrl ?? new URL(Astro.url.pathname, baseUrl).toString();
+const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefined;
 ---
 
 <!doctype html>
@@ -19,10 +30,28 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600&family=Signika:wght@500;700&display=swap"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={resolvedCanonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={resolvedCanonicalUrl} />
+    {resolvedOgImage && <meta property="og:image" content={resolvedOgImage} />}
+    <meta name="twitter:card" content={resolvedOgImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={resolvedTitle} />
+    <meta name="twitter:description" content={description} />
+    {resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
   </head>
   <body class="flex min-h-screen flex-col">
     <Header />
