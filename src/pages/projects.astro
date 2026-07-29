@@ -22,13 +22,14 @@ const projects = [
     slug: "/projects/project-three",
   },
 ];
+const pageDescription = "A selection of things I've built.";
 ---
 
-<Layout>
+<Layout title="Projects" description={pageDescription}>
   <section class="mb-14 max-w-2xl">
     <p class="mb-4 text-sm tracking-wide text-text-light">WORK</p>
     <h1 class="mb-4 text-3xl font-black text-text-dark md:text-5xl">Projects</h1>
-    <p class="text-text-light">A selection of things I've built.</p>
+    <p class="text-text-light">{pageDescription}</p>
   </section>
 
   <section>
