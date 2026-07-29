@@ -1,4 +1,5 @@
 ---
+import BackToTop from "../components/BackToTop.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import "../styles/global.css";
@@ -55,9 +56,11 @@ const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefin
   </head>
   <body class="flex min-h-screen flex-col">
     <Header />
-    <main class="mx-auto w-full max-w-5xl grow px-4 py-12">
+    <main class="mx-auto w-full max-w-5xl grow px-4 pt-12 pb-24 sm:py-12">
       <slot />
     </main>
     <Footer />
+    <BackToTop />
   </body>
 </html>
+
