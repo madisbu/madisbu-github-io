@@ -29,7 +29,7 @@
 <style>
   .back-to-top-wrap {
     position: fixed;
-    bottom: 2rem;
+    bottom: 3.5rem;
     right: 2rem;
     display: flex;
     align-items: center;
@@ -88,10 +88,10 @@
     white-space: nowrap;
   }
 
-  /* Mobile: larger tap target, above sticky footer, label hidden */
-  @media (max-width: 639px) {
+  /* Touch devices: larger tap target, above footer, label hidden */
+  @media (hover: none) and (pointer: coarse) {
     .back-to-top-wrap {
-      bottom: 5.5rem;
+      bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
       right: 1rem;
       gap: 0;
     }

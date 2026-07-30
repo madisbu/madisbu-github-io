@@ -17,17 +17,17 @@ const isActive = (href: string) => {
 ---
 
 <header class="border-b border-border bg-body">
-  <div class="relative mx-auto flex w-full max-w-5xl items-center px-4 py-3 sm:py-4">
+  <div class="header-shell relative mx-auto flex w-full max-w-5xl items-center px-4 py-3 sm:py-4">
     <!-- Logo -->
     <a href="/" class="inline-flex shrink-0 items-center" aria-label="Mabux Home">
       <picture>
         <source srcset="/mabux_logo_transparent.webp" type="image/webp" />
-        <img src="/mabux_logo.png" alt="Mabux" class="h-20 w-auto sm:h-20" loading="eager" decoding="async" />
+        <img src="/mabux_logo.png" alt="Mabux" class="brand-logo h-20 w-auto sm:h-20" loading="eager" decoding="async" />
       </picture>
     </a>
 
     <!-- Desktop: centered nav -->
-    <nav class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-sm font-bold tracking-widest uppercase sm:flex">
+    <nav class="desktop-nav absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-sm font-bold tracking-widest uppercase sm:flex">
       {
         navItems.map((item) => (
           <a
@@ -52,7 +52,7 @@ const isActive = (href: string) => {
         href={githubUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="hidden items-center gap-2 rounded-sm border border-text-light px-4 py-1.5 text-sm font-bold tracking-wide text-text-dark transition-colors hover:bg-text-dark hover:text-body sm:inline-flex"
+        class="desktop-github hidden items-center gap-2 rounded-sm border border-text-light px-4 py-1.5 text-sm font-bold tracking-wide text-text-dark transition-colors hover:bg-text-dark hover:text-body sm:inline-flex"
       >
         <svg class="h-4 w-4 fill-current" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 0-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
@@ -63,8 +63,10 @@ const isActive = (href: string) => {
       <!-- Mobile: hamburger button -->
       <button
         id="mobile-menu-open"
-        class="sm:hidden p-2 text-text-dark"
+        class="mobile-menu-toggle p-2 text-text-dark sm:hidden"
         aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu-overlay"
       >
         <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
           <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
@@ -78,6 +80,10 @@ const isActive = (href: string) => {
 <div
   id="mobile-menu-overlay"
   class="fixed inset-0 z-50 hidden flex-col bg-body"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="mobile-menu-title"
+  aria-hidden="true"
 >
   <!-- Close button -->
   <button
@@ -90,7 +96,7 @@ const isActive = (href: string) => {
 
   <!-- Nav items -->
   <nav class="flex flex-1 flex-col items-center justify-center gap-4">
-    <p class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">Menu</p>
+    <p id="mobile-menu-title" class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">Menu</p>
     {
       navItems.map((item) => (
         <a
@@ -125,6 +131,47 @@ const isActive = (href: string) => {
   </nav>
 </div>
 
+<style>
+  @media (min-width: 640px) and (max-width: 820px) {
+    .header-shell {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .brand-logo {
+      height: 4.25rem;
+    }
+
+    .desktop-nav {
+      gap: 1.6rem;
+      font-size: 0.8125rem;
+    }
+
+    .desktop-nav a {
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+    }
+
+    .desktop-github {
+      gap: 0.45rem;
+      padding-left: 0.7rem;
+      padding-right: 0.7rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 600px) {
+    .desktop-nav,
+    .desktop-github {
+      display: none;
+    }
+
+    .mobile-menu-toggle {
+      display: inline-flex;
+    }
+  }
+</style>
+
 <script>
   const openBtn = document.getElementById("mobile-menu-open");
   const closeBtn = document.getElementById("mobile-menu-close");
@@ -135,6 +182,8 @@ const isActive = (href: string) => {
   const openMenu = () => {
     overlay.classList.remove("hidden");
     overlay.classList.add("flex");
+    openBtn?.setAttribute("aria-expanded", "true");
+    overlay.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
     // Move focus to the close button when overlay opens
     (overlay.querySelector("#mobile-menu-close") as HTMLElement)?.focus();
@@ -143,6 +192,8 @@ const isActive = (href: string) => {
   const closeMenu = () => {
     overlay.classList.add("hidden");
     overlay.classList.remove("flex");
+    openBtn?.setAttribute("aria-expanded", "false");
+    overlay.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
     // Return focus to the hamburger button
     (openBtn as HTMLElement)?.focus();
@@ -191,6 +242,3 @@ const isActive = (href: string) => {
     }
   });
 </script>
-
-
-
