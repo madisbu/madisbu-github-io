@@ -1,0 +1,194 @@
+---
+export interface Props {
+  greetings?: string[];
+  name?: string;
+}
+
+const {
+  greetings = ["Hello...", "你好...", "नमस्ते...", "Hola...", "مرحبا...", "Bonjour...", "নমস্কার...", "Olá...", "Tere..."],
+  name = "I'm Madis !",
+} = Astro.props;
+---
+
+<h1
+  class="text-balance text-center text-2xl font-black leading-[1.05] tracking-tight text-text-dark sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
+>
+  <span class="sr-only">{greetings[0]} {name} Product designer from Estonia</span>
+  <span class="inline-flex flex-wrap justify-center items-baseline gap-x-2 gap-y-1" data-typing-root>
+    <span class="hero-sentence__typing">
+      <span class="hero-sentence__typing-word" data-typing-word></span>
+    </span>
+    <span class="whitespace-nowrap">{name}</span>
+    <span>
+      <span class="hero-sentence__underline">Product designer</span> from Estonia
+    </span>
+  </span>
+</h1>
+
+<style>
+  .hero-sentence__typing {
+    display: inline;
+  }
+
+  .hero-sentence__typing-word {
+    display: inline;
+    white-space: pre;
+  }
+
+  .hero-sentence__caret {
+    display: inline-block;
+    width: 0.07em;
+    height: 0.85em;
+    margin-left: 0.05em;
+    background: currentColor;
+    vertical-align: -0.08em;
+    animation: hero-sentence-caret 1s steps(1) infinite;
+  }
+
+  /* Hand-drawn underline */
+  .hero-sentence__underline {
+    position: relative;
+    display: inline;
+    padding-bottom: 0.22em;
+  }
+
+  .hero-sentence__underline::after {
+    content: "";
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    bottom: 0;
+    height: 0.25em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M1,7 C8,3 14,9 26,6 C38,3 44,8 58,5.5 C72,3 80,8 96,6 C112,4 120,8.5 138,6 C155,3.5 163,8 180,5.5 C190,4 196,7 199,6' stroke='%23EFF93B' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    animation: draw-underline 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards 1.2s;
+  }
+
+  @keyframes draw-underline {
+    to { background-size: 100% 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-sentence__underline::after {
+      animation: none;
+      background-size: 100% 100%;
+    }
+  }
+
+  @keyframes hero-sentence-caret {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-sentence__caret {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const typeGreeting = (root: HTMLElement) => {
+    if (root.dataset.initialized === "true") return;
+    root.dataset.initialized = "true";
+
+    const word = root.querySelector<HTMLElement>("[data-typing-word]");
+    if (!word) return;
+
+    const greetings = Array.from(root.querySelectorAll<HTMLElement>("[data-typing-greeting]"))
+      .map((el) => el.textContent?.trim() ?? "")
+      .filter(Boolean);
+
+    const fallbackGreetings = [
+      "Hello...",
+      "你好...",
+      "नमस्ते...",
+      "Hola...",
+      "مرحبا...",
+      "Bonjour...",
+      "নমস্কার...",
+      "Olá...",
+      "Tere...",
+    ];
+
+    const sequence = greetings.length > 0 ? greetings : fallbackGreetings;
+
+    // Create a persistent caret element
+    const caret = document.createElement("span");
+    caret.className = "hero-sentence__caret";
+    caret.setAttribute("aria-hidden", "true");
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      word.textContent = sequence[0];
+      return;
+    }
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let timer: number | undefined;
+
+    const typeDelay = 140;
+    const deleteDelay = 80;
+    const holdDelay = 1600;
+
+    const render = (text: string) => {
+      // Set text node then re-append caret so it always follows the last character
+      word.textContent = text;
+      word.appendChild(caret);
+    };
+
+    const tick = () => {
+      const current = sequence[wordIndex];
+
+      if (!deleting) {
+        charIndex += 1;
+        render(current.slice(0, charIndex));
+
+        if (charIndex >= current.length) {
+          deleting = true;
+          timer = window.setTimeout(tick, holdDelay);
+          return;
+        }
+
+        timer = window.setTimeout(tick, typeDelay);
+        return;
+      }
+
+      charIndex -= 1;
+      render(current.slice(0, charIndex));
+
+      if (charIndex <= 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % sequence.length;
+        timer = window.setTimeout(tick, 180);
+        return;
+      }
+
+      timer = window.setTimeout(tick, deleteDelay);
+    };
+
+    render("");
+    timer = window.setTimeout(tick, 300);
+
+    const cleanup = () => {
+      if (timer) window.clearTimeout(timer);
+    };
+
+    window.addEventListener("pagehide", cleanup, { once: true });
+  };
+
+  const boot = () => {
+    document.querySelectorAll<HTMLElement>("[data-typing-root]").forEach(typeGreeting);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
+
+  document.addEventListener("astro:page-load", boot);
+</script>

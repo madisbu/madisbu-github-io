@@ -1,15 +1,58 @@
 ---
+import HeroSentence from "../components/HeroSentence.astro";
 import Layout from "../layouts/Layout.astro";
+
+const pageDescription =
+  "I build fast, focused web products — clean interfaces, minimal dependencies, and sharp attention to detail.";
+const heroAlt = "Portrait of Madis";
 ---
 
-<Layout description="I build fast, focused web products — clean interfaces, minimal dependencies, and sharp attention to detail.">
-  <section class="mb-14 max-w-2xl">
-    <p class="mb-4 text-sm tracking-wide text-text-light">FREELANCE DEVELOPER</p>
-    <h1 class="mb-4 text-3xl font-black text-text-dark md:text-6xl">
-      I build fast, focused web products.
-    </h1>
-    <p class="text-text-light">
-      Clean interfaces, minimal dependencies, and sharp attention to detail — from concept to deployment.
-    </p>
+<Layout description={pageDescription}>
+  <section class="relative flex min-h-[72svh] flex-col sm:min-h-[80svh]">
+    <div class="pt-4 sm:pt-6 lg:pt-8">
+      <HeroSentence />
+    </div>
+
+    <div class="relative mt-auto -mb-24 sm:-mb-12">
+      <picture>
+        <source
+          type="image/avif"
+          srcset="/images/hero-480.avif 480w, /images/hero-768.avif 768w, /images/hero-1200.avif 1200w"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 64rem"
+        />
+        <source
+          type="image/webp"
+          srcset="/images/hero-480.webp 480w, /images/hero-768.webp 768w, /images/hero-1200.webp 1200w"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 64rem"
+        />
+        <img
+          src="/images/hero-1200.webp"
+          srcset="/images/hero-480.webp 480w, /images/hero-768.webp 768w, /images/hero-1200.webp 1200w"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 64rem"
+          width="1200"
+          height="670"
+          alt={heroAlt}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          class="w-full"
+        />
+      </picture>
+
+      <div class="pointer-events-none absolute inset-x-0 top-[58%] flex -translate-y-1/2 justify-between px-2 sm:px-4">
+        <a
+          href="/projects"
+          class="pointer-events-auto inline-flex min-h-11 w-[44%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:px-5 sm:text-sm"
+        >
+          VIEW PROJECTS
+        </a>
+        <a
+          href="/contact"
+          class="pointer-events-auto inline-flex min-h-11 w-[44%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:px-5 sm:text-sm"
+        >
+          LET&apos;S TALK
+        </a>
+      </div>
+    </div>
   </section>
 </Layout>
