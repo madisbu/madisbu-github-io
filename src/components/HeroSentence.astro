@@ -10,20 +10,24 @@ const {
 } = Astro.props;
 ---
 
-<h1
-  class="text-balance text-center text-2xl font-black leading-[1.05] tracking-tight text-text-dark sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
->
-  <span class="sr-only">{greetings[0]} {name} Product designer from Estonia</span>
-  <span class="inline-flex flex-wrap justify-center items-baseline gap-x-2 gap-y-1" data-typing-root>
-    <span class="hero-sentence__typing">
-      <span class="hero-sentence__typing-word" data-typing-word></span>
+<div class="text-center">
+  <h1
+    class="mb-2 text-balance text-center text-2xl font-black leading-[1.05] tracking-tight text-text-dark sm:mb-3 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
+  >
+    <span class="sr-only">{greetings[0]} {name} UX Engineer from Estonia</span>
+    <span class="inline-flex flex-col items-center gap-y-1 sm:gap-y-2">
+      <span class="inline-flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1 sm:flex-nowrap" data-typing-root>
+        <span class="hero-sentence__typing">
+          <span class="hero-sentence__typing-word" data-typing-word></span>
+        </span>
+        <span class="sm:whitespace-nowrap">{name}</span>
+      </span>
+      <span class="sm:whitespace-nowrap">
+        <span class="hero-sentence__underline">UX Engineer</span> from Estonia
+      </span>
     </span>
-    <span class="whitespace-nowrap">{name}</span>
-    <span>
-      <span class="hero-sentence__underline">Product designer</span> from Estonia
-    </span>
-  </span>
-</h1>
+  </h1>
+</div>
 
 <style>
   .hero-sentence__typing {
@@ -130,9 +134,9 @@ const {
     let deleting = false;
     let timer: number | undefined;
 
-    const typeDelay = 140;
-    const deleteDelay = 80;
-    const holdDelay = 1600;
+    const typeDelay = 210;
+    const deleteDelay = 120;
+    const holdDelay = 2400;
 
     const render = (text: string) => {
       // Set text node then re-append caret so it always follows the last character
@@ -163,7 +167,7 @@ const {
       if (charIndex <= 0) {
         deleting = false;
         wordIndex = (wordIndex + 1) % sequence.length;
-        timer = window.setTimeout(tick, 180);
+        timer = window.setTimeout(tick, 270);
         return;
       }
 
@@ -171,7 +175,7 @@ const {
     };
 
     render("");
-    timer = window.setTimeout(tick, 300);
+    timer = window.setTimeout(tick, 450);
 
     const cleanup = () => {
       if (timer) window.clearTimeout(timer);
