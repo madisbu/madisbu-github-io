@@ -8,12 +8,12 @@ const heroAlt = "Portrait of Madis";
 ---
 
 <Layout description={pageDescription}>
-  <section class="relative flex min-h-[72svh] flex-col sm:min-h-[80svh]">
+  <section class="relative flex min-h-[68svh] flex-col sm:min-h-[72svh] lg:min-h-[80svh]">
     <div class="pt-4 sm:pt-6 lg:pt-8">
       <HeroSentence />
     </div>
 
-    <div class="relative mt-auto -mb-24 sm:-mb-12">
+    <div class="relative mt-4 md:mt-6 lg:mt-auto lg:-mb-12">
       <picture>
         <source
           type="image/avif"
@@ -39,16 +39,16 @@ const heroAlt = "Portrait of Madis";
         />
       </picture>
 
-      <div class="pointer-events-none absolute inset-x-0 top-[58%] flex -translate-y-1/2 justify-between px-2 sm:px-4">
+      <div class="pointer-events-none absolute inset-x-2 bottom-[5.75rem] flex justify-between gap-2 sm:inset-x-4 sm:bottom-4 md:bottom-6 lg:inset-x-0 lg:top-[58%] lg:bottom-auto lg:-translate-y-1/2 lg:px-2">
         <a
           href="/projects"
-          class="pointer-events-auto inline-flex min-h-11 w-[44%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:px-5 sm:text-sm"
+          class="pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
           VIEW PROJECTS
         </a>
         <a
           href="/contact"
-          class="pointer-events-auto inline-flex min-h-11 w-[44%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:px-5 sm:text-sm"
+          class="pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
           LET&apos;S TALK
         </a>
