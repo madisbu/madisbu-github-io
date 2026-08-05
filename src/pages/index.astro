@@ -8,13 +8,28 @@ const heroAlt = "Portrait of Madis";
 ---
 
 <Layout description={pageDescription}>
-  <section class="relative flex min-h-[68svh] flex-col sm:min-h-[72svh] lg:min-h-[80svh]">
-    <div class="pt-4 sm:pt-6 lg:pt-8">
+  <section class="hero-section relative flex h-full min-h-0 flex-col lg:min-h-[calc(100svh-9rem)]">
+    <div class="hero-copy pt-4 sm:pt-6 lg:pt-8">
       <HeroSentence />
     </div>
 
-    <div class="relative mt-4 md:mt-6 lg:mt-auto lg:-mb-12">
-      <picture>
+    <div class="hero-cta-mobile mt-auto grid -translate-y-2 grid-cols-2 gap-3 portrait:max-lg:hidden sm:gap-4 lg:hidden">
+      <a
+        href="/projects"
+        class="inline-flex min-h-11 items-center justify-center rounded-md border border-text-dark bg-body px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:px-5 sm:text-sm"
+      >
+        VIEW PROJECTS
+      </a>
+      <a
+        href="/contact"
+        class="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:px-5 sm:text-sm"
+      >
+        LET&apos;S TALK
+      </a>
+    </div>
+
+    <div class="hero-image-wrap relative mt-auto flex shrink-0 items-end justify-center lg:-mb-12">
+      <picture class="hero-image-frame flex h-[clamp(12rem,calc(58svh-12rem),20rem)] w-full items-end justify-center overflow-hidden lg:block lg:h-auto lg:max-w-[56rem] lg:overflow-visible">
         <source
           type="image/avif"
           srcset="/images/hero-480.avif 480w, /images/hero-768.avif 768w, /images/hero-1200.avif 1200w"
@@ -35,11 +50,11 @@ const heroAlt = "Portrait of Madis";
           loading="eager"
           fetchpriority="high"
           decoding="async"
-          class="w-full"
+          class="mobile-hero-image h-full w-auto max-w-none object-contain object-bottom lg:h-auto lg:w-full lg:max-w-full"
         />
       </picture>
 
-      <div class="pointer-events-none absolute inset-x-2 bottom-[5.75rem] flex justify-between gap-2 sm:inset-x-4 sm:bottom-4 md:bottom-6 lg:inset-x-0 lg:top-[58%] lg:bottom-auto lg:-translate-y-1/2 lg:px-2">
+      <div class="hero-cta-overlay pointer-events-none absolute inset-x-2 bottom-[5.75rem] hidden justify-between gap-2 sm:inset-x-4 sm:bottom-4 md:bottom-6 lg:flex lg:inset-x-0 lg:top-[58%] lg:bottom-auto lg:-translate-y-1/2 lg:px-2">
         <a
           href="/projects"
           class="pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
@@ -56,3 +71,98 @@ const heroAlt = "Portrait of Madis";
     </div>
   </section>
 </Layout>
+
+<style>
+  .hero-section {
+    --hero-mobile-image-scale: 1;
+    --hero-tablet-image-scale: 1;
+  }
+
+  @media (min-width: 1367px) {
+    .hero-image-wrap {
+      transform: translateY(calc(-6% - 18px));
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1366px) and (orientation: portrait) {
+    .hero-section {
+      min-height: 0;
+      --hero-tablet-image-scale: 1.05;
+    }
+
+    .hero-copy {
+      transform: translateY(10svh);
+    }
+
+    .hero-image-wrap {
+      margin-bottom: 0;
+    }
+
+    .hero-image-frame {
+      display: flex;
+      height: clamp(18rem, calc(62svh - 12rem), 40rem);
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .mobile-hero-image {
+      height: 100%;
+      width: auto;
+      max-width: none;
+      margin-inline: auto;
+      transform-origin: center bottom;
+      transform: scale(var(--hero-tablet-image-scale));
+    }
+
+    .hero-cta-overlay {
+      display: none;
+    }
+
+  }
+
+  @media (max-width: 389px) and (orientation: portrait) {
+    .hero-image-frame {
+      height: clamp(17rem, calc(70svh - 12rem), 24rem);
+    }
+
+    .mobile-hero-image {
+      width: auto;
+      margin-inline: auto;
+      transform-origin: center bottom;
+      transform: none;
+    }
+  }
+
+  @media (min-width: 340px) and (max-width: 359px) and (orientation: portrait) {
+    .mobile-hero-image {
+      transform: scale(0.96);
+    }
+  }
+
+  @media (min-width: 390px) and (max-width: 639px) and (orientation: portrait) {
+    .hero-copy {
+      margin-top: auto;
+      padding-top: 0;
+      transform: translateY(-10svh);
+    }
+
+    .hero-section {
+      --hero-mobile-image-scale: 1.03;
+    }
+
+    .hero-image-wrap {
+      margin-top: 2rem;
+    }
+
+    .hero-image-frame {
+      height: clamp(18rem, calc(58svh - 12rem), 28rem);
+    }
+
+    .mobile-hero-image {
+      width: auto;
+      margin-inline: auto;
+      transform-origin: center bottom;
+      transform: scale(var(--hero-mobile-image-scale));
+    }
+  }
+</style>

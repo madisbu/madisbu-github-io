@@ -24,6 +24,7 @@ const {
 const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const resolvedCanonicalUrl = canonicalUrl ?? new URL(Astro.url.pathname, baseUrl).toString();
 const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefined;
+const isHomePage = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -54,9 +55,19 @@ const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefin
     <meta name="twitter:description" content={description} />
     {resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
   </head>
-  <body class="flex min-h-screen flex-col">
+  <body
+    class:list={[
+      "flex min-h-screen flex-col",
+      isHomePage && "home-page h-svh overflow-hidden lg:h-auto lg:overflow-visible",
+    ]}
+  >
     <Header />
-    <main class="mx-auto w-full max-w-5xl grow px-4 pt-12 pb-24 sm:py-12">
+    <main
+      class:list={[
+        "mx-auto w-full max-w-5xl grow px-4 pt-12 pb-24 sm:py-12",
+        isHomePage && "home-main flex min-h-0 flex-col overflow-hidden pb-[4.25rem] sm:pb-0 lg:block lg:overflow-visible lg:pb-0",
+      ]}
+    >
       <slot />
     </main>
     <Footer />
@@ -64,3 +75,18 @@ const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefin
   </body>
 </html>
 
+<style is:global>
+  @media (min-width: 640px) and (max-width: 1366px) and (orientation: portrait) {
+    body.home-page {
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    body.home-page main.home-main {
+      display: flex;
+      min-height: 0;
+      overflow: hidden;
+      padding-bottom: 0;
+    }
+  }
+</style>

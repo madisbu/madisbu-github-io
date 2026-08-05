@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const inputPath = path.join(root, 'public', 'main_hero.webp');
 const outputDir = path.join(root, 'public', 'images');
+const outputPrefix = 'hero';
 
 async function removeBg(inputPath) {
   const { data, info } = await sharp(inputPath)
@@ -101,8 +102,8 @@ async function main() {
     const base = sharp(data, { raw: { width, height, channels } })
       .resize({ width: w, withoutEnlargement: true });
 
-    await base.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outputDir, `hero-${w}.avif`));
-    await base.clone().webp({ quality: 85 }).toFile(path.join(outputDir, `hero-${w}.webp`));
+    await base.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outputDir, `${outputPrefix}-${w}.avif`));
+    await base.clone().webp({ quality: 85 }).toFile(path.join(outputDir, `${outputPrefix}-${w}.webp`));
     console.log(`  done ${w}px (avif + webp)`);
   }
 
