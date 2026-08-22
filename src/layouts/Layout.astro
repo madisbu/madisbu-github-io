@@ -58,7 +58,7 @@ const isHomePage = Astro.url.pathname === "/";
   <body
     class:list={[
       "flex min-h-screen flex-col",
-      isHomePage && "home-page h-svh overflow-hidden lg:h-auto lg:overflow-visible",
+      isHomePage && "home-page overflow-hidden lg:overflow-visible",
     ]}
   >
     <Header />
@@ -76,17 +76,131 @@ const isHomePage = Astro.url.pathname === "/";
 </html>
 
 <style is:global>
+  :root {
+    --app-height: 100svh;
+    --header-height: 0px;
+    --mobile-footer-height: 68px;
+  }
+
+  /* General portrait rule — applies to all portrait screens up to 1023px. */
+  @media (max-width: 1023px) and (orientation: portrait) {
+    body.home-page {
+      min-height: var(--app-height);
+      height: var(--app-height);
+    }
+
+    body.home-page main.home-main {
+      min-height: calc(var(--app-height) - var(--header-height));
+      padding-bottom: var(--mobile-footer-height);
+    }
+  }
+
+  /*
+   * Tablet portrait override — intentionally follows the general portrait rule above.
+   * Resets padding-bottom (overlay CTAs are used instead of the mobile footer bar)
+   * and enables flex layout for the main content area.
+   * The 640–1023px range is covered by both blocks; the later rule wins.
+   */
   @media (min-width: 640px) and (max-width: 1366px) and (orientation: portrait) {
     body.home-page {
-      height: 100svh;
+      height: var(--app-height);
       overflow: hidden;
     }
 
     body.home-page main.home-main {
       display: flex;
-      min-height: 0;
+      min-height: calc(var(--app-height) - var(--header-height));
       overflow: hidden;
       padding-bottom: 0;
     }
   }
+
+  @media (min-width: 1024px) {
+    body.home-page {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    body.home-page main.home-main {
+      min-height: 0;
+      padding-bottom: 0;
+    }
+  }
 </style>
+
+<script>
+  type ViewportSyncWindow = Window & typeof globalThis & {
+    __mabuxViewportCleanup?: () => void;
+  };
+
+  const viewportWindow = window as ViewportSyncWindow;
+
+  const syncHomeViewport = () => {
+    const root = document.documentElement;
+    const header = document.querySelector<HTMLElement>("[data-site-header]");
+    const mobileQuickLinks = document.querySelector<HTMLElement>("[data-mobile-quick-links]");
+
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    const headerHeight = header?.getBoundingClientRect().height ?? 0;
+    const mobileFooterHeight =
+      mobileQuickLinks && getComputedStyle(mobileQuickLinks).display !== "none"
+        ? mobileQuickLinks.getBoundingClientRect().height
+        : 0;
+
+    root.style.setProperty("--app-height", `${viewportHeight}px`);
+    root.style.setProperty("--header-height", `${headerHeight}px`);
+    root.style.setProperty("--mobile-footer-height", `${mobileFooterHeight}px`);
+  };
+
+  const initializeHomeViewportSync = () => {
+    viewportWindow.__mabuxViewportCleanup?.();
+
+    const observedElements = [
+      document.querySelector<HTMLElement>("[data-site-header]"),
+      document.querySelector<HTMLElement>("[data-mobile-quick-links]"),
+    ].filter((element): element is HTMLElement => element !== null);
+
+    const onResize = syncHomeViewport;
+    const resizeObserver =
+      typeof ResizeObserver === "function" ? new ResizeObserver(onResize) : undefined;
+
+    observedElements.forEach((element) => resizeObserver?.observe(element));
+
+    // Prefer visualViewport resize (accurate on mobile, e.g. virtual keyboard).
+    // Fall back to window resize only when visualViewport is unavailable.
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", onResize);
+      window.visualViewport.addEventListener("scroll", onResize);
+    } else {
+      window.addEventListener("resize", onResize);
+    }
+    window.addEventListener("orientationchange", onResize);
+
+    syncHomeViewport();
+
+    viewportWindow.__mabuxViewportCleanup = () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", onResize);
+        window.visualViewport.removeEventListener("scroll", onResize);
+      } else {
+        window.removeEventListener("resize", onResize);
+      }
+      window.removeEventListener("orientationchange", onResize);
+      resizeObserver?.disconnect();
+    };
+
+    // Re-register cleanup on every init so SPA navigations are always covered.
+    document.addEventListener("astro:before-swap", () => {
+      viewportWindow.__mabuxViewportCleanup?.();
+    }, { once: true });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeHomeViewportSync, { once: true });
+  } else {
+    initializeHomeViewportSync();
+  }
+
+  // Re-initialize after each Astro view transition.
+  document.addEventListener("astro:after-swap", initializeHomeViewportSync);
+</script>

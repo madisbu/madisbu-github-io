@@ -8,7 +8,7 @@ const heroAlt = "Portrait of Madis";
 ---
 
 <Layout description={pageDescription}>
-  <section class="hero-section relative flex h-full min-h-0 flex-col lg:min-h-[calc(100svh-9rem)]">
+  <section class="hero-section relative flex h-full min-h-0 flex-col">
     <div class="hero-copy pt-4 sm:pt-6 lg:pt-8">
       <HeroSentence />
     </div>
@@ -29,7 +29,7 @@ const heroAlt = "Portrait of Madis";
     </div>
 
     <div class="hero-image-wrap relative mt-auto flex shrink-0 items-end justify-center lg:-mb-12">
-      <picture class="hero-image-frame flex h-[clamp(12rem,calc(58svh-12rem),20rem)] w-full items-end justify-center overflow-hidden lg:block lg:h-auto lg:max-w-[56rem] lg:overflow-visible">
+      <picture class="hero-image-frame flex w-full items-end justify-center overflow-hidden lg:block lg:h-auto lg:max-w-[56rem] lg:overflow-visible">
         <source
           type="image/avif"
           srcset="/images/hero-480.avif 480w, /images/hero-768.avif 768w, /images/hero-1200.avif 1200w"
@@ -76,9 +76,26 @@ const heroAlt = "Portrait of Madis";
   .hero-section {
     --hero-mobile-image-scale: 1;
     --hero-tablet-image-scale: 1;
+    min-height: 100%;
+  }
+
+  @media (max-width: 1366px) and (orientation: portrait) {
+    .hero-section {
+      --hero-available-height: calc(
+        var(--app-height, 100svh) - var(--header-height, 0px) - var(--mobile-footer-height, 0px)
+      );
+    }
+
+    .hero-image-frame {
+      height: clamp(12rem, calc(var(--hero-available-height) - 16rem), 20rem);
+    }
   }
 
   @media (min-width: 1367px) {
+    .hero-section {
+      min-height: calc(100svh - 9rem);
+    }
+
     .hero-image-wrap {
       transform: translateY(calc(-6% - 18px));
     }
@@ -86,12 +103,11 @@ const heroAlt = "Portrait of Madis";
 
   @media (min-width: 640px) and (max-width: 1366px) and (orientation: portrait) {
     .hero-section {
-      min-height: 0;
       --hero-tablet-image-scale: 1.05;
     }
 
     .hero-copy {
-      transform: translateY(10svh);
+      transform: translateY(clamp(4.5rem, 10vw, 8rem));
     }
 
     .hero-image-wrap {
@@ -100,7 +116,7 @@ const heroAlt = "Portrait of Madis";
 
     .hero-image-frame {
       display: flex;
-      height: clamp(18rem, calc(62svh - 12rem), 40rem);
+      height: clamp(18rem, calc(var(--hero-available-height) - 12rem), 40rem);
       max-width: 100%;
       overflow: hidden;
     }
@@ -122,7 +138,7 @@ const heroAlt = "Portrait of Madis";
 
   @media (max-width: 389px) and (orientation: portrait) {
     .hero-image-frame {
-      height: clamp(17rem, calc(70svh - 12rem), 24rem);
+      height: clamp(17rem, calc(var(--hero-available-height) - 10rem), 24rem);
     }
 
     .mobile-hero-image {
@@ -143,7 +159,7 @@ const heroAlt = "Portrait of Madis";
     .hero-copy {
       margin-top: auto;
       padding-top: 0;
-      transform: translateY(-10svh);
+      transform: translateY(clamp(-5.5rem, -12vw, -4rem));
     }
 
     .hero-section {
@@ -155,7 +171,7 @@ const heroAlt = "Portrait of Madis";
     }
 
     .hero-image-frame {
-      height: clamp(18rem, calc(58svh - 12rem), 28rem);
+      height: clamp(18rem, calc(var(--hero-available-height) - 12rem), 28rem);
     }
 
     .mobile-hero-image {
