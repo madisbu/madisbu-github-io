@@ -33,9 +33,9 @@ const mobileQuickLinks = [
 ];
 ---
 
-<footer class="border-t border-border bg-body">
-  <div class="mx-auto hidden w-full max-w-5xl items-center px-4 py-6 sm:grid sm:grid-cols-3">
-    <p class="text-sm font-[550] text-text-dark">{copyrightText}</p>
+<footer data-site-footer class="border-t border-border bg-body">
+  <div class="desktop-footer-shell mx-auto hidden w-full max-w-5xl items-center px-4 py-6 sm:grid sm:grid-cols-3">
+    <p class="desktop-footer-copy text-sm font-[550] text-text-dark">{copyrightText}</p>
 
     <nav aria-label="Desktop social links" class="justify-self-end sm:col-start-3">
       <ul class="flex items-center gap-4">
@@ -47,7 +47,7 @@ const mobileQuickLinks = [
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={item.label}
-                class="inline-flex h-8 w-8 items-center justify-center rounded bg-dark text-white transition-opacity hover:opacity-85"
+                class="desktop-footer-icon inline-flex h-8 w-8 items-center justify-center rounded bg-dark text-white transition-opacity hover:opacity-85"
               >
                 {item.icon === "linkedin" ? (
                   <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
@@ -97,3 +97,37 @@ const mobileQuickLinks = [
     </nav>
   </div>
 </footer>
+
+<style>
+  @media (min-width: 2560px) {
+    .desktop-footer-shell {
+      max-width: 80rem;
+      padding-block: 2rem;
+    }
+
+    .desktop-footer-copy {
+      font-size: 1rem;
+    }
+
+    .desktop-footer-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .desktop-footer-shell {
+      max-width: 112rem;
+      padding-block: 2.5rem;
+    }
+
+    .desktop-footer-copy {
+      font-size: 1.25rem;
+    }
+
+    .desktop-footer-icon {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+</style>

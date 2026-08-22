@@ -28,42 +28,54 @@ const heroAlt = "Portrait of Madis";
       </a>
     </div>
 
-    <div class="hero-image-wrap relative mt-auto flex shrink-0 items-end justify-center lg:-mb-12">
+    <div class="hero-image-wrap relative mt-auto flex shrink-0 items-end justify-center">
       <picture class="hero-image-frame flex w-full items-end justify-center overflow-hidden lg:block lg:h-auto lg:max-w-[56rem] lg:overflow-visible">
         <source
+          media="(max-width: 1366px) and (orientation: portrait)"
           type="image/avif"
-          srcset="/images/hero-480.avif 480w, /images/hero-768.avif 768w, /images/hero-1200.avif 1200w"
-          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 64rem"
+          srcset="/images/hero-mobile-480.avif 480w, /images/hero-mobile-768.avif 768w"
+          sizes="(max-width: 639px) 100vw, 64rem"
+        />
+        <source
+          media="(max-width: 1366px) and (orientation: portrait)"
+          type="image/webp"
+          srcset="/images/hero-mobile-480.webp 480w, /images/hero-mobile-768.webp 768w"
+          sizes="(max-width: 639px) 100vw, 64rem"
+        />
+        <source
+          type="image/avif"
+          srcset="/images/hero-480.avif 480w, /images/hero-768.avif 768w, /images/hero-1200.avif 1200w, /images/hero-1376.avif 1376w"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, (min-width: 2560px) 86rem, (min-width: 1920px) 72rem, 64rem"
         />
         <source
           type="image/webp"
-          srcset="/images/hero-480.webp 480w, /images/hero-768.webp 768w, /images/hero-1200.webp 1200w"
-          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 64rem"
+          srcset="/images/hero-480.webp 480w, /images/hero-768.webp 768w, /images/hero-1200.webp 1200w, /images/hero-1376.webp 1376w"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, (min-width: 2560px) 86rem, (min-width: 1920px) 72rem, 64rem"
         />
         <img
           src="/images/hero-1200.webp"
-          srcset="/images/hero-480.webp 480w, /images/hero-768.webp 768w, /images/hero-1200.webp 1200w"
-          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 64rem"
+          srcset="/images/hero-480.webp 480w, /images/hero-768.webp 768w, /images/hero-1200.webp 1200w, /images/hero-1376.webp 1376w"
+          sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, (min-width: 2560px) 86rem, (min-width: 1920px) 72rem, 64rem"
           width="1200"
           height="670"
           alt={heroAlt}
           loading="eager"
           fetchpriority="high"
           decoding="async"
-          class="mobile-hero-image h-full w-auto max-w-none object-contain object-bottom lg:h-auto lg:w-full lg:max-w-full"
+          class="mobile-hero-image h-full w-full max-w-full object-contain object-bottom lg:h-auto"
         />
       </picture>
 
       <div class="hero-cta-overlay pointer-events-none absolute inset-x-2 bottom-[5.75rem] hidden justify-between gap-2 sm:inset-x-4 sm:bottom-4 md:bottom-6 lg:flex lg:inset-x-0 lg:top-[58%] lg:bottom-auto lg:-translate-y-1/2 lg:px-2">
         <a
           href="/projects"
-          class="pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
+          class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
           VIEW PROJECTS
         </a>
         <a
           href="/contact"
-          class="pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
+          class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
           LET&apos;S TALK
         </a>
@@ -74,15 +86,14 @@ const heroAlt = "Portrait of Madis";
 
 <style>
   .hero-section {
-    --hero-mobile-image-scale: 1;
-    --hero-tablet-image-scale: 1;
     min-height: 100%;
   }
 
   @media (max-width: 1366px) and (orientation: portrait) {
     .hero-section {
       --hero-available-height: calc(
-        var(--app-height, 100svh) - var(--header-height, 0px) - var(--mobile-footer-height, 0px)
+        var(--app-height, 100svh) - var(--header-height, 0px) -
+          var(--site-footer-height, 0px) - var(--mobile-footer-height, 0px)
       );
     }
 
@@ -91,23 +102,57 @@ const heroAlt = "Portrait of Madis";
     }
   }
 
-  @media (min-width: 1367px) {
+  @media (min-width: 1366px) {
+    .hero-image-frame {
+      max-width: min(62rem, calc(76svh + 16rem));
+    }
+  }
+
+  @media (min-width: 1440px) {
     .hero-section {
       min-height: calc(100svh - 9rem);
     }
 
+    .hero-copy {
+      transform: translateY(clamp(0rem, calc(90svh - 50.625rem), 32rem));
+    }
+
     .hero-image-wrap {
+      margin-bottom: -3rem;
       transform: translateY(calc(-6% - 18px));
     }
   }
 
-  @media (min-width: 640px) and (max-width: 1366px) and (orientation: portrait) {
+  @media (min-width: 1366px) and (max-height: 800px) {
     .hero-section {
-      --hero-tablet-image-scale: 1.05;
+      min-height: 100%;
     }
 
+    .hero-image-frame {
+      max-width: 48rem;
+    }
+
+    .hero-image-wrap {
+      margin-bottom: 0;
+      transform: none;
+    }
+  }
+
+  @media
+    (min-width: 1366px) and (max-width: 1439px) and
+    (min-height: 801px) {
     .hero-copy {
-      transform: translateY(clamp(4.5rem, 10vw, 8rem));
+      transform: translateY(-2rem);
+    }
+
+    .hero-image-frame {
+      max-width: 58.75rem;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1366px) and (orientation: portrait) {
+    .hero-copy {
+      transform: translateY(clamp(0rem, calc(70svh - 44.8rem), 7rem));
     }
 
     .hero-image-wrap {
@@ -116,18 +161,19 @@ const heroAlt = "Portrait of Madis";
 
     .hero-image-frame {
       display: flex;
-      height: clamp(18rem, calc(var(--hero-available-height) - 12rem), 40rem);
+      height: clamp(30rem, calc(var(--hero-available-height) - 10.75rem), 70rem);
       max-width: 100%;
       overflow: hidden;
     }
 
     .mobile-hero-image {
       height: 100%;
-      width: auto;
-      max-width: none;
+      width: 100%;
+      max-width: 100%;
       margin-inline: auto;
-      transform-origin: center bottom;
-      transform: scale(var(--hero-tablet-image-scale));
+      transform: none;
+      object-fit: contain;
+      object-position: center bottom;
     }
 
     .hero-cta-overlay {
@@ -136,22 +182,95 @@ const heroAlt = "Portrait of Madis";
 
   }
 
+  @media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
+    .hero-image-frame {
+      height: clamp(30rem, calc(var(--hero-available-height) - 12.55rem), 70rem);
+    }
+  }
+
+  @media
+    (min-width: 800px) and (max-width: 900px) and
+    (min-height: 1100px) and (orientation: portrait),
+    (min-width: 1000px) and (max-width: 1100px) and
+    (min-height: 1300px) and (orientation: portrait) {
+    .hero-copy {
+      transform: translateY(4rem);
+    }
+  }
+
+  @media
+    (min-width: 1000px) and (max-width: 1100px) and
+    (min-height: 1300px) and (orientation: portrait) {
+    .hero-image-frame .mobile-hero-image {
+      width: 94%;
+      margin-inline: auto;
+    }
+  }
+
+  @media (min-width: 1920px) and (min-height: 1000px) {
+    .hero-copy {
+      transform: translateY(clamp(2rem, 4svh, 4rem));
+    }
+
+    .hero-image-wrap {
+      width: clamp(72rem, calc(211svh - 81.125rem), calc(100vw - 4rem));
+      max-width: calc(100vw - 4rem);
+      align-self: center;
+      transform: translateY(-3rem);
+    }
+
+    .hero-image-frame {
+      max-width: 100%;
+    }
+
+    .hero-cta-overlay {
+      max-width: 64rem;
+      margin-inline: auto;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .hero-cta-overlay {
+      max-width: 80rem;
+    }
+
+    .hero-cta-button {
+      min-height: 3.5rem;
+      max-width: 13rem;
+      font-size: 1rem;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .hero-cta-overlay {
+      max-width: 112rem;
+    }
+
+    .hero-cta-button {
+      min-height: 4rem;
+      max-width: 16rem;
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (min-width: 3840px) and (min-height: 2000px) {
+    .hero-image-wrap {
+      width: min(74vw, 178rem);
+    }
+  }
+
   @media (max-width: 389px) and (orientation: portrait) {
     .hero-image-frame {
       height: clamp(17rem, calc(var(--hero-available-height) - 10rem), 24rem);
     }
 
     .mobile-hero-image {
-      width: auto;
+      width: 100%;
+      max-width: 100%;
       margin-inline: auto;
-      transform-origin: center bottom;
       transform: none;
-    }
-  }
-
-  @media (min-width: 340px) and (max-width: 359px) and (orientation: portrait) {
-    .mobile-hero-image {
-      transform: scale(0.96);
+      object-fit: contain;
+      object-position: center bottom;
     }
   }
 
@@ -160,10 +279,6 @@ const heroAlt = "Portrait of Madis";
       margin-top: auto;
       padding-top: 0;
       transform: translateY(clamp(-5.5rem, -12vw, -4rem));
-    }
-
-    .hero-section {
-      --hero-mobile-image-scale: 1.03;
     }
 
     .hero-image-wrap {
@@ -175,10 +290,12 @@ const heroAlt = "Portrait of Madis";
     }
 
     .mobile-hero-image {
-      width: auto;
+      width: 100%;
+      max-width: 100%;
       margin-inline: auto;
-      transform-origin: center bottom;
-      transform: scale(var(--hero-mobile-image-scale));
+      transform: none;
+      object-fit: contain;
+      object-position: center bottom;
     }
   }
 </style>

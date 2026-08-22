@@ -80,6 +80,7 @@ const isHomePage = Astro.url.pathname === "/";
     --app-height: 100svh;
     --header-height: 0px;
     --mobile-footer-height: 68px;
+    --site-footer-height: 0px;
   }
 
   /* General portrait rule — applies to all portrait screens up to 1023px. */
@@ -90,7 +91,9 @@ const isHomePage = Astro.url.pathname === "/";
     }
 
     body.home-page main.home-main {
-      min-height: calc(var(--app-height) - var(--header-height));
+      min-height: calc(
+        var(--app-height) - var(--header-height) - var(--site-footer-height)
+      );
       padding-bottom: var(--mobile-footer-height);
     }
   }
@@ -109,13 +112,15 @@ const isHomePage = Astro.url.pathname === "/";
 
     body.home-page main.home-main {
       display: flex;
-      min-height: calc(var(--app-height) - var(--header-height));
+      min-height: calc(
+        var(--app-height) - var(--header-height) - var(--site-footer-height)
+      );
       overflow: hidden;
       padding-bottom: 0;
     }
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 1367px), (min-width: 1024px) and (orientation: landscape) {
     body.home-page {
       height: auto;
       min-height: 100vh;
@@ -138,10 +143,12 @@ const isHomePage = Astro.url.pathname === "/";
   const syncHomeViewport = () => {
     const root = document.documentElement;
     const header = document.querySelector<HTMLElement>("[data-site-header]");
+    const footer = document.querySelector<HTMLElement>("[data-site-footer]");
     const mobileQuickLinks = document.querySelector<HTMLElement>("[data-mobile-quick-links]");
 
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
     const headerHeight = header?.getBoundingClientRect().height ?? 0;
+    const siteFooterHeight = footer?.getBoundingClientRect().height ?? 0;
     const mobileFooterHeight =
       mobileQuickLinks && getComputedStyle(mobileQuickLinks).display !== "none"
         ? mobileQuickLinks.getBoundingClientRect().height
@@ -149,6 +156,7 @@ const isHomePage = Astro.url.pathname === "/";
 
     root.style.setProperty("--app-height", `${viewportHeight}px`);
     root.style.setProperty("--header-height", `${headerHeight}px`);
+    root.style.setProperty("--site-footer-height", `${siteFooterHeight}px`);
     root.style.setProperty("--mobile-footer-height", `${mobileFooterHeight}px`);
   };
 
@@ -157,6 +165,7 @@ const isHomePage = Astro.url.pathname === "/";
 
     const observedElements = [
       document.querySelector<HTMLElement>("[data-site-header]"),
+      document.querySelector<HTMLElement>("[data-site-footer]"),
       document.querySelector<HTMLElement>("[data-mobile-quick-links]"),
     ].filter((element): element is HTMLElement => element !== null);
 

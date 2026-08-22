@@ -9,7 +9,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const inputPath = path.join(root, 'public', 'main_hero.webp');
 const outputDir = path.join(root, 'public', 'images');
-const outputPrefix = 'hero';
+const widths = [480, 768, 1200, 1376];
+const mobileWidths = [480, 768];
+
+// Keeps the full portrait and both shoulders, with balanced side padding.
+const mobileCrop = {
+  left: 289,
+  top: 0,
+  width: 816,
+  height: 768,
+};
 
 async function removeBg(inputPath) {
   const { data, info } = await sharp(inputPath)
@@ -96,15 +105,30 @@ async function main() {
   console.log('Removing background…');
   const { data, width, height, channels } = await removeBg(inputPath);
 
-  const widths = [480, 768, 1200];
-
   for (const w of widths) {
     const base = sharp(data, { raw: { width, height, channels } })
       .resize({ width: w, withoutEnlargement: true });
 
-    await base.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outputDir, `${outputPrefix}-${w}.avif`));
-    await base.clone().webp({ quality: 85 }).toFile(path.join(outputDir, `${outputPrefix}-${w}.webp`));
+    await base.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outputDir, `hero-${w}.avif`));
+    await base.clone().webp({ quality: 85 }).toFile(path.join(outputDir, `hero-${w}.webp`));
     console.log(`  done ${w}px (avif + webp)`);
+  }
+
+  if (
+    mobileCrop.left + mobileCrop.width > width ||
+    mobileCrop.top + mobileCrop.height > height
+  ) {
+    throw new Error(`Mobile crop ${JSON.stringify(mobileCrop)} exceeds source dimensions ${width}x${height}`);
+  }
+
+  for (const w of mobileWidths) {
+    const base = sharp(data, { raw: { width, height, channels } })
+      .extract(mobileCrop)
+      .resize({ width: w, withoutEnlargement: true });
+
+    await base.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outputDir, `hero-mobile-${w}.avif`));
+    await base.clone().webp({ quality: 85 }).toFile(path.join(outputDir, `hero-mobile-${w}.webp`));
+    console.log(`  done mobile ${w}px (avif + webp)`);
   }
 
   console.log('Done.');
