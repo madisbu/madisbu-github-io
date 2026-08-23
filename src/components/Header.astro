@@ -160,7 +160,11 @@ const isActive = (href: string) => {
     }
   }
 
-  @media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 600px) {
+  @media
+    (orientation: landscape) and
+    (min-width: 481px) and
+    (max-width: 1023px) and
+    (max-height: 480px) {
     .desktop-nav,
     .desktop-github {
       display: none;
@@ -168,6 +172,47 @@ const isActive = (href: string) => {
 
     .mobile-menu-toggle {
       display: inline-flex;
+    }
+  }
+
+  @media
+    (orientation: landscape) and
+    (min-width: 481px) and
+    (max-width: 1023px) and
+    (max-height: 480px) {
+    .header-shell {
+      padding-block: 0.25rem;
+    }
+
+    .brand-logo {
+      height: 3rem;
+    }
+
+    .mobile-menu-toggle {
+      padding: 0.375rem;
+    }
+
+    #mobile-menu-close {
+      top: 0.75rem;
+      right: 1rem;
+    }
+
+    #mobile-menu-overlay nav {
+      gap: 0.75rem;
+      padding: 2.5rem 1rem 0.75rem;
+      overflow-y: auto;
+    }
+
+    #mobile-menu-title {
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      line-height: 1.25;
+    }
+
+    #mobile-menu-overlay nav > a {
+      padding-block: 0.5rem;
+      font-size: 0.75rem;
+      line-height: 1.25;
     }
   }
 

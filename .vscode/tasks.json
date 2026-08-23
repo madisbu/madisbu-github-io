@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install dependencies",
+      "type": "shell",
+      "command": "npm install",
+      "inAgents": true,
+      "runOptions": {
+        "runOn": "worktreeCreated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Connect Android device",
+      "type": "shell",
+      "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}\\.vscode\\connect-adb.ps1\"",
+      "inAgents": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Start dev server",
+      "type": "shell",
+      "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}\\.vscode\\start-dev.ps1\"",
+      "inAgents": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Prepare Android development",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Connect Android device",
+        "Start dev server"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop dev server",
+      "type": "shell",
+      "command": ".\\node_modules\\.bin\\astro.cmd dev stop",
+      "problemMatcher": []
+    },
+    {
+      "label": "Disconnect Android device",
+      "type": "shell",
+      "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}\\.vscode\\disconnect-adb.ps1\"",
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean up Android development",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Stop dev server",
+        "Disconnect Android device"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

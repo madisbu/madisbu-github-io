@@ -31,6 +31,18 @@ const heroAlt = "Portrait of Madis";
     <div class="hero-image-wrap relative mt-auto flex shrink-0 items-end justify-center">
       <picture class="hero-image-frame flex w-full items-end justify-center overflow-hidden lg:block lg:h-auto lg:max-w-[56rem] lg:overflow-visible">
         <source
+          media="(orientation: landscape) and (min-width: 481px) and (max-width: 1023px) and (max-height: 480px)"
+          type="image/avif"
+          srcset="/images/hero-mobile-480.avif 480w, /images/hero-mobile-768.avif 768w"
+          sizes="50vw"
+        />
+        <source
+          media="(orientation: landscape) and (min-width: 481px) and (max-width: 1023px) and (max-height: 480px)"
+          type="image/webp"
+          srcset="/images/hero-mobile-480.webp 480w, /images/hero-mobile-768.webp 768w"
+          sizes="50vw"
+        />
+        <source
           media="(max-width: 1366px) and (orientation: portrait)"
           type="image/avif"
           srcset="/images/hero-mobile-480.avif 480w, /images/hero-mobile-768.avif 768w"
@@ -87,6 +99,69 @@ const heroAlt = "Portrait of Madis";
 <style>
   .hero-section {
     min-height: 100%;
+  }
+
+  @media
+    (orientation: landscape) and
+    (min-width: 481px) and
+    (max-width: 1023px) and
+    (max-height: 480px) {
+    .hero-section {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: minmax(0, 1fr);
+      column-gap: 1rem;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .hero-copy {
+      display: flex;
+      grid-column: 1;
+      grid-row: 1;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      padding: 0;
+      transform: none;
+    }
+
+    .hero-cta-mobile {
+      display: none;
+    }
+
+    .hero-image-wrap {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: stretch;
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      transform: none;
+    }
+
+    .hero-image-frame {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      overflow: hidden;
+    }
+
+    .mobile-hero-image {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      transform: none;
+    }
+
+    .hero-cta-overlay {
+      display: none;
+    }
   }
 
   @media (max-width: 1366px) and (orientation: portrait) {

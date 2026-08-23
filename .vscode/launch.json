@@ -2,8 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm run dev",
+      "command": ".\\node_modules\\.bin\\astro.cmd dev logs --follow",
       "name": "Development server",
+      "preLaunchTask": "Prepare Android development",
+      "postDebugTask": "Clean up Android development",
       "request": "launch",
       "type": "node-terminal"
     }

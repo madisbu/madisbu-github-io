@@ -99,6 +99,38 @@ const mobileQuickLinks = [
 </footer>
 
 <style>
+  @media
+    (orientation: landscape) and
+    (min-width: 481px) and
+    (max-width: 1023px) and
+    (max-height: 480px) {
+    .desktop-footer-shell {
+      display: none;
+    }
+
+    [data-mobile-quick-links] {
+      display: block;
+    }
+
+    [data-mobile-quick-links] nav {
+      padding-block: 0.25rem;
+    }
+
+    [data-mobile-quick-links] a {
+      gap: 0;
+      padding-block: 0;
+    }
+
+    [data-mobile-quick-links] svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    [data-mobile-quick-links] span {
+      font-size: 0.625rem;
+    }
+  }
+
   @media (min-width: 2560px) {
     .desktop-footer-shell {
       max-width: 80rem;
