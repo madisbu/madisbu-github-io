@@ -1,0 +1,56 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const title = "Car Rental App Redesign";
+const description =
+  "A customer-focused mobile booking experience designed to make finding and reserving the right car feel faster and clearer.";
+---
+
+<Layout title={title} description={description}>
+  <section class="max-w-2xl">
+    <p class="mb-4 text-sm tracking-wide text-text-light">
+      <a href="/projects" class="hover:text-primary">← Projects</a>
+    </p>
+    <p class="mb-3 text-xs font-semibold tracking-[0.14em] text-text-light uppercase">UX/UI Design</p>
+    <h1 class="mb-4 text-3xl font-black text-text-dark md:text-5xl">{title}</h1>
+    <p class="mb-8 text-text-light">{description}</p>
+
+    <img
+      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&auto=format&fit=crop&q=80"
+      alt=""
+      width="1200"
+      height="800"
+      class="mb-10 w-full rounded-lg object-cover"
+      loading="eager"
+    />
+
+    <h2 class="mb-4 text-2xl text-text-dark">Overview</h2>
+    <p class="mb-4 text-text-light">
+      This five-month solo project explored how a car rental app could make the booking process more approachable.
+      The work focused on helping customers compare vehicles, understand costs, and reserve a car in fewer,
+      more predictable steps.
+    </p>
+    <p class="mb-10 text-text-light">
+      The redesign balances speed with the information people need to make a confident decision, from useful filters
+      and clearer price breakdowns to a less disruptive guest checkout experience.
+    </p>
+
+    <h2 class="mb-4 text-2xl text-text-dark">Approach</h2>
+    <p class="mb-4 text-text-light">
+      Competitive analysis and journey mapping surfaced friction around search, pricing, promotions, and payment.
+      Low-fidelity sketches then tested alternative list and detail layouts before the strongest direction moved into
+      a polished interface.
+    </p>
+    <p class="mb-10 text-text-light">
+      An interactive prototype covered the full journey: filtering and comparing cars, selecting extras, reviewing
+      the price breakdown, and completing payment.
+    </p>
+
+    <h2 class="mb-4 text-2xl text-text-dark">Focus areas</h2>
+    <ul class="mb-10 list-disc pl-5 text-text-light space-y-1">
+      <li>User journey and opportunity mapping</li>
+      <li>Information architecture and booking flow</li>
+      <li>Wireframes, visual design, and prototyping</li>
+    </ul>
+  </section>
+</Layout>

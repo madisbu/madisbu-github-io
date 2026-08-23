@@ -2,17 +2,223 @@
 export interface Props {
   title: string;
   description: string;
+  category: string;
+  filterKey: string;
   image: string;
   slug: string;
+  index: number;
 }
 
-const { title, description, image, slug } = Astro.props;
+const { title, description, category, filterKey, image, slug, index } = Astro.props;
 ---
 
-<article class="rounded-lg border border-border bg-body p-4 transition-shadow duration-200 hover:shadow-sm">
-  <a href={slug} class="block">
-    <img src={image} alt={title} class="mb-4 h-48 w-full rounded object-cover" loading="lazy" />
-    <h3 class="mb-2 text-xl text-text-dark">{title}</h3>
-    <p class="text-sm text-text-light">{description}</p>
+<article
+  class="project-card"
+  data-project-card
+  data-filter-key={filterKey}
+  style={`--stagger: ${index * 90}ms`}
+>
+  <a href={slug} class="project-card__link">
+    <div class="project-card__media">
+      <img
+        src={image}
+        alt=""
+        width="1200"
+        height="800"
+        class="project-card__image"
+        loading={index === 0 ? "eager" : "lazy"}
+        fetchpriority={index === 0 ? "high" : "auto"}
+        decoding="async"
+      />
+      <span class="project-card__number" aria-hidden="true">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+      <span class="project-card__action">
+        View project
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4"></path>
+        </svg>
+      </span>
+    </div>
+
+    <div class="project-card__content">
+      <p class="project-card__category">{category}</p>
+      <h2 class="project-card__title">{title}</h2>
+      <p class="project-card__description">{description}</p>
+    </div>
   </a>
 </article>
+
+<style>
+  .project-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-body);
+    transition:
+      opacity 0.55s ease var(--stagger),
+      transform 0.55s ease var(--stagger),
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .project-card.is-reveal-pending {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  .project-card.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .project-card__link {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .project-card__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-light);
+  }
+
+  .project-card__media::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 52%, rgb(0 0 0 / 0.58));
+    content: "";
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .project-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-card__number {
+    position: absolute;
+    z-index: 1;
+    top: 0.875rem;
+    left: 0.875rem;
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--color-text-dark);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(0.5rem);
+  }
+
+  .project-card__action {
+    position: absolute;
+    z-index: 1;
+    right: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .project-card__action svg {
+    width: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .project-card__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .project-card__category {
+    margin: 0 0 0.6rem;
+    color: var(--color-text-light);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .project-card__title {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .project-card__description {
+    margin: 0;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .project-card:focus-within {
+    border-color: var(--color-text-dark);
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.1);
+  }
+
+  .project-card__link:focus-visible {
+    outline: 3px solid #eff93b;
+    outline-offset: -3px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card:hover {
+      border-color: #d4d4d4;
+      box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.1);
+      transform: translateY(-0.35rem);
+    }
+
+    .project-card:hover .project-card__image {
+      transform: scale(1.045);
+    }
+
+    .project-card:hover .project-card__media::after {
+      opacity: 1;
+    }
+
+    .project-card:hover .project-card__action {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card__image,
+    .project-card__media::after,
+    .project-card__action {
+      transition: none;
+    }
+
+    .project-card {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

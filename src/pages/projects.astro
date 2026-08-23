@@ -4,37 +4,307 @@ import ProjectCard from "../components/ProjectCard.astro";
 
 const projects = [
   {
-    title: "Project One",
-    description: "A clean Astro build focused on performance and sharp UI details.",
+    title: "Car Rental App Redesign",
+    description: "A friendlier mobile booking experience shaped around clarity, confidence, and fewer steps.",
+    category: "UX/UI Design",
+    filterKey: "ux-ui",
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&auto=format&fit=crop&q=80",
-    slug: "/projects/project-one",
+    slug: "/projects/car-rental-app-redesign",
   },
   {
-    title: "Project Two",
-    description: "A production-ready static site with minimal dependencies and fast load times.",
+    title: "Waste Disposal Website",
+    description: "A focused service website with a custom order form that makes a complex request feel simple.",
+    category: "Web Design",
+    filterKey: "web",
     image: "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?w=1200&auto=format&fit=crop&q=80",
-    slug: "/projects/project-two",
+    slug: "/projects/waste-disposal-website",
   },
   {
-    title: "Project Three",
-    description: "A portfolio experience built from Astroplate visuals, without Astroplate bloat.",
+    title: "Multistep Order Form",
+    description: "An MVP order flow that guides customers through a structured purchase without unnecessary friction.",
+    category: "Product Development",
+    filterKey: "product",
     image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&auto=format&fit=crop&q=80",
-    slug: "/projects/project-three",
+    slug: "/projects/multistep-order-form",
   },
 ];
-const pageDescription = "A selection of things I've built.";
+
+const filters = [
+  { key: "all", label: "All work" },
+  { key: "ux-ui", label: "UX/UI" },
+  { key: "web", label: "Web" },
+  { key: "product", label: "Product" },
+];
+
+const pageDescription = "Selected digital products shaped from first idea to focused, usable experience.";
 ---
 
 <Layout title="Projects" description={pageDescription}>
-  <section class="mb-14 max-w-2xl">
-    <p class="mb-4 text-sm tracking-wide text-text-light">WORK</p>
-    <h1 class="mb-4 text-3xl font-black text-text-dark md:text-5xl">Projects</h1>
-    <p class="text-text-light">{pageDescription}</p>
+  <section class="projects-intro">
+    <div>
+      <p class="projects-eyebrow">SELECTED WORK / 2023—2026</p>
+      <h1>Projects<span aria-hidden="true">.</span></h1>
+    </div>
+    <p class="projects-description">{pageDescription}</p>
   </section>
 
-  <section>
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => <ProjectCard {...project} />)}
+  <section class="projects-section" aria-labelledby="project-filter-label">
+    <div class="projects-toolbar">
+      <div>
+        <p id="project-filter-label" class="projects-toolbar__label">Filter by discipline</p>
+        <div class="projects-filters" aria-label="Project categories">
+          {
+            filters.map((filter, index) => (
+              <button
+                type="button"
+                class="projects-filter"
+                data-project-filter={filter.key}
+                aria-pressed={index === 0 ? "true" : "false"}
+              >
+                {filter.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      <p class="projects-count" aria-live="polite">
+        <span data-project-count>{projects.length}</span>
+        <span data-project-count-label> projects</span>
+      </p>
+    </div>
+
+    <div class="projects-grid">
+      {projects.map((project, index) => <ProjectCard {...project} index={index} />)}
     </div>
   </section>
 </Layout>
+
+<script>
+  const initializeProjectFilters = () => {
+    const section = document.querySelector<HTMLElement>(".projects-section");
+    const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-project-filter]"));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-project-card]"));
+    const count = document.querySelector<HTMLElement>("[data-project-count]");
+    const countLabel = document.querySelector<HTMLElement>("[data-project-count-label]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!section || section.dataset.filtersInitialized || !filters.length || !cards.length) return;
+    section.dataset.filtersInitialized = "true";
+
+    const revealCards = () => {
+      if (reducedMotion || typeof IntersectionObserver === "undefined") {
+        cards.forEach((card) => card.classList.add("is-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.15 },
+      );
+
+      cards.forEach((card) => {
+        card.classList.add("is-reveal-pending");
+        observer.observe(card);
+      });
+    };
+
+    const setFilter = (activeFilter: string) => {
+      let visibleCount = 0;
+
+      filters.forEach((filter) => {
+        filter.setAttribute("aria-pressed", String(filter.dataset.projectFilter === activeFilter));
+      });
+
+      cards.forEach((card) => {
+        card.getAnimations().forEach((animation) => animation.cancel());
+        const matches = activeFilter === "all" || card.dataset.filterKey === activeFilter;
+        card.hidden = !matches;
+
+        if (!matches) return;
+
+        visibleCount += 1;
+        card.classList.add("is-visible");
+
+        if (!reducedMotion) {
+          card.animate(
+            [
+              { opacity: 0, transform: "translateY(12px) scale(0.985)" },
+              { opacity: 1, transform: "translateY(0) scale(1)" },
+            ],
+            {
+              duration: 360,
+              delay: (visibleCount - 1) * 70,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              fill: "both",
+            },
+          );
+        }
+      });
+
+      if (count) count.textContent = String(visibleCount);
+      if (countLabel) countLabel.textContent = visibleCount === 1 ? " project" : " projects";
+    };
+
+    filters.forEach((filter) => {
+      filter.addEventListener("click", () => setFilter(filter.dataset.projectFilter ?? "all"));
+    });
+
+    revealCards();
+  };
+
+  document.addEventListener("astro:page-load", initializeProjectFilters);
+  initializeProjectFilters();
+</script>
+
+<style>
+  .projects-intro {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1rem 0 clamp(3.5rem, 8vw, 6.5rem);
+  }
+
+  .projects-eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-text-light);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+
+  .projects-intro h1 {
+    font-size: clamp(3.25rem, 9vw, 6.75rem);
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 0.9;
+  }
+
+  .projects-intro h1 span {
+    color: #eff93b;
+  }
+
+  .projects-description {
+    max-width: 29rem;
+    margin: 0;
+    color: var(--color-text-light);
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.65;
+  }
+
+  .projects-section {
+    padding-bottom: 2rem;
+  }
+
+  .projects-toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .projects-toolbar__label {
+    margin: 0 0 0.75rem;
+    color: var(--color-text-light);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .projects-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .projects-filter {
+    min-height: 2.5rem;
+    padding: 0.55rem 0.95rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-body);
+    color: var(--color-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .projects-filter:hover {
+    border-color: var(--color-text-dark);
+  }
+
+  .projects-filter[aria-pressed="true"] {
+    border-color: var(--color-text-dark);
+    background: var(--color-text-dark);
+    color: var(--color-body);
+  }
+
+  .projects-filter:focus-visible {
+    outline: 3px solid #eff93b;
+    outline-offset: 2px;
+  }
+
+  .projects-count {
+    flex: none;
+    margin: 0 0 0.55rem;
+    color: var(--color-text-light);
+    font-size: 0.78rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .projects-grid > [hidden] {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .projects-intro {
+      grid-template-columns: minmax(0, 1.4fr) minmax(15rem, 0.6fr);
+      align-items: end;
+    }
+
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .projects-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 639px) {
+    .projects-toolbar {
+      align-items: flex-start;
+    }
+
+    .projects-count {
+      margin-top: 1.85rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .projects-filter {
+      transition: none;
+    }
+  }
+</style>

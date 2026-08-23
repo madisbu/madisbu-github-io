@@ -1,0 +1,55 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const title = "Waste Disposal Website";
+const description =
+  "A clear service website and custom order form designed to simplify waste collection requests.";
+---
+
+<Layout title={title} description={description}>
+  <section class="max-w-2xl">
+    <p class="mb-4 text-sm tracking-wide text-text-light">
+      <a href="/projects" class="hover:text-primary">← Projects</a>
+    </p>
+    <p class="mb-3 text-xs font-semibold tracking-[0.14em] text-text-light uppercase">Web Design</p>
+    <h1 class="mb-4 text-3xl font-black text-text-dark md:text-5xl">{title}</h1>
+    <p class="mb-8 text-text-light">{description}</p>
+
+    <img
+      src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?w=1200&auto=format&fit=crop&q=80"
+      alt=""
+      width="1200"
+      height="800"
+      class="mb-10 w-full rounded-lg object-cover"
+      loading="eager"
+    />
+
+    <h2 class="mb-4 text-2xl text-text-dark">Overview</h2>
+    <p class="mb-4 text-text-light">
+      Waste collection services involve details that can quickly overwhelm a customer: material type, volume,
+      location, timing, and access requirements. This project organizes those decisions into a straightforward
+      website and guided request flow.
+    </p>
+    <p class="mb-10 text-text-light">
+      Clear language and strong hierarchy keep the service understandable while helping the business receive more
+      complete order information.
+    </p>
+
+    <h2 class="mb-4 text-2xl text-text-dark">Approach</h2>
+    <p class="mb-4 text-text-light">
+      The page structure puts the most common customer questions first, then uses the order form to collect only the
+      information relevant to each request.
+    </p>
+    <p class="mb-10 text-text-light">
+      Responsive layouts and generous touch targets keep the experience practical for customers submitting a request
+      from the job site as well as from a desktop.
+    </p>
+
+    <h2 class="mb-4 text-2xl text-text-dark">Focus areas</h2>
+    <ul class="mb-10 list-disc pl-5 text-text-light space-y-1">
+      <li>Service information architecture</li>
+      <li>Responsive web interface</li>
+      <li>Custom order form UX</li>
+    </ul>
+  </section>
+</Layout>
