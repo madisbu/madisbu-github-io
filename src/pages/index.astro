@@ -16,13 +16,13 @@ const heroAlt = "Portrait of Madis";
     <div class="hero-cta-mobile mt-auto grid -translate-y-2 grid-cols-2 gap-3 portrait:max-lg:hidden sm:gap-4 lg:hidden">
       <a
         href="/projects"
-        class="inline-flex min-h-11 items-center justify-center rounded-md border border-text-dark bg-body px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:px-5 sm:text-sm"
+        class="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:px-5 sm:text-sm"
       >
         VIEW PROJECTS
       </a>
       <a
         href="/contact"
-        class="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:px-5 sm:text-sm"
+        class="inline-flex min-h-11 items-center justify-center rounded-md border border-text-dark bg-body px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:px-5 sm:text-sm"
       >
         LET&apos;S TALK
       </a>
@@ -41,6 +41,18 @@ const heroAlt = "Portrait of Madis";
           type="image/webp"
           srcset="/images/hero-mobile-480.webp 480w, /images/hero-mobile-768.webp 768w"
           sizes="50vw"
+        />
+        <source
+          media="(orientation: landscape) and (min-width: 768px) and (max-width: 1366px) and (min-height: 481px)"
+          type="image/avif"
+          srcset="/images/hero-mobile-480.avif 480w, /images/hero-mobile-768.avif 768w"
+          sizes="55vw"
+        />
+        <source
+          media="(orientation: landscape) and (min-width: 768px) and (max-width: 1366px) and (min-height: 481px)"
+          type="image/webp"
+          srcset="/images/hero-mobile-480.webp 480w, /images/hero-mobile-768.webp 768w"
+          sizes="55vw"
         />
         <source
           media="(max-width: 1366px) and (orientation: portrait)"
@@ -81,13 +93,13 @@ const heroAlt = "Portrait of Madis";
       <div class="hero-cta-overlay pointer-events-none absolute inset-x-2 bottom-[5.75rem] hidden justify-between gap-2 sm:inset-x-4 sm:bottom-4 md:bottom-6 lg:flex lg:inset-x-0 lg:top-[58%] lg:bottom-auto lg:-translate-y-1/2 lg:px-2">
         <a
           href="/projects"
-          class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
+          class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
           VIEW PROJECTS
         </a>
         <a
           href="/contact"
-          class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
+          class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-[11rem] items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
           LET&apos;S TALK
         </a>
@@ -164,6 +176,66 @@ const heroAlt = "Portrait of Madis";
     }
   }
 
+  @media
+    (orientation: landscape) and
+    (min-width: 768px) and
+    (max-width: 1366px) and
+    (min-height: 481px) {
+    .hero-section {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      grid-template-rows: minmax(0, 1fr);
+      column-gap: clamp(1rem, 3vw, 2.5rem);
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .hero-copy {
+      display: flex;
+      grid-column: 1;
+      grid-row: 1;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      padding: 0;
+      transform: translateX(clamp(0.375rem, 1vw, 0.75rem));
+    }
+
+    .hero-cta-mobile,
+    .hero-cta-overlay {
+      display: none;
+    }
+
+    .hero-image-wrap {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: stretch;
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      transform: none;
+    }
+
+    .hero-image-frame {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      overflow: hidden;
+    }
+
+    .mobile-hero-image {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      transform: none;
+    }
+  }
+
   @media (max-width: 1366px) and (orientation: portrait) {
     .hero-section {
       --hero-available-height: calc(
@@ -214,7 +286,7 @@ const heroAlt = "Portrait of Madis";
   }
 
   @media
-    (min-width: 1366px) and (max-width: 1439px) and
+    (min-width: 1367px) and (max-width: 1439px) and
     (min-height: 801px) {
     .hero-copy {
       transform: translateY(-2rem);
