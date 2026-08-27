@@ -8,7 +8,7 @@ const projects = [
     description: "A friendlier mobile booking experience shaped around clarity, confidence, and fewer steps.",
     category: "UX/UI Design",
     filterKey: "ux-ui",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&auto=format&fit=crop&q=80",
+    image: "/images/projects/car-rental-app-redesign/cover.webp",
     slug: "/projects/car-rental-app-redesign",
   },
   {
@@ -16,7 +16,7 @@ const projects = [
     description: "A focused service website with a custom order form that makes a complex request feel simple.",
     category: "Web Design",
     filterKey: "web",
-    image: "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?w=1200&auto=format&fit=crop&q=80",
+    image: "/images/projects/waste-disposal-website/cover.webp",
     slug: "/projects/waste-disposal-website",
   },
   {
@@ -24,53 +24,42 @@ const projects = [
     description: "An MVP order flow that guides customers through a structured purchase without unnecessary friction.",
     category: "Product Development",
     filterKey: "product",
-    image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&auto=format&fit=crop&q=80",
+    image: "/images/projects/multistep-order-form/cover.webp",
     slug: "/projects/multistep-order-form",
   },
 ];
 
 const filters = [
-  { key: "all", label: "All work" },
+  { key: "all", label: "ALL WORK" },
   { key: "ux-ui", label: "UX/UI" },
-  { key: "web", label: "Web" },
-  { key: "product", label: "Product" },
+  { key: "web", label: "WEB" },
+  { key: "product", label: "PRODUCT" },
 ];
 
-const pageDescription = "Selected digital products shaped from first idea to focused, usable experience.";
+const pageDescription = "UX/UI, web design, and product development projects by Madis Burmeister.";
 ---
 
-<Layout title="Projects" description={pageDescription}>
+<Layout title="Projects" description={pageDescription} wide>
   <section class="projects-intro">
-    <div>
-      <p class="projects-eyebrow">SELECTED WORK / 2023—2026</p>
-      <h1>Projects<span aria-hidden="true">.</span></h1>
-    </div>
-    <p class="projects-description">{pageDescription}</p>
+    <h1>Projects<span aria-hidden="true">.</span></h1>
   </section>
 
-  <section class="projects-section" aria-labelledby="project-filter-label">
+  <section class="projects-section" aria-label="Portfolio projects">
     <div class="projects-toolbar">
-      <div>
-        <p id="project-filter-label" class="projects-toolbar__label">Filter by discipline</p>
-        <div class="projects-filters" aria-label="Project categories">
-          {
-            filters.map((filter, index) => (
-              <button
-                type="button"
-                class="projects-filter"
-                data-project-filter={filter.key}
-                aria-pressed={index === 0 ? "true" : "false"}
-              >
-                {filter.label}
-              </button>
-            ))
-          }
-        </div>
+      <div class="projects-filters" aria-label="Project categories">
+        {
+          filters.map((filter, index) => (
+            <button
+              type="button"
+              class="projects-filter"
+              data-project-filter={filter.key}
+              aria-pressed={index === 0 ? "true" : "false"}
+            >
+              {filter.label}
+            </button>
+          ))
+        }
       </div>
-      <p class="projects-count" aria-live="polite">
-        <span data-project-count>{projects.length}</span>
-        <span data-project-count-label> projects</span>
-      </p>
     </div>
 
     <div class="projects-grid">
@@ -84,8 +73,6 @@ const pageDescription = "Selected digital products shaped from first idea to foc
     const section = document.querySelector<HTMLElement>(".projects-section");
     const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-project-filter]"));
     const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-project-card]"));
-    const count = document.querySelector<HTMLElement>("[data-project-count]");
-    const countLabel = document.querySelector<HTMLElement>("[data-project-count-label]");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (!section || section.dataset.filtersInitialized || !filters.length || !cards.length) return;
@@ -146,9 +133,6 @@ const pageDescription = "Selected digital products shaped from first idea to foc
           );
         }
       });
-
-      if (count) count.textContent = String(visibleCount);
-      if (countLabel) countLabel.textContent = visibleCount === 1 ? " project" : " projects";
     };
 
     filters.forEach((filter) => {
@@ -164,59 +148,28 @@ const pageDescription = "Selected digital products shaped from first idea to foc
 
 <style>
   .projects-intro {
-    display: grid;
-    gap: 1.5rem;
-    padding: 1rem 0 clamp(3.5rem, 8vw, 6.5rem);
-  }
-
-  .projects-eyebrow {
-    margin: 0 0 1rem;
-    color: var(--color-text-light);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    padding: 1rem 0 clamp(2rem, 4vw, 3.5rem);
   }
 
   .projects-intro h1 {
-    font-size: clamp(3.25rem, 9vw, 6.75rem);
+    font-size: clamp(1.875rem, 8vw, 2rem);
     font-weight: 700;
-    letter-spacing: -0.055em;
-    line-height: 0.9;
+    letter-spacing: -0.025em;
+    line-height: 1;
   }
 
   .projects-intro h1 span {
     color: #eff93b;
   }
 
-  .projects-description {
-    max-width: 29rem;
-    margin: 0;
-    color: var(--color-text-light);
-    font-size: clamp(1rem, 2vw, 1.18rem);
-    line-height: 1.65;
-  }
-
   .projects-section {
-    padding-bottom: 2rem;
+    padding-bottom: clamp(5rem, 8vw, 7rem);
   }
 
   .projects-toolbar {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .projects-toolbar__label {
-    margin: 0 0 0.75rem;
-    color: var(--color-text-light);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
+    justify-content: center;
+    margin-bottom: clamp(2.75rem, 5vw, 4rem);
   }
 
   .projects-filters {
@@ -235,7 +188,7 @@ const pageDescription = "Selected digital products shaped from first idea to foc
     cursor: pointer;
     font: inherit;
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 700;
     transition:
       color 0.2s ease,
       background-color 0.2s ease,
@@ -258,13 +211,6 @@ const pageDescription = "Selected digital products shaped from first idea to foc
     outline-offset: 2px;
   }
 
-  .projects-count {
-    flex: none;
-    margin: 0 0 0.55rem;
-    color: var(--color-text-light);
-    font-size: 0.78rem;
-  }
-
   .projects-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -275,10 +221,15 @@ const pageDescription = "Selected digital products shaped from first idea to foc
     display: none;
   }
 
+  @media (min-width: 390px) and (max-width: 639px) and (orientation: portrait) {
+    .projects-intro h1 {
+      font-size: clamp(2.0625rem, calc(10vw - 0.375rem), 2.3125rem);
+    }
+  }
+
   @media (min-width: 640px) {
-    .projects-intro {
-      grid-template-columns: minmax(0, 1.4fr) minmax(15rem, 0.6fr);
-      align-items: end;
+    .projects-intro h1 {
+      font-size: 2.5rem;
     }
 
     .projects-grid {
@@ -286,19 +237,53 @@ const pageDescription = "Selected digital products shaped from first idea to foc
     }
   }
 
-  @media (min-width: 900px) {
-    .projects-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+  @media (min-width: 1024px) {
+    .projects-intro h1 {
+      font-size: 3rem;
     }
   }
 
-  @media (max-width: 639px) {
-    .projects-toolbar {
-      align-items: flex-start;
+  @media (min-width: 1280px) {
+    .projects-intro h1 {
+      font-size: 3.75rem;
     }
+  }
 
-    .projects-count {
-      margin-top: 1.85rem;
+  @media
+    (orientation: landscape) and
+    (min-width: 481px) and
+    (max-width: 1023px) and
+    (max-height: 480px) {
+    .projects-intro h1 {
+      font-size: clamp(1.125rem, 3.6vw, 2rem);
+    }
+  }
+
+  @media
+    (orientation: landscape) and
+    (min-width: 768px) and
+    (max-width: 1366px) and
+    (min-height: 481px) {
+    .projects-intro h1 {
+      font-size: clamp(2.5rem, 3.5vw, 3rem);
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .projects-intro h1 {
+      font-size: 4.5rem;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .projects-intro h1 {
+      font-size: 6rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .projects-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 

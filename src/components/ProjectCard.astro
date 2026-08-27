@@ -30,21 +30,23 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
         fetchpriority={index === 0 ? "high" : "auto"}
         decoding="async"
       />
-      <span class="project-card__number" aria-hidden="true">
-        {String(index + 1).padStart(2, "0")}
-      </span>
+    </div>
+
+    <div class="project-card__content">
+      <div class="project-card__meta">
+        <p class="project-card__category">{category}</p>
+        <span class="project-card__number" aria-hidden="true">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+      <h2 class="project-card__title">{title}</h2>
+      <p class="project-card__description">{description}</p>
       <span class="project-card__action">
         View project
         <svg viewBox="0 0 16 16" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4"></path>
         </svg>
       </span>
-    </div>
-
-    <div class="project-card__content">
-      <p class="project-card__category">{category}</p>
-      <h2 class="project-card__title">{title}</h2>
-      <p class="project-card__description">{description}</p>
     </div>
   </a>
 </article>
@@ -86,56 +88,39 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
     background: var(--color-light);
   }
 
-  .project-card__media::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 52%, rgb(0 0 0 / 0.58));
-    content: "";
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
   .project-card__image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    padding: 0.75rem;
+    object-fit: contain;
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .project-card__number {
-    position: absolute;
-    z-index: 1;
-    top: 0.875rem;
-    left: 0.875rem;
     display: grid;
+    flex: none;
     width: 2.35rem;
     height: 2.35rem;
     place-items: center;
+    border: 1px solid var(--color-border);
     border-radius: 999px;
     background: rgb(255 255 255 / 0.92);
     color: var(--color-text-dark);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.08em;
-    backdrop-filter: blur(0.5rem);
   }
 
   .project-card__action {
-    position: absolute;
-    z-index: 1;
-    right: 1rem;
-    bottom: 1rem;
     display: inline-flex;
+    align-self: flex-end;
     align-items: center;
     gap: 0.45rem;
-    color: white;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    color: var(--color-text-dark);
     font-size: 0.78rem;
-    font-weight: 600;
-    opacity: 0;
-    transform: translateY(0.5rem);
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease;
+    font-weight: 700;
   }
 
   .project-card__action svg {
@@ -145,6 +130,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.5;
+    transition: transform 0.2s ease;
   }
 
   .project-card__content {
@@ -154,8 +140,16 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
     padding: 1.25rem;
   }
 
+  .project-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
   .project-card__category {
-    margin: 0 0 0.6rem;
+    margin: 0;
     color: var(--color-text-light);
     font-size: 0.7rem;
     font-weight: 600;
@@ -198,21 +192,15 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
       transform: scale(1.045);
     }
 
-    .project-card:hover .project-card__media::after {
-      opacity: 1;
-    }
-
-    .project-card:hover .project-card__action {
-      opacity: 1;
-      transform: none;
+    .project-card:hover .project-card__action svg {
+      transform: translateX(0.2rem);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .project-card,
     .project-card__image,
-    .project-card__media::after,
-    .project-card__action {
+    .project-card__action svg {
       transition: none;
     }
 

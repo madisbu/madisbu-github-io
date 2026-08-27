@@ -9,6 +9,7 @@ export interface Props {
   description?: string;
   ogImage?: string;
   canonicalUrl?: string;
+  wide?: boolean;
 }
 
 const siteName = "Mabux";
@@ -19,6 +20,7 @@ const {
   description = "Personal site built with a lean Astroplate-inspired design.",
   ogImage,
   canonicalUrl,
+  wide = false,
 } = Astro.props;
 
 const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
@@ -64,7 +66,8 @@ const isHomePage = Astro.url.pathname === "/";
     <Header />
     <main
       class:list={[
-        "mx-auto w-full max-w-5xl grow px-4 pt-12 pb-24 sm:py-12",
+        "mx-auto w-full grow px-4 pt-12 pb-24 sm:py-12",
+        wide ? "max-w-7xl" : "max-w-5xl",
         isHomePage && "home-main flex min-h-0 flex-col overflow-hidden pb-[4.25rem] sm:pb-0 lg:block lg:overflow-visible lg:pb-0",
       ]}
     >
