@@ -56,12 +56,15 @@ function Wait-ForMdnsEndpoint {
 
 & $adb start-server | Out-Null
 
-$connectEndpoint = Get-MdnsEndpoint -ServiceType "_adb-tls-connect._tcp"
-if ($connectEndpoint) {
-  & $adb connect $connectEndpoint | Write-Host
-}
-
 $device = Get-ConnectedDevice
+
+if (-not $device) {
+  $connectEndpoint = Get-MdnsEndpoint -ServiceType "_adb-tls-connect._tcp"
+  if ($connectEndpoint) {
+    & $adb connect $connectEndpoint | Write-Host
+    $device = Get-ConnectedDevice
+  }
+}
 
 if (-not $device) {
   $pairingCode = Read-Host "On your phone, open Wireless debugging > Pair device with pairing code, then enter the 6-digit code"
