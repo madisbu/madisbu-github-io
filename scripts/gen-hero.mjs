@@ -28,6 +28,7 @@ async function removeBg(inputPath) {
 
   const { width, height, channels } = info;
   const tolerance = 30;
+  const transparentCutoff = 18;
 
   // Sample background from three corners and average
   const corners = [
@@ -87,12 +88,16 @@ async function removeBg(inputPath) {
     }
   }
 
-  // Apply alpha: background pixels fade from transparent (dist=0) to opaque (dist=tolerance)
+  // Remove low-level background noise, then feather the remaining edge pixels.
   for (let idx = 0; idx < width * height; idx++) {
     if (state[idx] === 1) {
       const pi = idx * channels;
       const dist = colorDist(pi);
-      data[pi + 3] = Math.round((dist / tolerance) * 255);
+      const feather = Math.max(
+        0,
+        (dist - transparentCutoff) / (tolerance - transparentCutoff),
+      );
+      data[pi + 3] = Math.round(feather * 255);
     }
   }
 
