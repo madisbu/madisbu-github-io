@@ -71,11 +71,12 @@ const pageDescription = "UX/UI, web design, and product development projects by 
 <script>
   const initializeProjectFilters = () => {
     const section = document.querySelector<HTMLElement>(".projects-section");
+    const grid = document.querySelector<HTMLElement>(".projects-grid");
     const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-project-filter]"));
     const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-project-card]"));
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!section || section.dataset.filtersInitialized || !filters.length || !cards.length) return;
+    if (!section || !grid || section.dataset.filtersInitialized || !filters.length || !cards.length) return;
     section.dataset.filtersInitialized = "true";
 
     const revealCards = () => {
@@ -111,7 +112,9 @@ const pageDescription = "UX/UI, web design, and product development projects by 
       cards.forEach((card) => {
         card.getAnimations().forEach((animation) => animation.cancel());
         const matches = activeFilter === "all" || card.dataset.filterKey === activeFilter;
+        const number = card.querySelector<HTMLElement>(".project-card__number");
         card.hidden = !matches;
+        if (number) number.hidden = activeFilter !== "all";
 
         if (!matches) return;
 
@@ -133,6 +136,8 @@ const pageDescription = "UX/UI, web design, and product development projects by 
           );
         }
       });
+
+      grid.classList.toggle("is-single-result", visibleCount === 1);
     };
 
     filters.forEach((filter) => {
@@ -148,7 +153,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
 
 <style>
   .projects-intro {
-    padding: 1rem 0 clamp(2rem, 4vw, 3.5rem);
+    padding: 1rem 0 clamp(3rem, 4vw, 5rem);
   }
 
   .projects-intro h1 {
@@ -284,6 +289,10 @@ const pageDescription = "UX/UI, web design, and product development projects by 
   @media (min-width: 900px) {
     .projects-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .projects-grid.is-single-result > :global([data-project-card]:not([hidden])) {
+      grid-column: 2;
     }
   }
 

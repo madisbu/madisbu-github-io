@@ -29,7 +29,7 @@
 <style>
   .back-to-top-wrap {
     position: fixed;
-    bottom: 3.5rem;
+    bottom: var(--back-to-top-bottom, 3.5rem);
     right: 2rem;
     display: flex;
     align-items: center;
@@ -91,7 +91,10 @@
   /* Touch devices: larger tap target, above footer, label hidden */
   @media (hover: none) and (pointer: coarse) {
     .back-to-top-wrap {
-      bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+      bottom: max(
+        var(--back-to-top-bottom, 3.5rem),
+        calc(5.5rem + env(safe-area-inset-bottom, 0px))
+      );
       right: 1rem;
       gap: 0;
     }
@@ -126,10 +129,17 @@
 
     if (_scrollHandler) {
       window.removeEventListener('scroll', _scrollHandler);
+      window.removeEventListener('resize', _scrollHandler);
     }
 
     _scrollHandler = () => {
       const isVisible = window.scrollY > 200;
+      const footer = document.querySelector('[data-site-footer]');
+      const footerTop = footer?.getBoundingClientRect().top ?? window.innerHeight;
+      const visibleFooterHeight = Math.max(0, window.innerHeight - footerTop);
+      const bottomOffset = Math.max(56, visibleFooterHeight + 24);
+
+      wrap.style.setProperty('--back-to-top-bottom', `${bottomOffset}px`);
       wrap.classList.toggle('show', isVisible);
       wrap.setAttribute('aria-hidden', String(!isVisible));
       btn.tabIndex = isVisible ? 0 : -1;
@@ -137,6 +147,7 @@
 
     _scrollHandler();
     window.addEventListener('scroll', _scrollHandler, { passive: true });
+    window.addEventListener('resize', _scrollHandler, { passive: true });
 
     wrap.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   }

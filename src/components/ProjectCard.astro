@@ -53,6 +53,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
 
 <style>
   .project-card {
+    --discipline-accent: var(--color-text-light);
     min-width: 0;
     overflow: hidden;
     border: 1px solid var(--color-border);
@@ -63,6 +64,18 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
       transform 0.55s ease var(--stagger),
       border-color 0.25s ease,
       box-shadow 0.25s ease;
+  }
+
+  .project-card[data-filter-key="ux-ui"] {
+    --discipline-accent: #1f6faf;
+  }
+
+  .project-card[data-filter-key="web"] {
+    --discipline-accent: #a84900;
+  }
+
+  .project-card[data-filter-key="product"] {
+    --discipline-accent: #6b4bb5;
   }
 
   .project-card.is-reveal-pending {
@@ -112,6 +125,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
   }
 
   .project-card__action {
+    position: relative;
     display: inline-flex;
     align-self: flex-end;
     align-items: center;
@@ -121,6 +135,21 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
     color: var(--color-text-dark);
     font-size: 0.78rem;
     font-weight: 700;
+    isolation: isolate;
+  }
+
+  .project-card__action::after {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: -0.2rem;
+    left: 0;
+    height: 0.2rem;
+    background: #eff93b;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.22s ease;
   }
 
   .project-card__action svg {
@@ -150,7 +179,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
 
   .project-card__category {
     margin: 0;
-    color: var(--color-text-light);
+    color: var(--discipline-accent);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.13em;
@@ -189,17 +218,23 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
     }
 
     .project-card:hover .project-card__image {
-      transform: scale(1.045);
+      transform: scale(1.025);
     }
 
     .project-card:hover .project-card__action svg {
       transform: translateX(0.2rem);
+    }
+
+    .project-card:hover .project-card__action::after {
+      transform: scaleX(1);
+      transform-origin: left;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .project-card,
     .project-card__image,
+    .project-card__action::after,
     .project-card__action svg {
       transition: none;
     }
