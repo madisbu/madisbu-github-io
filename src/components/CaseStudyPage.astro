@@ -1,0 +1,1978 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { ProjectCaseStudy, ProjectDiscipline } from "../types/case-study";
+
+export interface Props {
+  project: ProjectCaseStudy;
+}
+
+const { project } = Astro.props;
+
+const disciplineDetails: Record<
+  ProjectDiscipline,
+  { caseStudyLabel: string; accent: string }
+> = {
+  "ux-ui": {
+    caseStudyLabel: "UX/UI Case Study",
+    accent: "#1f6faf",
+  },
+  "web-design": {
+    caseStudyLabel: "Web Design Case Study",
+    accent: "#a84900",
+  },
+  "product-development": {
+    caseStudyLabel: "Product Development Case Study",
+    accent: "#6b4bb5",
+  },
+};
+
+const discipline = disciplineDetails[project.discipline];
+const orderedMetadata = [
+  ...project.metadata.filter((item) => item.label === "Partner"),
+  ...project.metadata.filter((item) => item.label !== "Partner"),
+];
+const duplicateSectionIds = project.sections
+  .map((section) => section.id)
+  .filter((id, index, ids) => ids.indexOf(id) !== index);
+
+if (project.sections.length === 0) {
+  throw new Error(`Case study "${project.title}" must contain at least one section.`);
+}
+
+if (duplicateSectionIds.length > 0) {
+  throw new Error(
+    `Case study "${project.title}" has duplicate section IDs: ${duplicateSectionIds.join(", ")}.`,
+  );
+}
+
+const splitEmphasizedText = (text: string, phrases: string[] = []) => {
+  if (phrases.length === 0) return [{ text, emphasized: false }];
+
+  const escapedPhrases = phrases.map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const pattern = new RegExp(`(${escapedPhrases.join("|")})`, "g");
+
+  return text
+    .split(pattern)
+    .filter(Boolean)
+    .map((part) => ({
+      text: part,
+      emphasized: phrases.includes(part),
+    }));
+};
+---
+
+<Layout
+  title={project.title}
+  description={project.description}
+  ogImage={project.cover.src}
+  wide
+  flushTop
+>
+  <article
+    class="case-study"
+    data-discipline={project.discipline}
+    style={`--case-study-accent: ${discipline.accent}`}
+  >
+    <header class="case-study-hero" data-case-study-hero>
+      <div class="case-study-hero-shell">
+        <a href="/projects" class="case-study-back">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M13 8H3m4-4L3 8l4 4"></path>
+          </svg>
+          All projects
+        </a>
+
+        <div class="case-study-hero-grid">
+          <div class="case-study-heading">
+            <h1>{project.title}</h1>
+            <p class="case-study-discipline">{discipline.caseStudyLabel}</p>
+          </div>
+
+          <figure class="case-study-cover">
+            <img
+              src={project.cover.src}
+              alt={project.cover.alt}
+              width={project.cover.width}
+              height={project.cover.height}
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </figure>
+        </div>
+      </div>
+    </header>
+
+    <div class="case-study-meta-band">
+      <dl
+        class="case-study-meta"
+        style={`--case-study-meta-columns: ${project.metadata.length}`}
+      >
+        {orderedMetadata.map((item) => (
+          <div>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="case-study-layout">
+      <aside class="case-study-nav-wrap">
+        <nav
+          class="case-study-nav"
+          aria-label="Case study sections"
+          style={`--case-study-progress: ${1 / project.sections.length}`}
+        >
+          <div class="case-study-nav-heading">
+            <span>Project journey</span>
+            <output data-case-study-progress-output>{Math.round(100 / project.sections.length)}%</output>
+          </div>
+          <div class="case-study-nav-body">
+            <div
+              class="case-study-progress"
+              role="progressbar"
+              aria-label="Case study progress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow={Math.round(100 / project.sections.length)}
+              data-case-study-progress
+            >
+              <span></span>
+            </div>
+            <ol>
+              {
+                project.sections.map((section, index) => (
+                  <li>
+                    <a
+                      href={`#${section.id}`}
+                      class:list={{ "is-active": index === 0 }}
+                      aria-current={index === 0 ? "location" : undefined}
+                    >
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      {section.title}
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="case-study-sections">
+        {
+          project.sections.map((section) => (
+            <section id={section.id} class="case-study-section">
+              <div class="case-study-section-heading">
+                <h2>{section.title}</h2>
+              </div>
+
+              {section.metrics && section.metrics.length > 0 && (
+                <dl class="case-study-metrics">
+                  {section.metrics.map((metric) => (
+                    <div>
+                      <dt>{metric.value}</dt>
+                      <dd>{metric.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+
+              {section.paragraphs && section.paragraphs.length > 0 && (
+                <div class="case-study-copy">
+                  <p>
+                    {splitEmphasizedText(
+                      section.paragraphs.join(" "),
+                      section.paragraphEmphasis,
+                    ).map((part) => part.emphasized ? <strong>{part.text}</strong> : part.text)}
+                  </p>
+                </div>
+              )}
+
+              {section.scenarios && section.scenarios.length > 0 && (
+                <div class="case-study-scenarios">
+                  {section.scenarios.map((scenario) => (
+                    <article class="case-study-scenario">
+                      <header>
+                        <p>{scenario.label}</p>
+                        <h3>{scenario.title}</h3>
+                      </header>
+                      <ol>
+                        {scenario.steps.map((step, stepIndex) => (
+                          <li>
+                            <span>{String(stepIndex + 1).padStart(2, "0")}</span>
+                            <div>
+                              <h4>{step.title}</h4>
+                              <p>{step.description}</p>
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
+                    </article>
+                  ))}
+                </div>
+              )}
+
+              {section.feedback && section.feedback.reviews.length > 0 && (
+                <>
+                <button
+                  class="case-study-feedback-next"
+                  type="button"
+                  aria-controls={`${section.id}-feedback`}
+                  aria-expanded="false"
+                  data-feedback-next
+                  hidden
+                >
+                  <span data-feedback-next-label>Show first review</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 4v15m-6-6 6 6 6-6"></path>
+                  </svg>
+                </button>
+                <div
+                  id={`${section.id}-feedback`}
+                  class="case-study-feedback"
+                  aria-label="Customer feedback"
+                  aria-live="polite"
+                  data-feedback
+                >
+                  <p class="case-study-feedback-lead" data-feedback-lead>
+                    {splitEmphasizedText(
+                      section.feedback.lead,
+                      section.feedback.leadEmphasis,
+                    ).map((part) => part.emphasized ? <strong>{part.text}</strong> : part.text)}
+                  </p>
+                  <div class="case-study-reviews">
+                    {section.feedback.reviews.map((review) => (
+                      <article
+                        class="case-study-feedback-step"
+                        style={`--review-accent: ${review.accent ?? "var(--case-study-accent)"}; --review-logo-width: ${review.logoDisplayWidth}px`}
+                        data-feedback-step
+                      >
+                        <header>
+                          <div class="case-study-review-logo-frame">
+                            <img
+                              class="case-study-review-logo"
+                              src={review.logo.src}
+                              alt={review.logo.alt}
+                              width={review.logo.width}
+                              height={review.logo.height}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </div>
+                          <div
+                            class="case-study-review-rating"
+                            role="img"
+                            aria-label={`${review.rating} out of 5 stars`}
+                          >
+                            {Array.from({ length: 5 }).map((_, index) => (
+                              <svg
+                                viewBox="0 0 20 20"
+                                class:list={{ "is-active": index < review.rating }}
+                                aria-hidden="true"
+                              >
+                                <path d="m10 2.2 2.3 4.7 5.2.7-3.8 3.7.9 5.2-4.6-2.4-4.6 2.4.9-5.2-3.8-3.7 5.2-.7L10 2.2Z"></path>
+                              </svg>
+                            ))}
+                          </div>
+                        </header>
+                        <blockquote>
+                          <p>{review.quote}</p>
+                        </blockquote>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+                </>
+              )}
+
+              {section.findings && section.findings.items.length > 0 && (
+                <div
+                class="case-study-insights"
+                aria-labelledby={`${section.id}-findings-title`}
+                >
+                <div class="case-study-insights-heading">
+                  {section.findings.eyebrow && <p>{section.findings.eyebrow}</p>}
+                  <h3 id={`${section.id}-findings-title`}>{section.findings.title}</h3>
+                </div>
+                <div class="case-study-findings">
+                  {section.findings.items.map((finding) => (
+                    <article>
+                      <p class="case-study-finding-value">
+                        {finding.prefix && <span>{finding.prefix}</span>}
+                        <strong>{finding.value}</strong>
+                      </p>
+                      <p>{finding.text}</p>
+                    </article>
+                  ))}
+                  <div class="case-study-findings-icon" aria-hidden="true">
+                    <svg viewBox="0 0 64 64">
+                      <path d="M20 29a12 12 0 1 1 24 0c0 5-2.5 7.8-5.5 10.7C36.8 41.4 36 43.3 36 46h-8c0-2.7-.8-4.6-2.5-6.3C22.5 36.8 20 34 20 29Z"></path>
+                      <path d="M28 51h8M29.5 56h5M32 8V3M14 15l-4-4M50 15l4-4M13 30H7M57 30h-6"></path>
+                    </svg>
+                  </div>
+                </div>
+                </div>
+              )}
+
+              {section.callout && (
+                <blockquote class="case-study-callout">
+                  {section.callout.label && <p>{section.callout.label}</p>}
+                  <strong>{section.callout.text}</strong>
+                </blockquote>
+              )}
+
+              {section.steps && section.steps.length > 0 && (
+                <ol class="case-study-steps">
+                  {section.steps.map((step, stepIndex) => (
+                    <li class:list={{ "has-feature": step.feature || step.quotes?.length }}>
+                      <span>{String(stepIndex + 1).padStart(2, "0")}</span>
+                      <div>
+                        <h3>{step.title}</h3>
+                        {step.feature ? (
+                          <div
+                            class:list={{
+                              "case-study-step-feature": true,
+                              "is-media-wide": step.feature.mediaLayout === "wide",
+                            }}
+                          >
+                            <div class="case-study-step-feature-copy">
+                              {step.feature.paragraphs.map((paragraph) => (
+                                <p>
+                                  {splitEmphasizedText(
+                                    paragraph,
+                                    step.feature?.paragraphEmphasis,
+                                  ).map((part) => part.emphasized
+                                    ? <strong>{part.text}</strong>
+                                    : part.text)}
+                                </p>
+                              ))}
+                              <a
+                                href={step.feature.link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {step.feature.link.label}
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                  <path d="M3 8h10M9 4l4 4-4 4"></path>
+                                </svg>
+                              </a>
+                            </div>
+                            <figure>
+                              <img
+                                src={step.feature.media.src}
+                                alt={step.feature.media.alt}
+                                width={step.feature.media.width}
+                                height={step.feature.media.height}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            </figure>
+                          </div>
+                        ) : (
+                          <p>{step.description}</p>
+                        )}
+                        {step.quotes && step.quotes.length > 0 && (
+                          <div class="case-study-step-quotes">
+                            {step.quotes.map((quote) => (
+                              <figure>
+                                <svg viewBox="0 0 48 48" aria-hidden="true">
+                                  <path d="M10 6h24l8 8v24H22l-8 5v-5h-4V6Z"></path>
+                                  <path d="M19 18h5v5l-4 5M29 18h5v5l-4 5"></path>
+                                </svg>
+                                <figcaption>{quote.attribution}</figcaption>
+                                <blockquote>
+                                  <p>“{quote.text}”</p>
+                                </blockquote>
+                              </figure>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              )}
+
+              {section.bullets && section.bullets.length > 0 && (
+                <ul class="case-study-bullets">
+                  {section.bullets.map((bullet) => <li>{bullet}</li>)}
+                </ul>
+              )}
+
+              {section.media && (
+                <figure class="case-study-media">
+                  <img
+                    src={section.media.src}
+                    alt={section.media.alt}
+                    width={section.media.width}
+                    height={section.media.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {section.media.caption && <figcaption>{section.media.caption}</figcaption>}
+                </figure>
+              )}
+
+              {section.links && section.links.length > 0 && (
+                <div class="case-study-links">
+                  {section.links.map((link) => (
+                    <a
+                      href={link.href}
+                      target={link.href.startsWith("http") ? "_blank" : undefined}
+                      rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    >
+                      {link.label}
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M3 8h10M9 4l4 4-4 4"></path>
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+            </section>
+          ))
+        }
+      </div>
+    </div>
+
+    <footer class="case-study-footer">
+      <nav class="case-study-project-nav" aria-label="More projects">
+        <a
+          class="case-study-project-link case-study-project-link--previous"
+          href={project.previousProject.href}
+        >
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M13 8H3m4-4L3 8l4 4"></path>
+          </svg>
+          <span>
+            <small>Previous project</small>
+            <strong>{project.previousProject.label}</strong>
+          </span>
+        </a>
+        <a
+          class="case-study-project-link case-study-project-link--next"
+          href={project.nextProject.href}
+        >
+          <span>
+            <small>Next project</small>
+            <strong>{project.nextProject.label}</strong>
+          </span>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4"></path>
+          </svg>
+        </a>
+      </nav>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  :global(body) {
+    overflow-x: clip;
+  }
+
+  .case-study {
+    --case-study-subsection-inset: clamp(1.25rem, 3vw, 1.75rem);
+    padding-bottom: clamp(3rem, 7vw, 6rem);
+  }
+
+  .case-study-hero {
+    --hero-pointer-x: 72%;
+    --hero-pointer-y: 38%;
+    position: relative;
+    left: 50%;
+    width: var(--case-study-viewport-width, 100vw);
+    margin-left: calc(var(--case-study-viewport-width, 100vw) * -0.5);
+    overflow: clip;
+    background:
+      linear-gradient(
+        to bottom,
+        var(--color-body) 0,
+        transparent 14%,
+        transparent 78%,
+        var(--color-body) 100%
+      ),
+      radial-gradient(
+        circle at var(--hero-pointer-x) var(--hero-pointer-y),
+        color-mix(in srgb, var(--case-study-accent) 18%, transparent) 0,
+        transparent min(34rem, 42vw)
+      ),
+      linear-gradient(120deg, #f7f9fa 0%, #eef3f5 100%);
+    transition: background-position 180ms ease-out;
+  }
+
+  .case-study-hero::before,
+  .case-study-hero::after {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, var(--case-study-accent) 18%, transparent);
+    border-radius: 50%;
+    pointer-events: none;
+    content: "";
+  }
+
+  .case-study-hero::before {
+    top: -9rem;
+    right: -7rem;
+    width: 24rem;
+    height: 24rem;
+  }
+
+  .case-study-hero::after {
+    bottom: -11rem;
+    left: 34%;
+    width: 18rem;
+    height: 18rem;
+  }
+
+  .case-study-hero-shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 80rem;
+    min-height: clamp(31rem, 58vw, 46rem);
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3rem) 1rem clamp(2rem, 5vw, 4rem);
+  }
+
+  .case-study-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-text-dark);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .case-study-back:hover {
+    color: var(--case-study-accent);
+  }
+
+  .case-study-back svg,
+  .case-study-links svg,
+  .case-study-footer svg {
+    width: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .case-study-heading {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .case-study-discipline {
+    margin: 0;
+    color: var(--case-study-accent);
+    font-size: clamp(0.95rem, 1.5vw, 1.125rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .case-study-heading h1 {
+    max-width: none;
+    font-size: clamp(1.875rem, 8vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  .case-study-hero-grid {
+    display: grid;
+    align-items: center;
+    gap: clamp(2rem, 8vw, 6rem);
+    min-height: clamp(24rem, 48vw, 38rem);
+    padding-top: clamp(3rem, 8vw, 6rem);
+  }
+
+  .case-study-meta {
+    display: none;
+  }
+
+  .case-study-meta-band {
+    position: relative;
+    z-index: 2;
+    background: var(--color-body);
+  }
+
+  .case-study-meta-band::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--case-study-accent) 24%, var(--color-border));
+    content: "";
+  }
+
+  .case-study-meta div {
+    min-width: 0;
+  }
+
+  .case-study-meta dt,
+  .case-study-nav > p,
+  .case-study-section-heading > p,
+  .case-study-callout > p,
+  .case-study-footer > p {
+    color: var(--color-text-light);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .case-study-meta dt {
+    color: var(--color-text-dark);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .case-study-meta dd {
+    margin: 0.45rem 0 0;
+    color: var(--color-text-dark);
+    font-size: 0.84rem;
+    font-weight: 400;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .case-study-cover {
+    align-self: center;
+    margin: 0;
+  }
+
+  .case-study-cover img,
+  .case-study-media img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .case-study-cover img {
+    max-height: 48rem;
+    filter: drop-shadow(0 1.5rem 2rem rgb(15 31 43 / 12%));
+    transform-origin: center;
+    transform: translate3d(
+        var(--hero-image-shift-x, 0),
+        var(--hero-image-shift-y, 0),
+        0
+      )
+      scale(var(--hero-image-scale, 1));
+    transition: transform 180ms ease-out;
+  }
+
+  .case-study-media img {
+    border-radius: 1rem;
+    background: var(--color-light);
+  }
+
+  .case-study-media figcaption {
+    margin-top: 0.75rem;
+    color: var(--color-text-light);
+    font-size: 0.78rem;
+    opacity: 0.6;
+  }
+
+  .case-study-layout {
+    display: grid;
+    gap: clamp(3rem, 8vw, 7rem);
+    margin-top: clamp(4rem, 8vw, 7rem);
+  }
+
+  .case-study-nav-wrap {
+    min-width: 0;
+  }
+
+  .case-study-nav {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .case-study-nav-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--color-text-dark);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .case-study-nav-heading output {
+    color: var(--case-study-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .case-study-nav-body {
+    margin-top: 0.85rem;
+  }
+
+  .case-study-progress {
+    height: 3px;
+    overflow: hidden;
+    background: var(--color-border);
+  }
+
+  .case-study-progress span {
+    display: block;
+    width: calc(var(--case-study-progress) * 100%);
+    height: 100%;
+    background: var(--case-study-accent);
+    transform-origin: left;
+    transition: width 280ms ease-out;
+  }
+
+  .case-study-nav ol {
+    display: flex;
+    gap: 0.6rem;
+    margin: 1rem 0 0;
+    padding: 0 0 0.5rem;
+    overflow-x: auto;
+    list-style: none;
+  }
+
+  .case-study-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-light);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .case-study-nav a:hover {
+    border-color: var(--case-study-accent);
+    color: var(--case-study-accent);
+  }
+
+  .case-study-nav a.is-active {
+    border-color: var(--case-study-accent);
+    background: color-mix(in srgb, var(--case-study-accent) 8%, var(--color-body));
+    color: var(--color-text-dark);
+  }
+
+  .case-study-nav a span {
+    color: var(--case-study-accent);
+    font-size: 0.65rem;
+  }
+
+  .case-study-sections {
+    min-width: 0;
+  }
+
+  .case-study-section {
+    scroll-margin-top: 2rem;
+    padding: clamp(3.5rem, 8vw, 7rem) 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .case-study-section:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .case-study-section-heading {
+    max-width: 50rem;
+  }
+
+  .case-study-section-heading h2 {
+    margin-top: 0;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  .case-study-copy {
+    max-width: 48rem;
+    margin-top: 2rem;
+  }
+
+  .case-study-copy p,
+  .case-study-steps p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.98rem;
+    line-height: 1.75;
+  }
+
+  .case-study-copy strong {
+    color: var(--color-text-dark);
+    font-weight: 700;
+  }
+
+  .case-study-scenarios {
+    display: grid;
+    gap: 1rem;
+    margin-top: clamp(2rem, 5vw, 3rem);
+  }
+
+  .case-study-scenario {
+    --scenario-accent: #9a671f;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 0.85rem;
+    background: var(--color-body);
+  }
+
+  .case-study-scenario:nth-child(even) {
+    --scenario-accent: var(--case-study-accent);
+  }
+
+  .case-study-scenario > header {
+    padding: var(--case-study-subsection-inset);
+    border-bottom: 1px solid color-mix(in srgb, var(--scenario-accent) 20%, var(--color-border));
+    background: color-mix(in srgb, var(--scenario-accent) 7%, var(--color-body));
+  }
+
+  .case-study-scenario > header p {
+    color: var(--scenario-accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .case-study-scenario > header h3 {
+    margin-top: 0.3rem;
+    color: var(--color-text-dark);
+    font-family: var(--font-secondary);
+    font-size: clamp(1.25rem, 3vw, 1.65rem);
+    line-height: 1.2;
+  }
+
+  .case-study-scenario ol {
+    margin: 0;
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    list-style: none;
+  }
+
+  .case-study-scenario li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.85rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .case-study-scenario li:last-child {
+    padding-bottom: 0;
+  }
+
+  .case-study-scenario li:not(:last-child)::after {
+    position: absolute;
+    top: 1.7rem;
+    bottom: 0.2rem;
+    left: 0.95rem;
+    width: 1px;
+    background: color-mix(in srgb, var(--scenario-accent) 28%, var(--color-border));
+    content: "";
+  }
+
+  .case-study-scenario li > span {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid color-mix(in srgb, var(--scenario-accent) 35%, var(--color-border));
+    border-radius: 50%;
+    background: var(--color-body);
+    color: var(--scenario-accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .case-study-scenario h4 {
+    color: var(--color-text-dark);
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .case-study-scenario li p {
+    margin-top: 0.3rem;
+    color: var(--color-text-light);
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .case-study-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .case-study-metrics div {
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: var(--color-light);
+  }
+
+  .case-study-metrics dt {
+    color: var(--case-study-accent);
+    font-family: var(--font-secondary);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .case-study-metrics dd {
+    margin-top: 0.6rem;
+    color: var(--color-text-light);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .case-study-insights {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding: clamp(2rem, 5vw, 3rem) var(--case-study-subsection-inset) 0;
+  }
+
+  .case-study-insights-heading {
+    max-width: 34rem;
+  }
+
+  .case-study-insights-heading > p {
+    color: var(--case-study-accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .case-study-insights-heading h3 {
+    margin-top: 0.35rem;
+    color: var(--color-text-dark);
+    font-size: clamp(1.25rem, 3vw, 1.65rem);
+    line-height: 1.2;
+  }
+
+  .case-study-findings {
+    display: grid;
+    margin-top: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .case-study-findings article {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    min-height: 10rem;
+    padding: clamp(1rem, 3vw, 1.75rem);
+    padding-bottom: 0;
+    text-align: center;
+  }
+
+  .case-study-findings article:first-of-type {
+    order: 1;
+  }
+
+  .case-study-findings article:nth-of-type(2) {
+    order: 3;
+  }
+
+  .case-study-findings-icon {
+    position: relative;
+    order: 2;
+    display: grid;
+    place-items: center;
+    min-height: 3.5rem;
+  }
+
+  .case-study-findings-icon::before {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-border);
+    content: "";
+  }
+
+  .case-study-findings-icon svg {
+    position: relative;
+    width: 4rem;
+    padding: 0.5rem;
+    background: var(--color-light);
+    fill: none;
+    stroke: var(--case-study-accent);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .case-study-finding-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--color-text-dark);
+    font-family: var(--font-secondary);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+  }
+
+  .case-study-finding-value strong {
+    color: var(--case-study-accent);
+    font-size: clamp(2.5rem, 7vw, 3.75rem);
+    font-weight: 700;
+    line-height: 0.95;
+  }
+
+  .case-study-findings article > p:last-child {
+    max-width: 23rem;
+    margin-top: 1.5rem;
+    color: var(--color-text);
+    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    line-height: 1.55;
+  }
+
+  .case-study-feedback {
+    margin: clamp(4rem, 8vw, 6rem) 0;
+  }
+
+  .case-study-feedback + .case-study-insights {
+    margin-top: 0;
+  }
+
+  .case-study-feedback-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: clamp(1rem, 2.5vw, 1.5rem) auto 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--case-study-accent);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .case-study-feedback-next[hidden],
+  .case-study-feedback-step[hidden] {
+    display: none;
+  }
+
+  .case-study-feedback-next.is-after-reviews {
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .case-study-feedback-next svg {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--case-study-accent) 35%, var(--color-border));
+    border-radius: 50%;
+    background: var(--color-body);
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .case-study-feedback-next:hover svg,
+  .case-study-feedback-next:focus-visible svg {
+    transform: translateY(0.25rem);
+    background: var(--case-study-accent);
+    color: var(--color-body);
+  }
+
+  .case-study-feedback-next:focus-visible {
+    outline: 2px solid var(--case-study-accent);
+    outline-offset: 0.35rem;
+  }
+
+  .case-study-feedback.is-enhanced .case-study-feedback-step {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  .case-study-feedback.is-enhanced .case-study-feedback-step.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 320ms ease,
+      transform 320ms ease;
+  }
+
+  .case-study-feedback-lead {
+    max-width: 40rem;
+    margin: 0 auto;
+    color: var(--color-text-dark);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .case-study-feedback-lead strong {
+    color: var(--case-study-accent);
+    font-weight: 700;
+  }
+
+  .case-study-feedback.is-enhanced:not(.has-visible-reviews) .case-study-reviews {
+    margin-top: 0;
+  }
+
+  .case-study-reviews {
+    display: grid;
+    gap: 1rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .case-study-reviews > article {
+    position: relative;
+    padding: clamp(1.35rem, 4vw, 2rem);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background: var(--color-body);
+    box-shadow: 0 0.75rem 2rem rgb(4 4 4 / 6%);
+  }
+
+  .case-study-reviews > article header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .case-study-review-logo-frame {
+    display: flex;
+    align-items: center;
+    width: 6rem;
+    height: 2.5rem;
+    flex: 0 0 auto;
+  }
+
+  .case-study-review-logo {
+    width: var(--review-logo-width);
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+  }
+
+  .case-study-review-rating {
+    display: flex;
+    gap: 0.15rem;
+  }
+
+  .case-study-review-rating svg {
+    width: 0.9rem;
+    fill: var(--color-border);
+  }
+
+  .case-study-review-rating svg.is-active {
+    fill: var(--review-accent);
+  }
+
+  .case-study-reviews blockquote {
+    position: relative;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+  }
+
+  .case-study-reviews blockquote::before {
+    position: absolute;
+    top: -0.65rem;
+    left: 0;
+    color: color-mix(in srgb, var(--review-accent) 32%, transparent);
+    font-family: Georgia, serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    content: "\201C";
+  }
+
+  .case-study-reviews blockquote p {
+    position: relative;
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .case-study-callout {
+    max-width: 52rem;
+    margin: 2rem 0 0;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-left: 0.35rem solid var(--case-study-accent);
+    background: var(--color-light);
+  }
+
+  .case-study-callout strong {
+    display: block;
+    margin-top: 0.6rem;
+    color: var(--color-text-dark);
+    font-family: var(--font-secondary);
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    line-height: 1.35;
+  }
+
+  .case-study-steps {
+    display: grid;
+    gap: 0;
+    max-width: 52rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-study-steps li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 1rem;
+    padding: 1.4rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .case-study-steps li:first-child {
+    border-top: 0;
+  }
+
+  .case-study-steps > li:last-child {
+    padding-bottom: 0;
+  }
+
+  .case-study-steps li > span {
+    color: var(--case-study-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .case-study-steps h3 {
+    font-size: 1.15rem;
+  }
+
+  .case-study-steps p {
+    margin-top: 0.35rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .case-study-steps li.has-feature {
+    padding-block: clamp(2rem, 5vw, 3rem);
+  }
+
+  .case-study-steps li.has-feature > span {
+    align-self: start;
+    font-family: var(--font-secondary);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .case-study-step-feature {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3rem);
+    margin-top: 1.25rem;
+  }
+
+  .case-study-step-feature-copy {
+    align-self: start;
+  }
+
+  .case-study-step-feature-copy p {
+    margin-top: 0;
+    color: var(--color-text);
+    font-size: clamp(0.95rem, 2vw, 1.02rem);
+    line-height: 1.7;
+  }
+
+  .case-study-steps li.has-feature > div > p {
+    margin-top: 1.25rem;
+    color: var(--color-text);
+    font-size: clamp(0.95rem, 2vw, 1.02rem);
+    line-height: 1.7;
+  }
+
+  .case-study-step-feature-copy p + p {
+    margin-top: 1.25rem;
+  }
+
+  .case-study-step-feature-copy strong {
+    color: var(--color-text-dark);
+    font-weight: 700;
+  }
+
+  .case-study-step-feature-copy a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding: 0.8rem 1.1rem;
+    border: 1px solid var(--case-study-accent);
+    color: var(--case-study-accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .case-study-step-feature-copy a:hover,
+  .case-study-step-feature-copy a:focus-visible {
+    background: var(--case-study-accent);
+    color: var(--color-body);
+  }
+
+  .case-study-step-feature-copy a:focus-visible {
+    outline: 2px solid var(--case-study-accent);
+    outline-offset: 0.25rem;
+  }
+
+  .case-study-step-feature-copy a svg {
+    width: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .case-study-step-feature figure {
+    display: grid;
+    place-items: center;
+    min-width: 0;
+  }
+
+  .case-study-step-feature img {
+    width: auto;
+    max-width: min(100%, 18rem);
+    max-height: 34rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    object-fit: contain;
+    box-shadow: 0 1rem 2.5rem rgb(4 4 4 / 8%);
+  }
+
+  .case-study-step-feature.is-media-wide img {
+    max-width: 100%;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .case-study-step-quotes {
+    display: grid;
+    gap: 0;
+    margin-top: clamp(2rem, 5vw, 3rem);
+  }
+
+  .case-study-step-quotes figure {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    padding: 1.75rem clamp(0.75rem, 3vw, 1.5rem);
+    text-align: center;
+  }
+
+  .case-study-step-quotes figure + figure {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .case-study-step-quotes figure:last-child {
+    padding-bottom: 0;
+  }
+
+  .case-study-step-quotes svg {
+    width: 3rem;
+    fill: none;
+    stroke: var(--color-text);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.35;
+  }
+
+  .case-study-step-quotes figcaption {
+    margin-top: 1rem;
+    color: var(--color-text-dark);
+    font-size: 0.86rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .case-study-step-quotes blockquote p {
+    max-width: 18rem;
+    margin-top: 0.8rem;
+    color: var(--color-text);
+    font-size: clamp(0.9rem, 1.7vw, 0.98rem);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .case-study-bullets {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 48rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-study-bullets li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--color-text);
+    line-height: 1.65;
+  }
+
+  .case-study-bullets li::before {
+    position: absolute;
+    top: 0.65em;
+    left: 0;
+    width: 0.5rem;
+    height: 0.18rem;
+    background: var(--case-study-accent);
+    content: "";
+  }
+
+  .case-study-media {
+    margin: 2.5rem 0 0;
+  }
+
+  .case-study-media img {
+    padding: clamp(1rem, 3vw, 2rem);
+  }
+
+  .case-study-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .case-study-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.65rem 1rem;
+    border-radius: 0.4rem;
+    background: var(--color-text-dark);
+    color: var(--color-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .case-study-links a:hover {
+    background: var(--case-study-accent);
+  }
+
+  .case-study-footer {
+    margin-top: clamp(4rem, 9vw, 8rem);
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .case-study-project-nav {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .case-study-project-link {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+    min-width: 0;
+    min-height: 6.5rem;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    color: var(--color-text-dark);
+    transition:
+      border-color 180ms ease-out,
+      background-color 180ms ease-out,
+      transform 180ms ease-out;
+  }
+
+  .case-study-project-link span {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .case-study-project-link small {
+    color: var(--case-study-accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .case-study-project-link strong {
+    overflow-wrap: anywhere;
+    font-family: var(--font-secondary);
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    line-height: 1.25;
+  }
+
+  .case-study-project-link svg {
+    flex: 0 0 auto;
+    width: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .case-study-project-link--next {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .case-study-project-link:hover {
+    border-color: var(--case-study-accent);
+    background: color-mix(in srgb, var(--case-study-accent) 7%, var(--color-body));
+    transform: translateY(-0.15rem);
+  }
+
+  @media (min-width: 640px) {
+    .case-study-heading h1 {
+      font-size: 2.5rem;
+    }
+
+    .case-study-metrics {
+      display: none;
+    }
+
+    .case-study-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(1.5rem, 4vw, 3rem);
+      padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+    }
+
+    .case-study-project-nav {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-study-scenarios {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-study-findings {
+      grid-template-columns: minmax(0, 1fr) 6rem minmax(0, 1fr);
+    }
+
+    .case-study-findings-icon {
+      width: 6rem;
+      min-height: 100%;
+    }
+
+    .case-study-findings-icon svg {
+      width: 4.75rem;
+      padding: 0.65rem;
+    }
+
+    .case-study-findings-icon::before {
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 100%;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .case-study-step-feature {
+      grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.65fr);
+      align-items: start;
+    }
+
+    .case-study-step-feature.is-media-wide {
+      grid-template-columns: minmax(16rem, 0.6fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .case-study-step-quotes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .case-study-step-quotes figure + figure {
+      border-top: 0;
+      border-left: 1px solid var(--color-border);
+    }
+
+    .case-study-step-quotes figure {
+      padding-bottom: 0;
+    }
+
+    .case-study-step-quotes figcaption {
+      height: 2.4rem;
+    }
+
+    .case-study-reviews {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .case-study-hero-grid {
+      grid-template-columns: minmax(15rem, 0.62fr) minmax(0, 1.38fr);
+      gap: clamp(2rem, 4vw, 4rem);
+    }
+
+    .case-study-heading h1 {
+      font-size: 3rem;
+    }
+
+    .case-study-meta {
+      grid-template-columns: repeat(var(--case-study-meta-columns), max-content);
+      justify-content: space-between;
+    }
+
+    .case-study[data-discipline="ux-ui"] .case-study-cover {
+      width: 110%;
+      margin-left: -2%;
+      --hero-image-scale: 1.1;
+    }
+
+    .case-study-layout {
+      grid-template-columns: minmax(12rem, 0.27fr) minmax(0, 0.73fr);
+      align-items: start;
+    }
+
+    .case-study-nav-wrap {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+    }
+
+    .case-study-nav {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .case-study-nav-body {
+      display: grid;
+      grid-template-columns: 3px minmax(0, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .case-study-progress {
+      width: 3px;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .case-study-progress span {
+      width: 100%;
+      height: calc(var(--case-study-progress) * 100%);
+      transform-origin: top;
+      transition: height 280ms ease-out;
+    }
+
+    .case-study-nav ol {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .case-study-nav a {
+      width: 100%;
+      min-height: 0;
+      padding: 0.7rem 0;
+      border: 0;
+      border-radius: 0;
+      opacity: 0.6;
+      white-space: normal;
+      transition:
+        color 180ms ease-out,
+        font-size 180ms ease-out,
+        opacity 180ms ease-out,
+        padding-left 180ms ease-out;
+    }
+
+    .case-study-nav a.is-active {
+      background: transparent;
+      font-size: 0.88rem;
+      opacity: 1;
+      padding-left: 0.35rem;
+    }
+
+    .case-study-nav a:hover {
+      opacity: 1;
+      padding-left: 0.2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .case-study-cover {
+      --hero-image-scale: 1.08;
+    }
+
+    .case-study[data-discipline="ux-ui"] .case-study-cover {
+      width: 116%;
+      margin-left: -4%;
+      --hero-image-scale: 1.16;
+    }
+
+    .case-study-heading h1 {
+      font-size: 3.75rem;
+    }
+  }
+
+  @media (min-width: 390px) and (max-width: 639px) and (orientation: portrait) {
+    .case-study-heading h1 {
+      font-size: clamp(2.0625rem, calc(10vw - 0.375rem), 2.3125rem);
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .case-study-heading h1 {
+      font-size: 4.5rem;
+    }
+  }
+
+  @media (min-width: 3840px) {
+    .case-study-heading h1 {
+      font-size: 6rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-study-cover img,
+    .case-study-progress span,
+    .case-study-nav a,
+    .case-study-feedback-next svg,
+    .case-study-feedback.is-enhanced .case-study-feedback-step,
+    .case-study-step-feature-copy a,
+    .case-study-links a,
+    .case-study-project-link {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  let cleanupCaseStudyNavigation: (() => void) | undefined;
+  let cleanupCaseStudyHero: (() => void) | undefined;
+  let cleanupCaseStudyFeedback: (() => void) | undefined;
+
+  const initCaseStudyHero = () => {
+    cleanupCaseStudyHero?.();
+
+    const hero = document.querySelector<HTMLElement>("[data-case-study-hero]");
+    if (!hero) return;
+
+    const syncViewportWidth = () => {
+      hero.style.setProperty(
+        "--case-study-viewport-width",
+        `${document.documentElement.clientWidth}px`,
+      );
+    };
+
+    syncViewportWidth();
+    window.addEventListener("resize", syncViewportWidth, { passive: true });
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      cleanupCaseStudyHero = () => {
+        window.removeEventListener("resize", syncViewportWidth);
+      };
+      return;
+    }
+
+    const updatePointer = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+
+      const bounds = hero.getBoundingClientRect();
+      const x = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+      const y = Math.min(1, Math.max(0, (event.clientY - bounds.top) / bounds.height));
+
+      hero.style.setProperty("--hero-pointer-x", `${x * 100}%`);
+      hero.style.setProperty("--hero-pointer-y", `${y * 100}%`);
+      hero.style.setProperty("--hero-image-shift-x", `${(x - 0.5) * 12}px`);
+      hero.style.setProperty("--hero-image-shift-y", `${(y - 0.5) * 8}px`);
+    };
+
+    const resetPointer = () => {
+      hero.style.removeProperty("--hero-pointer-x");
+      hero.style.removeProperty("--hero-pointer-y");
+      hero.style.removeProperty("--hero-image-shift-x");
+      hero.style.removeProperty("--hero-image-shift-y");
+    };
+
+    hero.addEventListener("pointermove", updatePointer, { passive: true });
+    hero.addEventListener("pointerleave", resetPointer);
+
+    cleanupCaseStudyHero = () => {
+      window.removeEventListener("resize", syncViewportWidth);
+      hero.removeEventListener("pointermove", updatePointer);
+      hero.removeEventListener("pointerleave", resetPointer);
+    };
+  };
+
+  const initCaseStudyNavigation = () => {
+    cleanupCaseStudyNavigation?.();
+
+    const nav = document.querySelector<HTMLElement>(".case-study-nav");
+    if (!nav) return;
+
+    const progress = nav.querySelector<HTMLElement>("[data-case-study-progress]");
+    const progressOutput = nav.querySelector<HTMLOutputElement>("[data-case-study-progress-output]");
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+    const sections = links
+      .map((link) => {
+        const id = link.hash.slice(1);
+        const section = document.getElementById(id);
+        return section ? { link, section } : null;
+      })
+      .filter((item): item is { link: HTMLAnchorElement; section: HTMLElement } => item !== null);
+
+    if (sections.length === 0) return;
+
+    let frame: number | undefined;
+
+    const updateActiveSection = () => {
+      frame = undefined;
+      const readingLine = Math.min(window.innerHeight * 0.3, 240);
+      let activeSection = sections[0];
+
+      for (const candidate of sections) {
+        if (candidate.section.getBoundingClientRect().top > readingLine) break;
+        activeSection = candidate;
+      }
+
+      for (const item of sections) {
+        const isActive = item === activeSection;
+        item.link.classList.toggle("is-active", isActive);
+
+        if (isActive) {
+          item.link.setAttribute("aria-current", "location");
+        } else {
+          item.link.removeAttribute("aria-current");
+        }
+      }
+
+      const activeIndex = sections.indexOf(activeSection);
+      const percentage = Math.round(((activeIndex + 1) / sections.length) * 100);
+      nav.style.setProperty("--case-study-progress", String((activeIndex + 1) / sections.length));
+      progress?.setAttribute("aria-valuenow", String(percentage));
+      if (progressOutput) progressOutput.value = `${percentage}%`;
+    };
+
+    const requestUpdate = () => {
+      if (frame !== undefined) return;
+      frame = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+    window.addEventListener("hashchange", requestUpdate);
+
+    cleanupCaseStudyNavigation = () => {
+      if (frame !== undefined) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      window.removeEventListener("hashchange", requestUpdate);
+    };
+  };
+
+  const initCaseStudyFeedback = () => {
+    cleanupCaseStudyFeedback?.();
+
+    const button = document.querySelector<HTMLButtonElement>("[data-feedback-next]");
+    const feedback = document.querySelector<HTMLElement>("[data-feedback]");
+    if (!button || !feedback) return;
+
+    const lead = feedback.querySelector<HTMLElement>("[data-feedback-lead]");
+    const reviews = feedback.querySelector<HTMLElement>(".case-study-reviews");
+    const steps = Array.from(feedback.querySelectorAll<HTMLElement>("[data-feedback-step]"));
+    const label = button.querySelector<HTMLElement>("[data-feedback-next-label]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (steps.length === 0) return;
+
+    feedback.classList.add("is-enhanced");
+    steps.forEach((step) => {
+      step.hidden = true;
+      step.classList.remove("is-visible");
+    });
+    button.hidden = false;
+    button.setAttribute("aria-expanded", "false");
+    lead?.after(button);
+
+    let currentStep = 0;
+
+    const revealNextStep = () => {
+      const step = steps[currentStep];
+      if (!step) return;
+
+      step.hidden = false;
+      window.requestAnimationFrame(() => step.classList.add("is-visible"));
+      currentStep += 1;
+      feedback.classList.add("has-visible-reviews");
+      reviews?.after(button);
+      button.classList.add("is-after-reviews");
+      button.setAttribute("aria-expanded", "true");
+
+      if (currentStep === steps.length) {
+        button.hidden = true;
+      } else if (label) {
+        label.textContent = "Show next review";
+      }
+
+      step.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "center",
+      });
+    };
+
+    button.addEventListener("click", revealNextStep);
+    cleanupCaseStudyFeedback = () => {
+      button.removeEventListener("click", revealNextStep);
+    };
+  };
+
+  const initCaseStudyPage = () => {
+    initCaseStudyHero();
+    initCaseStudyNavigation();
+    initCaseStudyFeedback();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCaseStudyPage, { once: true });
+  } else {
+    initCaseStudyPage();
+  }
+
+  document.addEventListener("astro:page-load", initCaseStudyPage);
+</script>

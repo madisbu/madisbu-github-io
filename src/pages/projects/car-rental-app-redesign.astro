@@ -1,56 +1,313 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import CaseStudyPage from "../../components/CaseStudyPage.astro";
+import type { ProjectCaseStudy } from "../../types/case-study";
 
-const title = "Car Rental App Redesign";
-const description =
-  "A customer-focused mobile booking experience designed to make finding and reserving the right car feel faster and clearer.";
+const project = {
+  title: "Car Rental App Redesign",
+  description:
+    "A faster, clearer mobile experience for finding and booking the right rental car.",
+  discipline: "ux-ui",
+  previousProject: {
+    label: "Multistep Order Form",
+    href: "/projects/multistep-order-form",
+  },
+  nextProject: {
+    label: "Waste Disposal Website",
+    href: "/projects/waste-disposal-website",
+  },
+  cover: {
+    src: "/images/projects/car-rental-app-redesign/cover.webp",
+    alt: "Car rental mobile app screens showing search, vehicle selection, extras, and payment",
+    width: 1200,
+    height: 468,
+    caption: "End-to-end mobile booking flow from vehicle search to payment.",
+  },
+  metadata: [
+    { label: "My Role", value: "UX/UI Designer" },
+    { label: "Format", value: "Part-time · Educational (solo) project" },
+    { label: "Platform", value: "iOS & Android" },
+    { label: "Deliverables", value: "UX/UI & Interaction Design" },
+    { label: "Tools", value: "Figma · Miro · Forms · Lookback" },
+  ],
+  sections: [
+    {
+      id: "overview",
+      title: "Overview",
+      eyebrow: "Context",
+      summary: "Redesigning a complex rental journey around clarity, trust, and confident decisions.",
+      paragraphs: [
+        "This solo project explored how a car rental app could make booking more approachable. The work focused on helping customers compare vehicles, understand costs, and reserve a car through fewer, more predictable steps.",
+        "The redesign balances speed with the information people need to make a confident choice, from useful filters and clearer price breakdowns to a less disruptive guest checkout experience.",
+      ],
+      metrics: [
+        { value: "5 months", label: "End-to-end design process" },
+        { value: "Mobile", label: "iOS and Android experience" },
+        { value: "Solo", label: "Research, UX, UI, and prototype" },
+        { value: "1 flow", label: "Search through completed booking" },
+      ],
+    },
+    {
+      id: "problem",
+      title: "Problem",
+      eyebrow: "Define",
+      summary: "Rental customers need transparent information without a slow or overwhelming booking process.",
+      paragraphs: [
+        "Car rental customers often complain that most mobile apps feature non-transparent or even incorrect pricing. Apps include distracting promo banners and login pop-ups, hindering a smooth booking process. Pricing explanations contain confusing acronyms, further eroding trust between end users and rental companies. This poor user experience negatively impacts rental businesses, resulting in fewer orders.",
+      ],
+      paragraphEmphasis: ["distracting promo banners", "login pop-ups", "confusing acronyms"],
+      scenarios: [
+        {
+          label: "Scenario A",
+          title: "Pricing",
+          steps: [
+            {
+              title: "Total price is unclear",
+              description: "Fees and cover costs appear late or change between search results and checkout.",
+            },
+            {
+              title: "Customer trust declines",
+              description: "Customers question whether the offer is accurate and pause to compare alternatives.",
+            },
+            {
+              title: "Bookings move elsewhere",
+              description: "More transparent competitors become the safer and easier choice.",
+            },
+          ],
+        },
+        {
+          label: "Scenario B",
+          title: "Booking terminology",
+          steps: [
+            {
+              title: "Cover options are difficult to decode",
+              description: "Terms such as CDW, LDW, and PAI appear without enough plain-language context.",
+            },
+            {
+              title: "Decision confidence drops",
+              description: "Customers cannot tell what they need, what is included, or what are the trade-offs.",
+            },
+            {
+              title: "Checkout is abandoned",
+              description: "Uncertainty interrupts the booking flow before customers complete payment.",
+            },
+          ],
+        },
+      ],
+      findings: {
+        title: "Key insights",
+        items: [
+          {
+            value: "27%",
+            text: "of research respondents preferred using a mobile app instead of a desktop site, indicating low mobile adoption for online rental services.",
+          },
+          {
+            value: "18%",
+            text: "of research participants rated the overall online car rental experience 5 out of 5, the highest possible score.",
+          },
+        ],
+      },
+      feedback: {
+        lead: "The average rating for four major car rental company apps in Google Play Store is 3.65 on a 5-point scale",
+        leadEmphasis: ["3.65", "5-point scale"],
+        reviews: [
+          {
+            company: "Europcar",
+            logo: {
+              src: "/images/projects/car-rental-app-redesign/logos/europcar.svg",
+              alt: "Europcar",
+              width: 930,
+              height: 340,
+            },
+            logoDisplayWidth: 82,
+            quote: "Very poor. Searching/booking for cars sometimes works, but can also be 200% more expensive than simultaneous search on website/laptop. You have to check.",
+            rating: 1,
+            accent: "#129b2a",
+          },
+          {
+            company: "Avis",
+            logo: {
+              src: "/images/projects/car-rental-app-redesign/logos/avis.svg",
+              alt: "Avis",
+              width: 1613,
+              height: 744,
+            },
+            logoDisplayWidth: 64,
+            quote: "Account charged for 3 times for the full amount without successful booking. Every attempt to book would result in an error message. This should not be possible by design. At the moment I have no idea how to retrieve my money.",
+            rating: 1,
+            accent: "#c9002b",
+          },
+          {
+            company: "Sixt",
+            logo: {
+              src: "/images/projects/car-rental-app-redesign/logos/sixt.svg",
+              alt: "Sixt",
+              width: 1725,
+              height: 696,
+            },
+            logoDisplayWidth: 68,
+            quote: "Made two booking at nearly same time. One on app and one online. App one did not include the basic insurance. 3£ per day insurance through website on other booking. Ended up costing 30£ per day for same insurance at airport. Will not risk booking though app again.",
+            rating: 1,
+            accent: "#f36822",
+          },
+          {
+            company: "Green Motion",
+            logo: {
+              src: "/images/projects/car-rental-app-redesign/logos/green-motion.svg",
+              alt: "Green Motion",
+              width: 565,
+              height: 112,
+            },
+            logoDisplayWidth: 96,
+            quote: "Never trust this company. After renting the car and paying online, we went to get the car, first they offer different car than what we chose, and they asked to pay 1500£ for insurance. Went to another company and rented a car without any hidden fees or unclear details.",
+            rating: 1,
+            accent: "#98b719",
+          },
+        ],
+      },
+    },
+    {
+      id: "research",
+      title: "Research & discovery",
+      eyebrow: "Understand",
+      summary: "Use evidence to separate genuine customer needs from assumptions about the rental process.",
+      steps: [
+        {
+          title: "Competitive Benchmarking",
+          description: "Compared major car rental products to identify common patterns, trust signals, and recurring friction.",
+          feature: {
+            paragraphs: [
+              "Competitive benchmarking let me study how similar rental companies address common booking problems without recruiting participants.",
+              "Discovery: One company advertised a 15% discount for online payment. Yet 15% off €573.76 is €487.70—not the advertised €500.15.",
+            ],
+            paragraphEmphasis: ["Discovery:"],
+            media: {
+              src: "/images/projects/car-rental-app-redesign/research/benchmarking.webp",
+              alt: "Car rental payment screen advertising a 15% online-payment discount, with €500.15 online and €573.76 at-branch prices",
+              width: 768,
+              height: 1706,
+            },
+            link: {
+              label: "Read Full Review",
+              href: "https://drive.google.com/file/d/1HO_HiTJfFhFvQYaOoMnkHx6WSBnuEddV",
+            },
+          },
+        },
+        {
+          title: "Online Survey",
+          description: "Gathered customer expectations and preferences around mobile booking, pricing, and rental terminology.",
+          feature: {
+            paragraphs: [
+              "I used an online survey to identify where rental customers struggle and gather both quantitative and qualitative evidence.",
+              "One question asked, “What would you change about the app you used?” The responses reveal recurring needs for clearer pricing, simpler booking, and fewer advertisements.",
+            ],
+            media: {
+              src: "/images/projects/car-rental-app-redesign/research/survey.png",
+              alt: "Survey responses about improving rental apps, including clearer pricing and fewer advertisements",
+              width: 477,
+              height: 405,
+            },
+            mediaLayout: "wide",
+            link: {
+              label: "Read Full Survey",
+              href: "https://drive.google.com/file/d/17g0nKsN5tuiIUnrG2iP3YdzbrioGJv-b/",
+            },
+          },
+        },
+        {
+          title: "Usability Testing",
+          description: "Observed customers completing core booking tasks to uncover comprehension issues and points of hesitation.",
+          quotes: [
+            {
+              attribution: "Helen about Sixt",
+              text: "When using any type of booking sites, I usually do not sign-up places that I do not use occasionally.",
+            },
+            {
+              attribution: "Helen about Sixt",
+              text: "I don’t understand what is premium location fee and in which step was it added to my order?",
+            },
+            {
+              attribution: "Mary & Sarah about Green Motion",
+              text: "I did not understand what CDW means and what are the risk reductions.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "flow",
+      title: "Journey & structure",
+      eyebrow: "Information architecture",
+      summary: "A clear sequence turns a large booking task into a set of manageable decisions.",
+      steps: [
+        {
+          title: "Search",
+          description: "Set location and dates, then refine results with meaningful filters.",
+        },
+        {
+          title: "Select",
+          description: "Compare vehicles using consistent specifications, availability, and pricing.",
+        },
+        {
+          title: "Customize",
+          description: "Choose cover and extras with contextual explanations and visible price changes.",
+        },
+        {
+          title: "Review and pay",
+          description: "Confirm the complete order, customer details, and final price before payment.",
+        },
+      ],
+    },
+    {
+      id: "sketches",
+      title: "Sketches",
+      eyebrow: "Create",
+      summary: "Explore alternative structures quickly before committing time to visual detail.",
+      paragraphs: [
+        "Early sketches explored search results, vehicle details, step order, and the information needed at key decision points. Comparing several directions made it easier to identify weak assumptions before moving into wireframes.",
+      ],
+      bullets: [
+        "Search and filter entry points.",
+        "Vehicle list and comparison patterns.",
+        "Pricing, extras, and cover selection.",
+        "Checkout progress and review states.",
+      ],
+    },
+    {
+      id: "design",
+      title: "Design & prototype",
+      eyebrow: "Refine and validate",
+      summary: "Turn the strongest structure into a consistent interface and test the complete booking journey.",
+      paragraphs: [
+        "The interface uses stronger spacing, a clearer type hierarchy, consistent vehicle cards, and contextual price details to improve scanning without reducing useful information.",
+        "The interactive prototype supports realistic tasks across filtering, comparing cars, selecting extras, reviewing the price breakdown, and completing payment.",
+      ],
+      bullets: [
+        "Reusable vehicle, pricing, and selection components.",
+        "Clear selected, loading, empty, validation, and error states.",
+        "Touch-friendly controls and mobile-first hierarchy.",
+        "A connected prototype covering the complete booking journey.",
+      ],
+    },
+    {
+      id: "reflections",
+      title: "Reflections",
+      eyebrow: "Learn",
+      summary: "Document what testing changed, what remains uncertain, and what should happen next.",
+      paragraphs: [
+        "Future content in this section should pair observed usability findings with the changes made between iterations. Quantitative outcomes should only be shown when supported by analytics or a structured study.",
+      ],
+      callout: {
+        label: "Outcome principle",
+        text: "Show what changed because of testing, then connect that change to customer or business value.",
+      },
+      bullets: [
+        "Explain the most important design trade-off and why it was made.",
+        "Separate validated learning from assumptions that still need testing.",
+        "Identify the next research question or product experiment.",
+      ],
+    },
+  ],
+} satisfies ProjectCaseStudy;
 ---
 
-<Layout title={title} description={description}>
-  <section class="max-w-2xl">
-    <p class="mb-4 text-sm tracking-wide text-text-light">
-      <a href="/projects" class="hover:text-primary">← Projects</a>
-    </p>
-    <p class="mb-3 text-xs font-semibold tracking-[0.14em] text-text-light uppercase">UX/UI Design</p>
-    <h1 class="mb-4 text-3xl font-black text-text-dark md:text-5xl">{title}</h1>
-    <p class="mb-8 text-text-light">{description}</p>
-
-    <img
-      src="/images/projects/car-rental-app-redesign/cover.webp"
-      alt="Car rental mobile app screens showing search, vehicle selection, extras, and payment"
-      width="1200"
-      height="468"
-      class="mb-10 w-full rounded-lg bg-light object-contain p-4"
-      loading="eager"
-    />
-
-    <h2 class="mb-4 text-2xl text-text-dark">Overview</h2>
-    <p class="mb-4 text-text-light">
-      This five-month solo project explored how a car rental app could make the booking process more approachable.
-      The work focused on helping customers compare vehicles, understand costs, and reserve a car in fewer,
-      more predictable steps.
-    </p>
-    <p class="mb-10 text-text-light">
-      The redesign balances speed with the information people need to make a confident decision, from useful filters
-      and clearer price breakdowns to a less disruptive guest checkout experience.
-    </p>
-
-    <h2 class="mb-4 text-2xl text-text-dark">Approach</h2>
-    <p class="mb-4 text-text-light">
-      Competitive analysis and journey mapping surfaced friction around search, pricing, promotions, and payment.
-      Low-fidelity sketches then tested alternative list and detail layouts before the strongest direction moved into
-      a polished interface.
-    </p>
-    <p class="mb-10 text-text-light">
-      An interactive prototype covered the full journey: filtering and comparing cars, selecting extras, reviewing
-      the price breakdown, and completing payment.
-    </p>
-
-    <h2 class="mb-4 text-2xl text-text-dark">Focus areas</h2>
-    <ul class="mb-10 list-disc pl-5 text-text-light space-y-1">
-      <li>User journey and opportunity mapping</li>
-      <li>Information architecture and booking flow</li>
-      <li>Wireframes, visual design, and prototyping</li>
-    </ul>
-  </section>
-</Layout>
+<CaseStudyPage project={project} />

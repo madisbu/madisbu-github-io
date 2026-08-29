@@ -1,55 +1,163 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import CaseStudyPage from "../../components/CaseStudyPage.astro";
+import type { ProjectCaseStudy } from "../../types/case-study";
 
-const title = "Waste Disposal Website";
-const description =
-  "A clear service website and custom order form designed to simplify waste collection requests.";
+const project = {
+  title: "Waste Disposal Website",
+  description:
+    "A clear service website and custom order form designed to simplify waste collection requests.",
+  discipline: "web-design",
+  previousProject: {
+    label: "Car Rental App Redesign",
+    href: "/projects/car-rental-app-redesign",
+  },
+  nextProject: {
+    label: "Multistep Order Form",
+    href: "/projects/multistep-order-form",
+  },
+  cover: {
+    src: "/images/projects/waste-disposal-website/cover.webp",
+    alt: "PrahiVeod waste disposal website shown across desktop and mobile screens",
+    width: 1200,
+    height: 748,
+    caption: "Responsive service website and guided order form across desktop and mobile.",
+  },
+  metadata: [
+    { label: "My Role", value: "Web Designer" },
+    { label: "Deliverables", value: "Website and order flow" },
+    { label: "Platform", value: "Responsive web" },
+  ],
+  sections: [
+    {
+      id: "overview",
+      title: "Overview",
+      eyebrow: "Business context",
+      summary: "Make a detailed operational service easy to understand and easy to order.",
+      paragraphs: [
+        "Waste collection involves details that can quickly overwhelm a customer: material type, volume, location, timing, and access requirements. This project organizes those decisions into a straightforward website and guided request flow.",
+        "Clear language and strong hierarchy help customers understand the service while enabling the business to receive more complete order information.",
+      ],
+      metrics: [
+        { value: "2 formats", label: "Desktop and mobile experiences" },
+        { value: "1 flow", label: "Guided waste collection request" },
+        { value: "6 services", label: "Scannable service categories" },
+        { value: "Responsive", label: "Designed across key breakpoints" },
+      ],
+    },
+    {
+      id: "goals",
+      title: "Goals and audience",
+      eyebrow: "Strategy",
+      summary: "Connect customer tasks with the information the business needs to fulfill an order.",
+      callout: {
+        label: "Primary goal",
+        text: "Help customers identify the right service and submit a useful request without calling for basic clarification.",
+      },
+      bullets: [
+        "Explain the available services in plain, practical language.",
+        "Support customers ordering from a work site as well as a desktop.",
+        "Collect relevant details without presenting one long generic form.",
+        "Build trust through clear contact, terms, and next-step information.",
+      ],
+    },
+    {
+      id: "content",
+      title: "Content and structure",
+      eyebrow: "Information architecture",
+      summary: "Organize the website around customer questions rather than the company’s internal structure.",
+      steps: [
+        {
+          title: "Understand the service",
+          description: "Introduce the company, coverage area, and most common waste collection options.",
+        },
+        {
+          title: "Compare options",
+          description: "Give each service a concise purpose, capacity, and suitability explanation.",
+        },
+        {
+          title: "Start an order",
+          description: "Move from the selected service into a request flow with relevant fields.",
+        },
+        {
+          title: "Confirm next steps",
+          description: "Set expectations for pricing, contact, timing, and order confirmation.",
+        },
+      ],
+    },
+    {
+      id: "visual-system",
+      title: "Visual system",
+      eyebrow: "Interface design",
+      summary: "Use the company’s industrial character without sacrificing clarity or accessibility.",
+      paragraphs: [
+        "The visual direction combines strong imagery and brand orange with a neutral content system. Repeated spacing, type, button, and form patterns make the site feel consistent across service pages.",
+      ],
+      bullets: [
+        "A restrained palette with orange reserved for actions and emphasis.",
+        "Reusable headings, service cards, controls, and feedback states.",
+        "Readable typography and sufficient contrast over imagery.",
+        "Consistent responsive behavior rather than separate mobile layouts.",
+      ],
+    },
+    {
+      id: "order-flow",
+      title: "Custom order flow",
+      eyebrow: "Conversion",
+      summary: "Progressively reveal the questions needed for a complete waste collection request.",
+      steps: [
+        {
+          title: "Waste type",
+          description: "Choose the material category so later questions remain relevant.",
+        },
+        {
+          title: "Service and size",
+          description: "Select the collection method and appropriate container or quantity.",
+        },
+        {
+          title: "Location and timing",
+          description: "Provide delivery, access, collection, and preferred schedule details.",
+        },
+        {
+          title: "Review and submit",
+          description: "Check all selections and contact information before sending the request.",
+        },
+      ],
+    },
+    {
+      id: "responsive-quality",
+      title: "Responsive quality",
+      eyebrow: "Delivery",
+      summary: "A web design case study should show that the interface works beyond a polished desktop screenshot.",
+      bullets: [
+        "Touch-friendly controls and clear form labels.",
+        "Keyboard focus, validation, and error feedback.",
+        "Optimized responsive images and stable page layout.",
+        "Semantic headings, meaningful links, and accessible navigation.",
+        "SEO metadata and content structured around customer search intent.",
+      ],
+    },
+    {
+      id: "outcome",
+      title: "Outcome and handoff",
+      eyebrow: "Impact",
+      summary: "Connect the finished website to business value and ongoing ownership.",
+      paragraphs: [
+        "The outcome is a clearer service experience and a structured route from discovery to a detailed request. When final data is available, this section should report outcomes such as completed requests, reduced clarification calls, search visibility, or task success.",
+        "A strong handoff also explains reusable components, content ownership, analytics events, and how future service pages can be added without redesigning the system.",
+      ],
+    },
+    {
+      id: "reflection",
+      title: "Reflection",
+      eyebrow: "Learn",
+      bullets: [
+        "Explain which content decision had the largest effect on usability.",
+        "Document compromises caused by time, content, or technical constraints.",
+        "List the next accessibility, performance, or conversion improvement.",
+      ],
+    },
+  ],
+} satisfies ProjectCaseStudy;
 ---
 
-<Layout title={title} description={description}>
-  <section class="max-w-2xl">
-    <p class="mb-4 text-sm tracking-wide text-text-light">
-      <a href="/projects" class="hover:text-primary">← Projects</a>
-    </p>
-    <p class="mb-3 text-xs font-semibold tracking-[0.14em] text-text-light uppercase">Web Design</p>
-    <h1 class="mb-4 text-3xl font-black text-text-dark md:text-5xl">{title}</h1>
-    <p class="mb-8 text-text-light">{description}</p>
-
-    <img
-      src="/images/projects/waste-disposal-website/cover.webp"
-      alt="PrahiVeod waste disposal website shown across desktop and mobile screens"
-      width="1200"
-      height="748"
-      class="mb-10 w-full rounded-lg bg-light object-contain p-4"
-      loading="eager"
-    />
-
-    <h2 class="mb-4 text-2xl text-text-dark">Overview</h2>
-    <p class="mb-4 text-text-light">
-      Waste collection services involve details that can quickly overwhelm a customer: material type, volume,
-      location, timing, and access requirements. This project organizes those decisions into a straightforward
-      website and guided request flow.
-    </p>
-    <p class="mb-10 text-text-light">
-      Clear language and strong hierarchy keep the service understandable while helping the business receive more
-      complete order information.
-    </p>
-
-    <h2 class="mb-4 text-2xl text-text-dark">Approach</h2>
-    <p class="mb-4 text-text-light">
-      The page structure puts the most common customer questions first, then uses the order form to collect only the
-      information relevant to each request.
-    </p>
-    <p class="mb-10 text-text-light">
-      Responsive layouts and generous touch targets keep the experience practical for customers submitting a request
-      from the job site as well as from a desktop.
-    </p>
-
-    <h2 class="mb-4 text-2xl text-text-dark">Focus areas</h2>
-    <ul class="mb-10 list-disc pl-5 text-text-light space-y-1">
-      <li>Service information architecture</li>
-      <li>Responsive web interface</li>
-      <li>Custom order form UX</li>
-    </ul>
-  </section>
-</Layout>
+<CaseStudyPage project={project} />
