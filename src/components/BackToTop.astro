@@ -6,6 +6,7 @@
   id="back-to-top"
   class="back-to-top-wrap"
   aria-hidden="true"
+  hidden
 >
   <button class="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top" tabindex="-1">
     <svg
@@ -45,6 +46,10 @@
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+  }
+
+  .back-to-top-wrap[hidden] {
+    display: none;
   }
 
   .back-to-top-btn {
@@ -114,6 +119,13 @@
       display: none;
     }
   }
+
+  @media (max-width: 639px),
+    (max-width: 1023px) and (max-height: 600px) and (orientation: landscape) {
+    .back-to-top-wrap {
+      display: none;
+    }
+  }
 </style>
 
 <script is:inline>
@@ -133,7 +145,10 @@
     }
 
     _scrollHandler = () => {
-      const isVisible = window.scrollY > 200;
+      const isMobileViewport = window.matchMedia(
+        '(max-width: 639px), (max-width: 1023px) and (max-height: 600px) and (orientation: landscape)',
+      ).matches;
+      const isVisible = !isMobileViewport && window.scrollY > 200;
       const footer = document.querySelector('[data-site-footer]');
       const footerTop = footer?.getBoundingClientRect().top ?? window.innerHeight;
       const visibleFooterHeight = Math.max(0, window.innerHeight - footerTop);
@@ -141,6 +156,7 @@
 
       wrap.style.setProperty('--back-to-top-bottom', `${bottomOffset}px`);
       wrap.classList.toggle('show', isVisible);
+      wrap.hidden = !isVisible;
       wrap.setAttribute('aria-hidden', String(!isVisible));
       btn.tabIndex = isVisible ? 0 : -1;
     };

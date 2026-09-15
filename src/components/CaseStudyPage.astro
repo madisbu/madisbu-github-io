@@ -28,6 +28,13 @@ const disciplineDetails: Record<
 };
 
 const discipline = disciplineDetails[project.discipline];
+const embedOrigins = [
+  ...new Set(
+    project.sections
+      .flatMap((section) => section.embed?.src ?? [])
+      .map((src) => new URL(src).origin),
+  ),
+];
 const orderedMetadata = [
   ...project.metadata.filter((item) => item.label === "Partner"),
   ...project.metadata.filter((item) => item.label !== "Partner"),
@@ -68,6 +75,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   ogImage={project.cover.src}
   wide
   flushTop
+  preconnectOrigins={embedOrigins}
 >
   <article
     class="case-study"
@@ -351,16 +359,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                                     : part.text)}
                                 </p>
                               ))}
-                              <a
-                                href={step.feature.link.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {step.feature.link.label}
-                                <svg viewBox="0 0 16 16" aria-hidden="true">
-                                  <path d="M3 8h10M9 4l4 4-4 4"></path>
-                                </svg>
-                              </a>
                             </div>
                             <figure>
                               <img
@@ -372,6 +370,16 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                                 decoding="async"
                               />
                             </figure>
+                            <a
+                              href={step.feature.link.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {step.feature.link.label}
+                              <svg viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M3 8h10M9 4l4 4-4 4"></path>
+                              </svg>
+                            </a>
                           </div>
                         ) : (
                           <p>{step.description}</p>
@@ -470,12 +478,36 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                   class="case-study-embed"
                   style={`--embed-aspect-ratio: ${section.embed.width} / ${section.embed.height}`}
                 >
+                  <div class="case-study-embed-mobile">
+                    {section.embed.mobilePreview && (
+                      <img
+                        src={section.embed.mobilePreview.src}
+                        alt={section.embed.mobilePreview.alt}
+                        width={section.embed.mobilePreview.width}
+                        height={section.embed.mobilePreview.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                    <p>Explore the complete booking flow in the interactive prototype.</p>
+                    <a
+                      href={section.embed.src}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open interactive prototype
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path d="M6 3h7v7M13 3 5 11M3 6v7h7"></path>
+                      </svg>
+                    </a>
+                  </div>
                   <iframe
-                    src={section.embed.src}
+                    data-case-study-embed
+                    data-src={section.embed.src}
                     title={section.embed.title}
                     width={section.embed.width}
                     height={section.embed.height}
-                    loading="lazy"
+                    loading="eager"
                     allowfullscreen
                   ></iframe>
                 </div>
@@ -677,7 +709,10 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   .case-study-meta {
-    display: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 2rem 0;
   }
 
   .case-study-meta-band {
@@ -698,6 +733,13 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
   .case-study-meta div {
     min-width: 0;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: var(--color-light);
+  }
+
+  .case-study-meta div:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 
   .case-study-meta dt,
@@ -725,7 +767,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     font-size: 0.84rem;
     font-weight: 400;
     line-height: 1.4;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .case-study-cover {
@@ -771,26 +813,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     border: 0;
     background: none;
     cursor: zoom-in;
-  }
-
-  .case-study-media-trigger::after {
-    content: "";
-    position: absolute;
-    inset: clamp(1rem, 3vw, 2rem);
-    border-radius: 1rem;
-    background: rgb(15 31 43 / 0%);
-    transition: background 150ms ease-out;
-    pointer-events: none;
-  }
-
-  .case-study-media-gallery .case-study-media-trigger::after {
-    inset: 0;
-    border-radius: 0;
-  }
-
-  .case-study-media-trigger:hover::after,
-  .case-study-media-trigger:focus-visible::after {
-    background: rgb(15 31 43 / 6%);
   }
 
   .case-study-media-trigger:focus-visible {
@@ -1447,11 +1469,11 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     font-weight: 700;
   }
 
-  .case-study-step-feature-copy a {
+  .case-study-step-feature > a {
     display: inline-flex;
     align-items: center;
+    justify-self: start;
     gap: 0.75rem;
-    margin-top: 1.75rem;
     padding: 0.8rem 1.1rem;
     border: 1px solid var(--case-study-accent);
     color: var(--case-study-accent);
@@ -1465,18 +1487,18 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       color 180ms ease;
   }
 
-  .case-study-step-feature-copy a:hover,
-  .case-study-step-feature-copy a:focus-visible {
+  .case-study-step-feature > a:hover,
+  .case-study-step-feature > a:focus-visible {
     background: var(--case-study-accent);
     color: var(--color-body);
   }
 
-  .case-study-step-feature-copy a:focus-visible {
+  .case-study-step-feature > a:focus-visible {
     outline: 2px solid var(--case-study-accent);
     outline-offset: 0.25rem;
   }
 
-  .case-study-step-feature-copy a svg {
+  .case-study-step-feature > a svg {
     width: 1rem;
     fill: none;
     stroke: currentColor;
@@ -1639,16 +1661,71 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   .case-study-embed {
+    --embed-height: clamp(36rem, 50vw, 43.75rem);
+    --embed-footer-height: 3.5rem;
+    position: relative;
     width: min(100%, 60.625rem);
+    height: var(--embed-height);
     margin: clamp(3rem, 7vw, 5rem) auto 0;
+    overflow: hidden;
+  }
+
+  .case-study-embed::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    height: var(--embed-footer-height);
+    background: var(--color-body);
+    content: "";
   }
 
   .case-study-embed iframe {
     display: block;
     width: 100%;
-    height: auto;
-    aspect-ratio: var(--embed-aspect-ratio);
+    height: var(--embed-height);
     border: 0;
+  }
+
+  .case-study-embed-mobile {
+    display: none;
+  }
+
+  .case-study-embed-mobile > img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .case-study-embed-mobile p {
+    max-width: 22rem;
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .case-study-embed-mobile a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0.8rem 1.1rem;
+    border: 1px solid var(--case-study-accent);
+    color: var(--case-study-accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .case-study-embed-mobile a > svg {
+    width: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
   }
 
   .case-study-media img {
@@ -1758,10 +1835,23 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     }
 
     .case-study-meta {
-      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: clamp(1.5rem, 4vw, 3rem);
       padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+    }
+
+    .case-study-meta div {
+      padding: 0;
+      border-radius: 0;
+      background: none;
+    }
+
+    .case-study-meta div:last-child:nth-child(odd) {
+      grid-column: auto;
+    }
+
+    .case-study-meta dd {
+      white-space: nowrap;
     }
 
     .case-study-project-nav {
@@ -1798,6 +1888,21 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     .case-study-step-feature {
       grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.65fr);
       align-items: start;
+    }
+
+    .case-study-step-feature-copy {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .case-study-step-feature > figure {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .case-study-step-feature > a {
+      grid-column: 1;
+      grid-row: 2;
     }
 
     .case-study-step-feature.is-media-wide {
@@ -1935,6 +2040,107 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     }
   }
 
+  @media (max-width: 639px),
+    (max-width: 1023px) and (max-height: 600px) and (orientation: landscape) {
+    .case-study-nav-wrap,
+    .case-study-metrics {
+      display: none;
+    }
+
+    .case-study-meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      padding: 2rem 0;
+    }
+
+    .case-study-meta div {
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      background: var(--color-light);
+    }
+
+    .case-study-meta div:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+
+    .case-study-meta dd {
+      white-space: normal;
+    }
+
+    .case-study-layout {
+      margin-top: 0;
+    }
+
+    .case-study-sections {
+      margin-top: clamp(3.5rem, 8vw, 7rem);
+    }
+
+    .case-study-steps li.has-feature > div {
+      display: contents;
+    }
+
+    .case-study-steps li.has-feature > span,
+    .case-study-steps li.has-feature > div > h3 {
+      align-self: center;
+    }
+
+    .case-study-steps li.has-feature > div > p,
+    .case-study-steps li.has-feature .case-study-step-feature,
+    .case-study-steps li.has-feature .case-study-step-quotes {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+
+    .case-study-step-feature {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    .case-study-step-feature-copy,
+    .case-study-step-feature > figure {
+      grid-column: 1;
+    }
+
+    .case-study-step-feature > figure {
+      grid-row: 2;
+      justify-self: center;
+    }
+
+    .case-study-step-feature > a {
+      display: none;
+    }
+
+    .case-study-step-quotes {
+      grid-template-columns: minmax(0, 24rem);
+      justify-content: center;
+    }
+
+    .case-study-step-quotes figcaption {
+      height: auto;
+    }
+
+    .case-study-embed {
+      height: auto;
+      min-height: 22rem;
+      overflow: visible;
+    }
+
+    .case-study-embed::after,
+    .case-study-embed iframe {
+      display: none;
+    }
+
+    .case-study-embed-mobile {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 1.5rem;
+      padding: 1.5rem 1rem 2rem;
+      border-radius: 1rem;
+      background: var(--color-light);
+    }
+  }
+
   @media (min-width: 2560px) {
     .case-study-heading h1 {
       font-size: 4.5rem;
@@ -2050,6 +2256,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   let cleanupCaseStudyFeedback: (() => void) | undefined;
   let cleanupCaseStudyQuoteNotes: (() => void) | undefined;
   let cleanupCaseStudyLightbox: (() => void) | undefined;
+  let cleanupCaseStudyEmbeds: (() => void) | undefined;
 
   const initCaseStudyHero = () => {
     cleanupCaseStudyHero?.();
@@ -2359,12 +2566,63 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     };
   };
 
+  const initCaseStudyEmbeds = () => {
+    cleanupCaseStudyEmbeds?.();
+
+    const embeds = Array.from(
+      document.querySelectorAll<HTMLIFrameElement>("[data-case-study-embed][data-src]"),
+    );
+    if (embeds.length === 0) return;
+
+    const mobileEmbedQuery = window.matchMedia(
+      "(max-width: 639px), (max-width: 1023px) and (max-height: 600px) and (orientation: landscape)",
+    );
+    let loaded = false;
+    let idleCallback: number | undefined;
+    let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const loadEmbeds = () => {
+      if (loaded || mobileEmbedQuery.matches) return;
+      loaded = true;
+
+      embeds.forEach((embed) => {
+        const src = embed.dataset.src;
+        if (!src || embed.src === src) return;
+        embed.src = src;
+      });
+    };
+
+    mobileEmbedQuery.addEventListener("change", loadEmbeds);
+
+    if (document.readyState === "complete") {
+      loadEmbeds();
+    } else {
+      window.addEventListener("load", loadEmbeds, { once: true });
+
+      if ("requestIdleCallback" in window) {
+        idleCallback = window.requestIdleCallback(loadEmbeds, { timeout: 3000 });
+      } else {
+        fallbackTimer = setTimeout(loadEmbeds, 1500);
+      }
+    }
+
+    cleanupCaseStudyEmbeds = () => {
+      window.removeEventListener("load", loadEmbeds);
+      if (idleCallback !== undefined && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleCallback);
+      }
+      if (fallbackTimer !== undefined) clearTimeout(fallbackTimer);
+      mobileEmbedQuery.removeEventListener("change", loadEmbeds);
+    };
+  };
+
   const initCaseStudyPage = () => {
     initCaseStudyHero();
     initCaseStudyNavigation();
     initCaseStudyFeedback();
     initCaseStudyQuoteNotes();
     initCaseStudyLightbox();
+    initCaseStudyEmbeds();
   };
 
   if (document.readyState === "loading") {

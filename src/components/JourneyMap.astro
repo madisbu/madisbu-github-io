@@ -821,7 +821,12 @@ const finishLabel = journey.finishLabel ?? "Finish";
      card away and reveals the pain point (top) and UX solution (bottom) on
      its "back", right on top of where the card was. The side arrows are
      dropped on this breakpoint since there's nothing left to point at. */
-  @media (max-width: 36rem) {
+  @media (max-width: 36rem),
+    (max-width: 63.9375rem) and (max-height: 37.5rem) and (orientation: landscape) {
+    .journey-shape-card > .journey-rough-svg {
+      display: none;
+    }
+
     .journey-row-step {
       grid-template-columns: minmax(0, 1fr);
       max-width: 24rem;

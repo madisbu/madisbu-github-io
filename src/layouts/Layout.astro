@@ -11,6 +11,7 @@ export interface Props {
   canonicalUrl?: string;
   wide?: boolean;
   flushTop?: boolean;
+  preconnectOrigins?: string[];
 }
 
 const siteName = "Mabux";
@@ -23,6 +24,7 @@ const {
   canonicalUrl,
   wide = false,
   flushTop = false,
+  preconnectOrigins = [],
 } = Astro.props;
 
 const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
@@ -38,6 +40,7 @@ const isHomePage = Astro.url.pathname === "/";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {preconnectOrigins.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Signika:wght@500;700&family=Architects+Daughter&display=swap"

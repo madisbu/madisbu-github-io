@@ -134,6 +134,7 @@ export interface CaseStudyEmbed {
   title: string;
   width: number;
   height: number;
+  mobilePreview?: CaseStudyMedia;
 }
 
 export interface CaseStudySection {
