@@ -13,6 +13,12 @@ export interface CaseStudyMedia {
    */
   transparentBackground?: boolean;
   /**
+   * Optional percentage of the available section width used to render the
+   * image. This can normalize visual scale across source files with different
+   * canvas widths while preserving their native aspect ratios.
+   */
+  displayWidthPercent?: number;
+  /**
    * Alternate image shown in the click-to-zoom lightbox. Use this when
    * `src` is a transparent-background asset that would be hard to see
    * against the lightbox's dark backdrop (e.g. supply a white-background
@@ -123,6 +129,13 @@ export interface CaseStudyLink {
   href: string;
 }
 
+export interface CaseStudyEmbed {
+  src: string;
+  title: string;
+  width: number;
+  height: number;
+}
+
 export interface CaseStudySection {
   id: string;
   title: string;
@@ -139,6 +152,8 @@ export interface CaseStudySection {
   scenarios?: CaseStudyScenario[];
   callout?: CaseStudyCallout;
   media?: CaseStudyMedia;
+  mediaGallery?: CaseStudyMedia[];
+  embed?: CaseStudyEmbed;
   links?: CaseStudyLink[];
 }
 

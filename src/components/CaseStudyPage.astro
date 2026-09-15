@@ -433,6 +433,54 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                 </figure>
               )}
 
+              {section.mediaGallery && section.mediaGallery.length > 0 && (
+                <div class="case-study-media-gallery">
+                  {section.mediaGallery.map((media) => (
+                    <figure
+                      class="case-study-media"
+                      style={media.displayWidthPercent
+                        ? `--media-display-width: ${media.displayWidthPercent}%`
+                        : undefined}
+                    >
+                      <button
+                        type="button"
+                        class="case-study-media-trigger"
+                        data-case-study-media-trigger
+                        data-zoom-src={media.zoomSrc ?? media.src}
+                        aria-label={`Enlarge image: ${media.alt}`}
+                      >
+                        <img
+                          class:list={{ "is-transparent": media.transparentBackground }}
+                          src={media.src}
+                          alt={media.alt}
+                          width={media.width}
+                          height={media.height}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </button>
+                      {media.caption && <figcaption>{media.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              )}
+
+              {section.embed && (
+                <div
+                  class="case-study-embed"
+                  style={`--embed-aspect-ratio: ${section.embed.width} / ${section.embed.height}`}
+                >
+                  <iframe
+                    src={section.embed.src}
+                    title={section.embed.title}
+                    width={section.embed.width}
+                    height={section.embed.height}
+                    loading="lazy"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              )}
+
               {section.links && section.links.length > 0 && (
                 <div class="case-study-links">
                   {section.links.map((link) => (
@@ -733,6 +781,11 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     background: rgb(15 31 43 / 0%);
     transition: background 150ms ease-out;
     pointer-events: none;
+  }
+
+  .case-study-media-gallery .case-study-media-trigger::after {
+    inset: 0;
+    border-radius: 0;
   }
 
   .case-study-media-trigger:hover::after,
@@ -1079,6 +1132,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     position: relative;
     width: 4rem;
     padding: 0.5rem;
+    background: var(--color-body);
     fill: none;
     stroke: var(--case-study-accent);
     stroke-linecap: round;
@@ -1566,6 +1620,35 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
   .case-study-media {
     margin: 2.5rem 0 0;
+  }
+
+  .case-study-media-gallery {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .case-study-media-gallery .case-study-media {
+    width: var(--media-display-width, 100%);
+    margin: 0;
+    justify-self: center;
+  }
+
+  .case-study-media-gallery .case-study-media img {
+    padding: 0;
+  }
+
+  .case-study-embed {
+    width: min(100%, 60.625rem);
+    margin: clamp(3rem, 7vw, 5rem) auto 0;
+  }
+
+  .case-study-embed iframe {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--embed-aspect-ratio);
+    border: 0;
   }
 
   .case-study-media img {
