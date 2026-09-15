@@ -6,6 +6,19 @@ export interface CaseStudyMedia {
   width: number;
   height: number;
   caption?: string;
+  /**
+   * Set when the image already has a transparent background (e.g. an
+   * exported PNG) so the section shouldn't paint a light card background
+   * behind it.
+   */
+  transparentBackground?: boolean;
+  /**
+   * Alternate image shown in the click-to-zoom lightbox. Use this when
+   * `src` is a transparent-background asset that would be hard to see
+   * against the lightbox's dark backdrop (e.g. supply a white-background
+   * version here instead).
+   */
+  zoomSrc?: string;
 }
 
 export interface CaseStudyMetaItem {
@@ -71,6 +84,35 @@ export interface CaseStudyScenario {
   steps: CaseStudyStep[];
 }
 
+export interface CaseStudyJourneyBubble {
+  label: string;
+  text: string;
+}
+
+export interface CaseStudyJourneyNode {
+  kind?: "step" | "start" | "finish";
+  title: string;
+  description: string;
+  painPoint?: CaseStudyJourneyBubble;
+  solution?: CaseStudyJourneyBubble;
+  sketch?: CaseStudyMedia;
+  final?: CaseStudyMedia;
+  branch?: string;
+  /**
+   * Label shown in the card's index badge (e.g. "Step 2"). Multiple
+   * consecutive nodes can share the same label to group them under one
+   * higher-level step. Falls back to a sequential "01", "02", ... index
+   * when omitted.
+   */
+  stepLabel?: string;
+}
+
+export interface CaseStudyJourney {
+  startLabel?: string;
+  finishLabel?: string;
+  nodes: CaseStudyJourneyNode[];
+}
+
 export interface CaseStudyCallout {
   label?: string;
   text: string;
@@ -93,6 +135,7 @@ export interface CaseStudySection {
   findings?: CaseStudyFindingGroup;
   feedback?: CaseStudyFeedback;
   steps?: CaseStudyStep[];
+  journey?: CaseStudyJourney;
   scenarios?: CaseStudyScenario[];
   callout?: CaseStudyCallout;
   media?: CaseStudyMedia;

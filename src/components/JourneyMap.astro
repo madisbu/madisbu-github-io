@@ -1,0 +1,897 @@
+---
+import type { CaseStudyJourney } from "../types/case-study";
+
+export interface Props {
+  journey: CaseStudyJourney;
+}
+
+const { journey } = Astro.props;
+const startLabel = journey.startLabel ?? "Start";
+const finishLabel = journey.finishLabel ?? "Finish";
+---
+
+<div class="journey-map" data-journey-map>
+  <div class="journey-row journey-row-start">
+    <div class="journey-shape journey-shape-pill" data-rough="pill">
+      <svg class="journey-rough-svg" data-rough-target aria-hidden="true"></svg>
+      <span class="journey-pill-label">{startLabel}</span>
+    </div>
+  </div>
+
+  {
+    journey.nodes.map((node, index) => (
+      <>
+        <div class="journey-connector" data-rough="connector" aria-hidden="true">
+          <svg class="journey-rough-svg" data-rough-target></svg>
+        </div>
+
+        <div
+          class:list={["journey-row", "journey-row-step", index % 2 === 0 ? "is-stagger-wide" : "is-stagger-narrow"]}
+          data-journey-step
+        >
+          {node.painPoint && (
+            <div class="journey-callout-col journey-callout-col-pain" id={`journey-detail-pain-${index}`} data-journey-detail hidden aria-hidden="true">
+              <div class="journey-shape journey-bubble journey-bubble-pain" data-rough="bubble" data-rough-accent="pain">
+                <svg class="journey-rough-svg" data-rough-target aria-hidden="true"></svg>
+                <p>
+                  <strong>{node.painPoint.label}</strong>
+                  {node.painPoint.text}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {node.painPoint && (
+            <div
+              class="journey-side-arrow journey-side-arrow-pain"
+              data-journey-side-arrow
+              data-rough="side-arrow"
+              data-rough-accent="pain"
+              data-arrow-direction="left"
+              aria-hidden="true"
+            >
+              <svg class="journey-rough-svg journey-side-arrow-svg" data-rough-target></svg>
+            </div>
+          )}
+
+          <div class="journey-card-col">
+            <div class="journey-shape journey-shape-card" data-rough="card">
+              <svg class="journey-rough-svg" data-rough-target aria-hidden="true"></svg>
+              <div
+                class="journey-card"
+                role="button"
+                tabindex="0"
+                data-journey-toggle
+                aria-expanded="false"
+                aria-controls={`journey-detail-pain-${index} journey-detail-solution-${index}`}
+              >
+                <span class="journey-card-index">{node.stepLabel ?? String(index + 1).padStart(2, "0")}</span>
+                <span class="journey-card-title">{node.title}</span>
+                <span class="journey-card-description">{node.description}</span>
+
+                {(node.sketch || node.final) && (
+                  <span class="journey-thumb" data-journey-thumb>
+                    {node.sketch && (
+                      <svg
+                        class="journey-thumb-sketch"
+                        data-journey-view="sketch"
+                        viewBox="0 0 160 100"
+                        aria-hidden="true"
+                      >
+                        <rect x="4" y="4" width="152" height="92" rx="6" />
+                        <path d="M14 24h132M14 40h80M14 56h110M14 72h60" />
+                        <circle cx="132" cy="72" r="10" />
+                      </svg>
+                    )}
+                    {node.final && (
+                      <img
+                        class="journey-thumb-final"
+                        data-journey-view="final"
+                        src={node.final.src}
+                        alt={node.final.alt}
+                        width={node.final.width}
+                        height={node.final.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                  </span>
+                )}
+
+                {node.sketch && node.final && (
+                  <span class="journey-view-toggle" data-journey-view-toggle role="group" aria-label={`${node.title} preview mode`}>
+                    <button type="button" data-journey-view-btn="sketch" aria-pressed="true">
+                      Sketch
+                    </button>
+                    <button type="button" data-journey-view-btn="final" aria-pressed="false">
+                      Final
+                    </button>
+                  </span>
+                )}
+
+                {(node.painPoint || node.solution) && (
+                  <span class="journey-card-hint" aria-hidden="true">
+                    Tap to see the pain point &amp; the fix
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {node.solution && (
+            <div
+              class="journey-side-arrow journey-side-arrow-solution"
+              data-journey-side-arrow
+              data-rough="side-arrow"
+              data-rough-accent="solution"
+              data-arrow-direction="right"
+              aria-hidden="true"
+            >
+              <svg class="journey-rough-svg journey-side-arrow-svg" data-rough-target></svg>
+            </div>
+          )}
+
+          {node.solution && (
+            <div class="journey-callout-col journey-callout-col-solution" id={`journey-detail-solution-${index}`} data-journey-detail hidden aria-hidden="true">
+              <div class="journey-shape journey-bubble journey-bubble-solution" data-rough="bubble" data-rough-accent="solution">
+                <svg class="journey-rough-svg" data-rough-target aria-hidden="true"></svg>
+                <p>
+                  <strong>{node.solution.label}</strong>
+                  {node.solution.text}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </>
+    ))
+  }
+
+  <div class="journey-connector" data-rough="connector" aria-hidden="true">
+    <svg class="journey-rough-svg" data-rough-target></svg>
+  </div>
+
+  <div class="journey-row journey-row-finish">
+    <div class="journey-shape journey-shape-diamond" data-rough="diamond">
+      <svg class="journey-rough-svg" data-rough-target aria-hidden="true"></svg>
+      <span class="journey-diamond-label">{finishLabel}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import rough from "roughjs";
+
+  const SEED = 7;
+
+  const drawRough = (target: HTMLElement) => {
+    const svg = target.querySelector<SVGSVGElement>("[data-rough-target]");
+    const shapeKind = target.dataset.rough;
+    if (!svg || !shapeKind) return;
+
+    const rect = target.getBoundingClientRect();
+    const width = Math.max(rect.width, 1);
+    const height = Math.max(rect.height, 1);
+    svg.setAttribute("width", String(width));
+    svg.setAttribute("height", String(height));
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.innerHTML = "";
+
+    const rc = rough.svg(svg);
+    const isDark = getComputedStyle(document.documentElement).getPropertyValue("--color-text-dark").trim() || "#040404";
+    const accent = target.dataset.roughAccent;
+    const stroke =
+      accent === "pain" ? "#b3261e" : accent === "solution" ? "#2f6a3f" : accent === "highlight" ? "#b8860b" : isDark;
+
+    const opts = { stroke, strokeWidth: 2, roughness: 1.6, bowing: 1.4, seed: SEED };
+    const pad = 2;
+    const w = width - pad * 2;
+    const h = height - pad * 2;
+
+    if (shapeKind === "card") {
+      // A single, deliberate stroke instead of Rough.js's default two
+      // overlapping passes — on wide, short rectangles those two passes can
+      // drift apart along an edge, leaving a faint second line detached from
+      // the card underneath it (very visible on high-density mobile
+      // screens). The card doesn't need the extra sketchiness; the border
+      // still reads as hand-drawn from the roughness/bowing alone.
+      const node = rc.rectangle(pad, pad, w, h, {
+        ...opts,
+        roughness: 1,
+        bowing: 0.5,
+        fill: undefined,
+        disableMultiStroke: true,
+        disableMultiStrokeFill: true,
+      });
+      svg.appendChild(node);
+    } else if (shapeKind === "bubble") {
+      const node = rc.rectangle(pad, pad, w, h, {
+        ...opts,
+        roughness: 1,
+        bowing: 0.5,
+        fill: undefined,
+      });
+      svg.appendChild(node);
+    } else if (shapeKind === "pill") {
+      const node = rc.ellipse(width / 2, height / 2, w, h, opts);
+      svg.appendChild(node);
+    } else if (shapeKind === "diamond") {
+      const points: [number, number][] = [
+        [width / 2, pad],
+        [w, height / 2],
+        [width / 2, h],
+        [pad, height / 2],
+      ];
+      const node = rc.polygon(points, opts);
+      svg.appendChild(node);
+    } else if (shapeKind === "connector") {
+      const topGap = 6;
+      const bottomGap = 6;
+      const headLength = 10;
+      const lineEnd = height - bottomGap - headLength;
+      const strokeWidth = accent === "highlight" ? 2.5 : 1.75;
+      const node = rc.line(width / 2, topGap, width / 2, lineEnd, {
+        ...opts,
+        roughness: 1,
+        bowing: 0.6,
+        strokeWidth,
+      });
+      svg.appendChild(node);
+      const head = rc.polygon(
+        [
+          [width / 2 - 5, lineEnd],
+          [width / 2 + 5, lineEnd],
+          [width / 2, height - bottomGap],
+        ],
+        { ...opts, roughness: 1, bowing: 0.6, fill: stroke, fillStyle: "solid" },
+      );
+      svg.appendChild(head);
+    } else if (shapeKind === "side-arrow") {
+      const direction = target.dataset.arrowDirection === "right" ? "right" : "left";
+      const headLength = 8;
+      const lineY = height / 2;
+      const lineStart = direction === "left" ? w : pad;
+      const lineEnd = direction === "left" ? pad + headLength : w - headLength;
+      const node = rc.line(lineStart, lineY, lineEnd, lineY, {
+        ...opts,
+        roughness: 1,
+        bowing: 0.8,
+        strokeWidth: 2,
+        strokeLineDash: [6, 5],
+      });
+      svg.appendChild(node);
+      const tipX = direction === "left" ? pad : w;
+      const headPoints: [number, number][] = [
+        [lineEnd, lineY - 5],
+        [lineEnd, lineY + 5],
+        [tipX, lineY],
+      ];
+      const head = rc.polygon(headPoints, {
+        ...opts,
+        roughness: 1,
+        bowing: 0.6,
+        fill: stroke,
+        fillStyle: "solid",
+      });
+      svg.appendChild(head);
+    }
+  };
+
+  // Cleanup callbacks for every initialized map, keyed by its root element,
+  // so window/document-level listeners and observers don't accumulate across
+  // Astro view-transition navigations (each navigation re-runs `initJourneyMap`
+  // on the swapped-in document).
+  const mapCleanups = new WeakMap<HTMLElement, () => void>();
+
+  const initSingleMap = (map: HTMLElement) => {
+    if (map.dataset.journeyReady === "true") return;
+    map.dataset.journeyReady = "true";
+
+    const roughTargets = Array.from(map.querySelectorAll<HTMLElement>("[data-rough]"));
+
+    const redrawAll = () => roughTargets.forEach(drawRough);
+    redrawAll();
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onWindowResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(redrawAll, 150);
+    };
+    window.addEventListener("resize", onWindowResize);
+
+    // Re-measure and redraw once the handwritten webfont finishes loading.
+    // On a real device (slower/uncached network) the font often swaps in
+    // after the first paint, growing the card's text box; without this the
+    // rough-drawn border stays pinned to its pre-swap size and appears to
+    // float below the taller card.
+    if ("fonts" in document) {
+      document.fonts.ready.then(() => requestAnimationFrame(redrawAll)).catch(() => {});
+    }
+
+    // Also watch every shape individually: text reflow, orientation changes,
+    // and mobile browsers resizing the viewport as their address bar
+    // collapses/expands don't always fire a window "resize" event, but they
+    // do change each element's box size, which ResizeObserver reliably sees.
+    let resizeObserver: ResizeObserver | undefined;
+    if ("ResizeObserver" in window) {
+      let pending: Set<HTMLElement> = new Set();
+      let rafId: number | null = null;
+      const flush = () => {
+        rafId = null;
+        pending.forEach(drawRough);
+        pending = new Set();
+      };
+      resizeObserver = new ResizeObserver((entries) => {
+        entries.forEach((entry) => pending.add(entry.target as HTMLElement));
+        if (rafId === null) rafId = requestAnimationFrame(flush);
+      });
+      roughTargets.forEach((target) => resizeObserver!.observe(target));
+    }
+
+    // Pain point / solution toggle.
+    const mobileFlipQuery = window.matchMedia("(max-width: 36rem)");
+    map.querySelectorAll<HTMLElement>("[data-journey-toggle]").forEach((toggle) => {
+      const row = toggle.closest<HTMLElement>("[data-journey-step]");
+      const detailIds = (toggle.getAttribute("aria-controls") ?? "").split(/\s+/).filter(Boolean);
+      const details = detailIds
+        .map((id) => map.querySelector<HTMLElement>(`#${CSS.escape(id)}`))
+        .filter((detail): detail is HTMLElement => Boolean(detail));
+
+      // `.journey-card` is a role="button" div (not a native <button>) so it
+      // can validly contain the nested Sketch/Final <button> controls; that
+      // means Enter/Space activation has to be wired up by hand.
+      toggle.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        toggle.click();
+      });
+
+      // On the mobile "flip" layout the card's front (with the toggle button)
+      // rotates out of view and out of the hit-testing area while open, so
+      // the back panels need their own tap-to-close affordance.
+      details.forEach((detail) => {
+        detail.addEventListener("click", () => {
+          if (mobileFlipQuery.matches && row?.classList.contains("is-detail-open")) {
+            toggle.click();
+          }
+        });
+      });
+
+      toggle.addEventListener("click", () => {
+        if (!details.length) return;
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        row?.classList.toggle("is-detail-open", !isOpen);
+        details.forEach((detail) => {
+          detail.hidden = isOpen;
+          // The mobile flip layout keeps hidden panels laid out (for the 3D
+          // transform and Rough.js sizing) by overriding `[hidden]`'s default
+          // `display: none`, which also un-hides them from the accessibility
+          // tree. Sync `aria-hidden` explicitly so closed panels stay hidden
+          // from assistive tech regardless of that layout override.
+          detail.setAttribute("aria-hidden", String(isOpen));
+        });
+
+        // Highlight the connector leading to the next step while this one is open.
+        const nextConnector = row?.nextElementSibling;
+        if (nextConnector instanceof HTMLElement && nextConnector.classList.contains("journey-connector")) {
+          nextConnector.classList.toggle("is-emphasized", !isOpen);
+          nextConnector.dataset.roughAccent = isOpen ? "" : "highlight";
+          nextConnector.addEventListener("transitionend", () => drawRough(nextConnector), { once: true });
+          requestAnimationFrame(() => drawRough(nextConnector));
+        }
+
+        if (!isOpen) {
+          requestAnimationFrame(() => {
+            details.forEach((detail) => {
+              detail.querySelectorAll<HTMLElement>("[data-rough]").forEach(drawRough);
+            });
+            row?.querySelectorAll<HTMLElement>("[data-journey-side-arrow] [data-rough]").forEach(drawRough);
+          });
+        }
+      });
+    });
+
+    // Sketch / Final preview toggle.
+    map.querySelectorAll<HTMLElement>("[data-journey-view-toggle]").forEach((group) => {
+      const thumb = group.closest(".journey-card")?.querySelector<HTMLElement>("[data-journey-thumb]");
+      group.querySelectorAll<HTMLButtonElement>("[data-journey-view-btn]").forEach((btn) => {
+        btn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const view = btn.dataset.journeyViewBtn;
+          group.querySelectorAll<HTMLButtonElement>("[data-journey-view-btn]").forEach((b) => {
+            b.setAttribute("aria-pressed", String(b === btn));
+          });
+          thumb?.setAttribute("data-active-view", view ?? "sketch");
+        });
+      });
+    });
+
+    // Scroll-driven highlight of the nearest step.
+    const steps = Array.from(map.querySelectorAll<HTMLElement>("[data-journey-step]"));
+    let stepObserver: IntersectionObserver | undefined;
+    if (steps.length && "IntersectionObserver" in window) {
+      stepObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            entry.target.classList.toggle("is-active", entry.isIntersecting);
+          });
+        },
+        { rootMargin: "-40% 0px -40% 0px", threshold: 0 },
+      );
+      steps.forEach((step) => stepObserver!.observe(step));
+    }
+
+    // Reveal each step one by one as it scrolls into view.
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finishRow = map.querySelector<HTMLElement>(".journey-row-finish");
+    const revealTargets = finishRow ? [...steps, finishRow] : steps;
+    let revealObserver: IntersectionObserver | undefined;
+    if (revealTargets.length && "IntersectionObserver" in window && !prefersReducedMotion) {
+      map.classList.add("js-reveal-enabled");
+      revealObserver = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const target = entry.target as HTMLElement;
+            target.classList.add("is-revealed");
+            const prevConnector = target.previousElementSibling;
+            if (prevConnector instanceof HTMLElement && prevConnector.classList.contains("journey-connector")) {
+              prevConnector.classList.add("is-revealed");
+            }
+            obs.unobserve(target);
+          });
+        },
+        { rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+      );
+      revealTargets.forEach((target) => revealObserver!.observe(target));
+    }
+
+    mapCleanups.set(map, () => {
+      window.removeEventListener("resize", onWindowResize);
+      resizeObserver?.disconnect();
+      stepObserver?.disconnect();
+      revealObserver?.disconnect();
+    });
+  };
+
+  const initJourneyMap = (root: ParentNode) => {
+    root.querySelectorAll<HTMLElement>("[data-journey-map]").forEach(initSingleMap);
+  };
+
+  initJourneyMap(document);
+  document.addEventListener("astro:page-load", () => initJourneyMap(document));
+
+  // Astro's view-transition router keeps this module alive across
+  // navigations; without this, every navigation's resize listener and
+  // observers pile up on maps that were just removed from the document.
+  document.addEventListener("astro:before-swap", () => {
+    document.querySelectorAll<HTMLElement>("[data-journey-map]").forEach((map) => {
+      mapCleanups.get(map)?.();
+      mapCleanups.delete(map);
+      delete map.dataset.journeyReady;
+    });
+  });
+</script>
+
+<style>
+  .journey-map {
+    --journey-yellow: #f7d774;
+    --journey-red: #b3261e;
+    --journey-red-bg: #fdf1f0;
+    --journey-green: #2f6a3f;
+    --journey-green-bg: #eef6f0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+  }
+
+  .journey-rough-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .journey-shape {
+    position: relative;
+  }
+
+  .journey-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .journey-row-step {
+    display: grid;
+    grid-template-columns:
+      minmax(6.25rem, 9.5rem)
+      minmax(1.5rem, 2.5rem)
+      minmax(0, 1fr)
+      minmax(1.5rem, 2.5rem)
+      minmax(6.25rem, 9.5rem);
+    align-items: center;
+    gap: clamp(0.35rem, 2vw, 0.85rem);
+    max-width: 58rem;
+    width: 100%;
+    margin: 0 auto;
+    opacity: 1;
+    transform: none;
+  }
+
+  .journey-map.js-reveal-enabled .journey-row-step {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .journey-map.js-reveal-enabled .journey-row-step.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .journey-map.js-reveal-enabled .journey-connector {
+    opacity: 0;
+    transition: opacity 0.4s ease 0.2s;
+  }
+
+  .journey-map.js-reveal-enabled .journey-connector.is-revealed {
+    opacity: 1;
+  }
+
+  .journey-card-col {
+    grid-column: 3;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .journey-shape-card {
+    width: 100%;
+    max-width: 26rem;
+  }
+
+  .is-stagger-narrow .journey-shape-card {
+    max-width: 19rem;
+  }
+
+  .journey-callout-col {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.4rem, 1.5vw, 0.75rem);
+    min-width: 0;
+  }
+
+  .journey-callout-col-pain {
+    grid-column: 1;
+  }
+
+  .journey-callout-col-solution {
+    grid-column: 5;
+  }
+
+  .journey-side-arrow {
+    grid-column: 2;
+    position: relative;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .journey-side-arrow-solution {
+    grid-column: 4;
+  }
+
+  .journey-row-step.is-detail-open .journey-side-arrow {
+    opacity: 1;
+  }
+
+  .journey-side-arrow-svg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .journey-pill-label,
+  .journey-diamond-label {
+    position: relative;
+    font-family: "Architects Daughter", var(--font-secondary);
+    font-weight: 700;
+  }
+
+  .journey-shape-pill {
+    display: grid;
+    place-items: center;
+    padding: 0.6rem 1.75rem;
+  }
+
+  .journey-pill-label {
+    font-size: 1.05rem;
+  }
+
+  .journey-shape-diamond {
+    display: grid;
+    place-items: center;
+    width: 8.5rem;
+    height: 8.5rem;
+  }
+
+  .journey-diamond-label {
+    font-size: 1rem;
+  }
+
+  .journey-connector {
+    position: relative;
+    width: 2rem;
+    height: 3.25rem;
+    margin: 0 auto;
+    transition: height 0.45s ease;
+  }
+
+  .journey-connector.is-emphasized {
+    height: 5.5rem;
+  }
+
+  .journey-card {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: clamp(0.75rem, 3vw, 1.1rem) clamp(0.85rem, 3.5vw, 1.3rem);
+    border: none;
+    border-radius: 0.6rem;
+    background: var(--journey-yellow);
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .journey-card:hover,
+  .journey-card:focus-visible {
+    transform: scale(1.02);
+    box-shadow: 0 6px 14px -6px rgba(4, 4, 4, 0.35);
+  }
+
+  .journey-card:focus-visible {
+    outline: 2px solid var(--color-text-dark, #040404);
+    outline-offset: 3px;
+  }
+
+  .journey-card:active {
+    transform: scale(0.98);
+  }
+
+  .journey-shape-card {
+    border-radius: 0.6rem;
+    overflow: visible;
+  }
+
+  .journey-row-step:nth-of-type(odd) .journey-shape-card {
+    transform: rotate(-0.5deg);
+  }
+
+  .journey-row-step:nth-of-type(even) .journey-shape-card {
+    transform: rotate(0.5deg);
+  }
+
+  .journey-row-step.is-active .journey-card {
+    transform: scale(1.02);
+  }
+
+  .journey-card-index {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: color-mix(in srgb, var(--color-text-dark) 65%, transparent);
+  }
+
+  .journey-card-title {
+    font-family: "Architects Daughter", var(--font-secondary);
+    font-size: clamp(1.05rem, 4vw, 1.35rem);
+    font-weight: 700;
+    color: var(--color-text-dark);
+  }
+
+  .journey-card-description {
+    font-size: clamp(0.82rem, 2.6vw, 0.92rem);
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--color-text-dark) 80%, transparent);
+  }
+
+  .journey-card-hint {
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-text-dark) 55%, transparent);
+  }
+
+  .journey-thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 160 / 100;
+    margin-top: 0.35rem;
+    border: 1px solid color-mix(in srgb, var(--color-text-dark) 25%, transparent);
+    border-radius: 0.4rem;
+    background: color-mix(in srgb, #fff 70%, var(--journey-yellow));
+    overflow: hidden;
+  }
+
+  .journey-thumb[data-active-view="final"] .journey-thumb-sketch,
+  .journey-thumb:not([data-active-view="final"]) .journey-thumb-final {
+    display: none;
+  }
+
+  .journey-thumb[data-active-view="final"] .journey-thumb-final {
+    display: block;
+  }
+
+  .journey-thumb-sketch {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-text-dark) 70%, transparent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .journey-thumb-final {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .journey-view-toggle {
+    display: inline-flex;
+    align-self: flex-start;
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+  }
+
+  .journey-view-toggle button {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid color-mix(in srgb, var(--color-text-dark) 35%, transparent);
+    border-radius: 999px;
+    background: transparent;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .journey-view-toggle button[aria-pressed="true"] {
+    background: var(--color-text-dark);
+    border-color: var(--color-text-dark);
+    color: #fff;
+  }
+
+  .journey-bubble {
+    padding: clamp(0.55rem, 2.5vw, 0.7rem) clamp(0.65rem, 3vw, 1rem);
+    border-radius: 1rem;
+    background: transparent;
+  }
+
+  .journey-bubble p {
+    position: relative;
+    margin: 0;
+    font-family: "Architects Daughter", var(--font-secondary);
+    font-size: clamp(0.78rem, 2.4vw, 0.9rem);
+    line-height: 1.4;
+  }
+
+  .journey-bubble p strong {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+  }
+
+  .journey-bubble-pain {
+    background: var(--journey-red-bg);
+  }
+
+  .journey-bubble-pain p {
+    color: var(--journey-red);
+  }
+
+  .journey-bubble-solution {
+    background: var(--journey-green-bg);
+  }
+
+  .journey-bubble-solution p {
+    color: var(--journey-green);
+  }
+
+  /* On narrow phones there isn't room to keep pain/solution left or right of
+     the card without crushing it, and stacking them below pushes the flow
+     apart. Instead, flip the card in place: tapping it rotates the yellow
+     card away and reveals the pain point (top) and UX solution (bottom) on
+     its "back", right on top of where the card was. The side arrows are
+     dropped on this breakpoint since there's nothing left to point at. */
+  @media (max-width: 36rem) {
+    .journey-row-step {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 24rem;
+      justify-items: center;
+      perspective: 60rem;
+    }
+
+    .journey-card-col,
+    .journey-callout-col-pain,
+    .journey-callout-col-solution {
+      grid-column: 1;
+      grid-row: 1;
+      width: 100%;
+    }
+
+    .journey-side-arrow {
+      display: none;
+    }
+
+    .journey-card-col {
+      min-height: 11rem;
+      backface-visibility: hidden;
+      transition: transform 0.6s ease, opacity 0.3s ease;
+    }
+
+    .journey-row-step.is-detail-open .journey-card-col {
+      transform: rotateY(180deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .journey-shape-card,
+    .is-stagger-narrow .journey-shape-card {
+      max-width: 100%;
+    }
+
+    .journey-callout-col {
+      max-width: none;
+    }
+
+    .journey-callout-col-pain,
+    .journey-callout-col-solution {
+      /* Size to their own content (not stretched to the full card height)
+         so the two panels don't overlap and block each other's taps. */
+      align-self: start;
+      backface-visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: rotateY(-180deg);
+      transition: transform 0.6s ease, opacity 0.3s ease 0.15s;
+    }
+
+    .journey-callout-col-solution {
+      align-self: end;
+    }
+
+    /* Let the panels keep their layout box (needed for the flip transform and
+       for Rough.js to size their borders) instead of the native hidden
+       display:none, while still hiding them from assistive tech. */
+    .journey-callout-col-pain[hidden],
+    .journey-callout-col-solution[hidden] {
+      display: flex;
+    }
+
+    .journey-row-step.is-detail-open .journey-callout-col-pain,
+    .journey-row-step.is-detail-open .journey-callout-col-solution {
+      transform: rotateY(0deg);
+      opacity: 1;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+  }
+</style>

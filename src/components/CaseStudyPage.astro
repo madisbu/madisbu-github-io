@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import JourneyMap from "./JourneyMap.astro";
 import type { ProjectCaseStudy, ProjectDiscipline } from "../types/case-study";
 
 export interface Props {
@@ -323,6 +324,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                 </blockquote>
               )}
 
+              {section.journey && <JourneyMap journey={section.journey} />}
+
               {section.steps && section.steps.length > 0 && (
                 <ol class="case-study-steps">
                   {section.steps.map((step, stepIndex) => (
@@ -374,10 +377,16 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                           <p>{step.description}</p>
                         )}
                         {step.quotes && step.quotes.length > 0 && (
-                          <div class="case-study-step-quotes">
-                            {step.quotes.map((quote) => (
-                              <figure>
-                                <svg viewBox="0 0 48 48" aria-hidden="true">
+                          <div class="case-study-step-quotes" data-quote-board>
+                            {step.quotes.map((quote, quoteIndex) => (
+                              <figure
+                                class="case-study-quote-note"
+                                data-rough="sticky"
+                                data-rough-tone={String(quoteIndex % 3)}
+                                style={`--note-rotate: ${[-2.5, 1.75, -1.5][quoteIndex % 3]}deg;`}
+                              >
+                                <svg class="case-study-quote-rough" data-rough-target aria-hidden="true"></svg>
+                                <svg class="case-study-quote-icon" viewBox="0 0 48 48" aria-hidden="true">
                                   <path d="M10 6h24l8 8v24H22l-8 5v-5h-4V6Z"></path>
                                   <path d="M19 18h5v5l-4 5M29 18h5v5l-4 5"></path>
                                 </svg>
@@ -403,14 +412,23 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
               {section.media && (
                 <figure class="case-study-media">
-                  <img
-                    src={section.media.src}
-                    alt={section.media.alt}
-                    width={section.media.width}
-                    height={section.media.height}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <button
+                    type="button"
+                    class="case-study-media-trigger"
+                    data-case-study-media-trigger
+                    data-zoom-src={section.media.zoomSrc ?? section.media.src}
+                    aria-label={`Enlarge image: ${section.media.alt}`}
+                  >
+                    <img
+                      class:list={{ "is-transparent": section.media.transparentBackground }}
+                      src={section.media.src}
+                      alt={section.media.alt}
+                      width={section.media.width}
+                      height={section.media.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
                   {section.media.caption && <figcaption>{section.media.caption}</figcaption>}
                 </figure>
               )}
@@ -467,6 +485,20 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       </nav>
     </footer>
   </article>
+
+  <div class="case-study-lightbox" data-case-study-lightbox hidden>
+    <button
+      type="button"
+      class="case-study-lightbox-close"
+      data-case-study-lightbox-close
+      aria-label="Close enlarged image"
+    >
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M3 3l10 10M13 3L3 13"></path>
+      </svg>
+    </button>
+    <img data-case-study-lightbox-image src="" alt="" />
+  </div>
 </Layout>
 
 <style>
@@ -676,6 +708,41 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   .case-study-media img {
     border-radius: 1rem;
     background: var(--color-light);
+  }
+
+  .case-study-media img.is-transparent {
+    border-radius: 0;
+    background: none;
+  }
+
+  .case-study-media-trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+
+  .case-study-media-trigger::after {
+    content: "";
+    position: absolute;
+    inset: clamp(1rem, 3vw, 2rem);
+    border-radius: 1rem;
+    background: rgb(15 31 43 / 0%);
+    transition: background 150ms ease-out;
+    pointer-events: none;
+  }
+
+  .case-study-media-trigger:hover::after,
+  .case-study-media-trigger:focus-visible::after {
+    background: rgb(15 31 43 / 6%);
+  }
+
+  .case-study-media-trigger:focus-visible {
+    outline: 0.15rem solid var(--case-study-accent);
+    outline-offset: 0.2rem;
   }
 
   .case-study-media figcaption {
@@ -1012,7 +1079,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     position: relative;
     width: 4rem;
     padding: 0.5rem;
-    background: var(--color-light);
     fill: none;
     stroke: var(--case-study-accent);
     stroke-linecap: round;
@@ -1126,8 +1192,13 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   .case-study-feedback-lead {
     max-width: 40rem;
     margin: 0 auto;
+    padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.5rem, 4vw, 2rem);
+    border-top: 0.3rem solid var(--case-study-accent);
+    border-radius: 0.4rem;
+    background: var(--color-light);
     color: var(--color-text-dark);
-    font-size: clamp(1rem, 2vw, 1.15rem);
+    font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+    font-weight: 600;
     line-height: 1.65;
     text-align: center;
   }
@@ -1385,28 +1456,52 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   .case-study-step-quotes {
+    --sticky-yellow: #fdf3d0;
+    --sticky-grey: var(--color-light);
+    --sticky-blue: #e4edfb;
     display: grid;
-    gap: 0;
+    gap: 2.25rem 1.5rem;
     margin-top: clamp(2rem, 5vw, 3rem);
   }
 
-  .case-study-step-quotes figure {
+  .case-study-quote-note {
+    position: relative;
     display: grid;
     align-content: start;
     justify-items: center;
-    padding: 1.75rem clamp(0.75rem, 3vw, 1.5rem);
+    padding: 1.75rem clamp(0.9rem, 3vw, 1.5rem) 1.5rem;
     text-align: center;
+    background: var(--sticky-yellow);
+    transform: rotate(var(--note-rotate, 0deg));
+    box-shadow: 0 10px 18px -12px rgba(4, 4, 4, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .case-study-step-quotes figure + figure {
-    border-top: 1px solid var(--color-border);
+  .case-study-quote-note[data-rough-tone="1"] {
+    background: var(--sticky-grey);
   }
 
-  .case-study-step-quotes figure:last-child {
-    padding-bottom: 0;
+  .case-study-quote-note[data-rough-tone="2"] {
+    background: var(--sticky-blue);
   }
 
-  .case-study-step-quotes svg {
+  .case-study-quote-note:hover,
+  .case-study-quote-note:focus-within {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 0 14px 22px -12px rgba(4, 4, 4, 0.4);
+  }
+
+  .case-study-quote-rough {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .case-study-quote-icon {
+    position: relative;
     width: 3rem;
     fill: none;
     stroke: var(--color-text);
@@ -1415,7 +1510,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     stroke-width: 1.35;
   }
 
-  .case-study-step-quotes figcaption {
+  .case-study-quote-note figcaption {
+    position: relative;
     margin-top: 1rem;
     color: var(--color-text-dark);
     font-size: 0.86rem;
@@ -1423,13 +1519,23 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     line-height: 1.4;
   }
 
-  .case-study-step-quotes blockquote p {
+  .case-study-quote-note blockquote {
+    position: relative;
+  }
+
+  .case-study-quote-note blockquote p {
     max-width: 18rem;
     margin-top: 0.8rem;
     color: var(--color-text);
     font-size: clamp(0.9rem, 1.7vw, 0.98rem);
     font-style: italic;
     line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-study-quote-note {
+      transition: none;
+    }
   }
 
   .case-study-bullets {
@@ -1620,15 +1726,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .case-study-step-quotes figure + figure {
-      border-top: 0;
-      border-left: 1px solid var(--color-border);
-    }
-
-    .case-study-step-quotes figure {
-      padding-bottom: 0;
-    }
-
     .case-study-step-quotes figcaption {
       height: 2.4rem;
     }
@@ -1779,12 +1876,97 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       transition: none;
     }
   }
+
+  .case-study-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 5vw, 3rem);
+    background: rgb(15 20 26 / 92%);
+    opacity: 0;
+    transition: opacity 180ms ease-out;
+  }
+
+  .case-study-lightbox[hidden] {
+    display: none;
+  }
+
+  .case-study-lightbox.is-open {
+    opacity: 1;
+  }
+
+  .case-study-lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    cursor: zoom-out;
+    background: #fff;
+    border-radius: 0.5rem;
+    transform: scale(0.96);
+    transition: transform 180ms ease-out;
+  }
+
+  .case-study-lightbox.is-open img {
+    transform: scale(1);
+  }
+
+  .case-study-lightbox-close {
+    position: absolute;
+    top: clamp(0.75rem, 3vw, 1.5rem);
+    right: clamp(0.75rem, 3vw, 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 12%);
+    color: #fff;
+    cursor: pointer;
+    transition: background 150ms ease-out;
+  }
+
+  .case-study-lightbox-close:hover,
+  .case-study-lightbox-close:focus-visible {
+    background: rgb(255 255 255 / 24%);
+  }
+
+  .case-study-lightbox-close:focus-visible {
+    outline: 0.15rem solid #fff;
+    outline-offset: 0.15rem;
+  }
+
+  .case-study-lightbox-close svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-study-lightbox,
+    .case-study-lightbox img {
+      transition: none;
+    }
+  }
 </style>
 
 <script>
+  import rough from "roughjs";
+
   let cleanupCaseStudyNavigation: (() => void) | undefined;
   let cleanupCaseStudyHero: (() => void) | undefined;
   let cleanupCaseStudyFeedback: (() => void) | undefined;
+  let cleanupCaseStudyQuoteNotes: (() => void) | undefined;
+  let cleanupCaseStudyLightbox: (() => void) | undefined;
 
   const initCaseStudyHero = () => {
     cleanupCaseStudyHero?.();
@@ -1962,10 +2144,144 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     };
   };
 
+  const initCaseStudyQuoteNotes = () => {
+    cleanupCaseStudyQuoteNotes?.();
+
+    const notes = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-rough="sticky"]'),
+    );
+    if (notes.length === 0) return;
+
+    const drawNote = (note: HTMLElement) => {
+      const svg = note.querySelector<SVGSVGElement>("[data-rough-target]");
+      if (!svg) return;
+
+      const rect = note.getBoundingClientRect();
+      const width = Math.max(rect.width, 1);
+      const height = Math.max(rect.height, 1);
+      svg.setAttribute("width", String(width));
+      svg.setAttribute("height", String(height));
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.innerHTML = "";
+
+      const generator = rough.svg(svg);
+      const pad = 2;
+      const seed = 11 + Array.from(note.dataset.roughTone ?? "0").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+      const node = generator.rectangle(pad, pad, width - pad * 2, height - pad * 2, {
+        stroke: "#040404",
+        strokeWidth: 1.75,
+        roughness: 1,
+        bowing: 0.6,
+        fill: undefined,
+        disableMultiStroke: true,
+        disableMultiStrokeFill: true,
+        seed,
+      });
+      svg.appendChild(node);
+    };
+
+    const redrawAll = () => notes.forEach(drawNote);
+    redrawAll();
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(redrawAll, 150);
+    };
+    window.addEventListener("resize", handleResize);
+
+    const resizeObserver =
+      "ResizeObserver" in window ? new ResizeObserver(handleResize) : undefined;
+    notes.forEach((note) => resizeObserver?.observe(note));
+
+    if ("fonts" in document) {
+      document.fonts.ready.then(() => window.requestAnimationFrame(redrawAll));
+    }
+
+    cleanupCaseStudyQuoteNotes = () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
+      resizeObserver?.disconnect();
+    };
+  };
+
+  const initCaseStudyLightbox = () => {
+    cleanupCaseStudyLightbox?.();
+
+    const lightbox = document.querySelector<HTMLElement>("[data-case-study-lightbox]");
+    const lightboxImage = lightbox?.querySelector<HTMLImageElement>(
+      "[data-case-study-lightbox-image]",
+    );
+    const closeButton = lightbox?.querySelector<HTMLButtonElement>(
+      "[data-case-study-lightbox-close]",
+    );
+    const triggers = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("[data-case-study-media-trigger]"),
+    );
+    if (!lightbox || !lightboxImage || !closeButton || triggers.length === 0) return;
+
+    let lastTrigger: HTMLButtonElement | null = null;
+
+    const openLightbox = (trigger: HTMLButtonElement) => {
+      const image = trigger.querySelector("img");
+      if (!image) return;
+
+      lastTrigger = trigger;
+      lightboxImage.src = trigger.dataset.zoomSrc || image.currentSrc || image.src;
+      lightboxImage.alt = image.alt;
+      lightbox.hidden = false;
+      // Force layout before adding the class so the fade/scale transition runs.
+      lightbox.getBoundingClientRect();
+      lightbox.classList.add("is-open");
+      closeButton.focus();
+      document.body.style.overflow = "hidden";
+    };
+
+    const closeLightbox = () => {
+      if (lightbox.hidden) return;
+
+      lightbox.classList.remove("is-open");
+      document.body.style.overflow = "";
+      lastTrigger?.focus();
+
+      window.setTimeout(() => {
+        lightbox.hidden = true;
+        lightboxImage.src = "";
+      }, 180);
+    };
+
+    const handleTriggerClick = (event: MouseEvent) => {
+      openLightbox(event.currentTarget as HTMLButtonElement);
+    };
+
+    const handleBackdropClick = (event: MouseEvent) => {
+      if (event.target === lightbox) closeLightbox();
+    };
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+    };
+
+    triggers.forEach((trigger) => trigger.addEventListener("click", handleTriggerClick));
+    closeButton.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", handleBackdropClick);
+    document.addEventListener("keydown", handleKeydown);
+
+    cleanupCaseStudyLightbox = () => {
+      triggers.forEach((trigger) => trigger.removeEventListener("click", handleTriggerClick));
+      closeButton.removeEventListener("click", closeLightbox);
+      lightbox.removeEventListener("click", handleBackdropClick);
+      document.removeEventListener("keydown", handleKeydown);
+      document.body.style.overflow = "";
+    };
+  };
+
   const initCaseStudyPage = () => {
     initCaseStudyHero();
     initCaseStudyNavigation();
     initCaseStudyFeedback();
+    initCaseStudyQuoteNotes();
+    initCaseStudyLightbox();
   };
 
   if (document.readyState === "loading") {

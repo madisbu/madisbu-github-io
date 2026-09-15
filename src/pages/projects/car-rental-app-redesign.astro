@@ -177,7 +177,7 @@ const project = {
           feature: {
             paragraphs: [
               "Competitive benchmarking let me study how similar rental companies address common booking problems without recruiting participants.",
-              "Discovery: One company advertised a 15% discount for online payment. Yet 15% off €573.76 is €487.70—not the advertised €500.15.",
+              "Discovery: One company advertised a 15% discount for online payment. Yet 15% off €573.76 is €487.70 not the advertised €500.15.",
             ],
             paragraphEmphasis: ["Discovery:"],
             media: {
@@ -237,40 +237,105 @@ const project = {
       id: "flow",
       title: "Journey & structure",
       eyebrow: "Information architecture",
-      summary: "A clear sequence turns a large booking task into a set of manageable decisions.",
-      steps: [
-        {
-          title: "Search",
-          description: "Set location and dates, then refine results with meaningful filters.",
-        },
-        {
-          title: "Select",
-          description: "Compare vehicles using consistent specifications, availability, and pricing.",
-        },
-        {
-          title: "Customize",
-          description: "Choose cover and extras with contextual explanations and visible price changes.",
-        },
-        {
-          title: "Review and pay",
-          description: "Confirm the complete order, customer details, and final price before payment.",
-        },
-      ],
+      summary: "A clear sequence turns a large booking task into a set of manageable decisions. Tap any step to see the pain point it addresses and the UX solution behind it.",
+      journey: {
+        startLabel: "Start",
+        finishLabel: "Finish",
+        nodes: [
+          {
+            title: "Main",
+            description: "Land on the home screen and start a new search with location and dates.",
+            stepLabel: "Step 1",
+            painPoint: {
+              label: "Pain point",
+              text: "Distracting promo banners and login pop-ups interrupt customers before they even start searching.",
+            },
+            solution: {
+              label: "UX solution",
+              text: "Start searching with absolutely zero interruptions—no banners or forced sign-in up front.",
+            },
+          },
+          {
+            title: "Search",
+            description: "Browse results on a map and list, then refine with meaningful filters.",
+            stepLabel: "Step 2",
+            painPoint: {
+              label: "Pain point",
+              text: "A broken map view and confusing filtering or sorting options make results hard to trust.",
+            },
+            solution: {
+              label: "UX solution",
+              text: "A reliable map and list view with clear filters that actually narrow down results.",
+            },
+          },
+          {
+            title: "Car Details",
+            description: "Compare a specific vehicle's specifications, availability, and full pricing.",
+            stepLabel: "Step 2",
+            painPoint: {
+              label: "Pain point",
+              text: "Confusing pricing logic. Final price not transparent.",
+            },
+            solution: {
+              label: "UX solution",
+              text: "A complete, transparent price breakdown that's visible before any extra steps.",
+            },
+          },
+          {
+            title: "Covers",
+            description: "Choose a protection plan with contextual explanations of what's included.",
+            stepLabel: "Step 3",
+            painPoint: {
+              label: "Pain point",
+              text: "Cover options use acronyms like CDW, LDW, and PAI without enough plain-language context.",
+            },
+            solution: {
+              label: "UX solution",
+              text: "Simple plan descriptions with no confusing acronyms or unexplained jargon.",
+            },
+          },
+          {
+            title: "Extras",
+            description: "Add optional equipment and services with clear visuals and pricing.",
+            stepLabel: "Step 3",
+            painPoint: {
+              label: "Pain point",
+              text: "Generic icons and unclear pricing make it hard to know what an extra actually includes.",
+            },
+            solution: {
+              label: "UX solution",
+              text: "Real photos of every extra with clear, itemized pricing shown up front.",
+            },
+          },
+          {
+            title: "Summary",
+            description: "Confirm the complete order, personal details, and final price before payment.",
+            stepLabel: "Step 4",
+            painPoint: {
+              label: "Pain point",
+              text: "Being forced to log in or register mid-flow interrupts customers just before they finish booking.",
+            },
+            solution: {
+              label: "UX solution",
+              text: "Fast, secure personal-details entry with a final price breakdown and summary before paying.",
+            },
+          },
+        ],
+      },
     },
     {
       id: "sketches",
       title: "Sketches",
       eyebrow: "Create",
       summary: "Explore alternative structures quickly before committing time to visual detail.",
-      paragraphs: [
-        "Early sketches explored search results, vehicle details, step order, and the information needed at key decision points. Comparing several directions made it easier to identify weak assumptions before moving into wireframes.",
-      ],
-      bullets: [
-        "Search and filter entry points.",
-        "Vehicle list and comparison patterns.",
-        "Pricing, extras, and cover selection.",
-        "Checkout progress and review states.",
-      ],
+      media: {
+        src: "/images/projects/car-rental-app-redesign/sketches/sketches.png",
+        zoomSrc: "/images/projects/car-rental-app-redesign/sketches/sketches-full.png",
+        alt: "Hand-drawn wireframe sketches of the home, search, car details, extras, and payment screens",
+        width: 1418,
+        height: 578,
+        transparentBackground: true,
+      },
     },
     {
       id: "design",
