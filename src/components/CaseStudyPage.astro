@@ -1887,6 +1887,12 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   @media (min-width: 768px) {
     .case-study-step-feature {
       grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.65fr);
+      /* Row 1 is capped to the copy's own content height (rather than
+         "auto", which would let the tall spanning figure inflate it) so any
+         extra height needed for the figure is absorbed by row 2 instead.
+         That keeps the CTA directly under the copy instead of leaving a
+         large gap above it. */
+      grid-template-rows: min-content auto;
       align-items: start;
     }
 
@@ -1903,6 +1909,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     .case-study-step-feature > a {
       grid-column: 1;
       grid-row: 2;
+      align-self: start;
     }
 
     .case-study-step-feature.is-media-wide {
@@ -2091,7 +2098,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       width: 100%;
     }
 
-    .case-study-step-feature {
+    .case-study-step-feature,
+    .case-study-step-feature.is-media-wide {
       grid-template-columns: minmax(0, 1fr);
       gap: 1.5rem;
     }
@@ -2099,6 +2107,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     .case-study-step-feature-copy,
     .case-study-step-feature > figure {
       grid-column: 1;
+      grid-row: auto;
     }
 
     .case-study-step-feature > figure {
@@ -2117,6 +2126,84 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
     .case-study-step-quotes figcaption {
       height: auto;
+    }
+
+    .case-study-embed {
+      height: auto;
+      min-height: 22rem;
+      overflow: visible;
+    }
+
+    .case-study-embed::after,
+    .case-study-embed iframe {
+      display: none;
+    }
+
+    .case-study-embed-mobile {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 1.5rem;
+      padding: 1.5rem 1rem 2rem;
+      border-radius: 1rem;
+      background: var(--color-light);
+    }
+  }
+
+  /* Tablets in portrait have room for the desktop-style two-column research
+     layout and CTA, but not enough height for the sidebar journey nav or the
+     Figma prototype to render correctly, so those two get the same
+     treatment as phones while everything else stays like desktop. Tablet
+     landscape (and anything 1024px+) is unaffected. */
+  @media (min-width: 640px) and (max-width: 1023px) and (orientation: portrait) {
+    .case-study-nav-wrap {
+      display: none;
+    }
+
+    .case-study-layout {
+      margin-top: 0;
+    }
+
+    .case-study-sections {
+      margin-top: clamp(3.5rem, 8vw, 7rem);
+    }
+
+    .case-study-step-quotes {
+      margin-left: -3.25rem;
+      width: calc(100% + 3.25rem);
+    }
+
+    .case-study-embed {
+      height: auto;
+      min-height: 22rem;
+      overflow: visible;
+    }
+
+    .case-study-embed::after,
+    .case-study-embed iframe {
+      display: none;
+    }
+
+    .case-study-embed-mobile {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 1.5rem;
+      padding: 1.5rem 1rem 2rem;
+      border-radius: 1rem;
+      background: var(--color-light);
+    }
+  }
+
+  /* Tablet landscape has room to keep the desktop-style sidebar nav (unlike
+     portrait), but the Figma prototype still doesn't render correctly on
+     real tablet hardware in this orientation, so it gets the same
+     static-preview fallback as phones and tablet portrait. `pointer: coarse`
+     scopes this to touch tablets so similarly sized landscape laptops keep
+     the live embed. */
+  @media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse) {
+    .case-study-step-quotes {
+      justify-content: center;
     }
 
     .case-study-embed {
@@ -2575,7 +2662,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     if (embeds.length === 0) return;
 
     const mobileEmbedQuery = window.matchMedia(
-      "(max-width: 639px), (max-width: 1023px) and (max-height: 600px) and (orientation: landscape)",
+      "(max-width: 639px), (max-width: 1023px) and (max-height: 600px) and (orientation: landscape), (min-width: 640px) and (max-width: 1023px) and (orientation: portrait), (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse)",
     );
     let loaded = false;
     let idleCallback: number | undefined;

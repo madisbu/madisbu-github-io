@@ -329,7 +329,13 @@ const finishLabel = journey.finishLabel ?? "Finish";
     }
 
     // Pain point / solution toggle.
-    const mobileFlipQuery = window.matchMedia("(max-width: 36rem)");
+    // Must mirror the flip-card breakpoint below (`@media (max-width: 36rem),
+    // (max-width: 63.9375rem) and (max-height: 37.5rem) and (orientation:
+    // landscape)`) or the mobile-landscape flip loses its tap-to-close
+    // affordance once the front rotates out of hit-testing range.
+    const mobileFlipQuery = window.matchMedia(
+      "(max-width: 36rem), (max-width: 63.9375rem) and (max-height: 37.5rem) and (orientation: landscape)",
+    );
     map.querySelectorAll<HTMLElement>("[data-journey-toggle]").forEach((toggle) => {
       const row = toggle.closest<HTMLElement>("[data-journey-step]");
       const detailIds = (toggle.getAttribute("aria-controls") ?? "").split(/\s+/).filter(Boolean);
@@ -856,6 +862,24 @@ const finishLabel = journey.finishLabel ?? "Finish";
       transform: rotateY(180deg);
       opacity: 0;
       pointer-events: none;
+    }
+
+    .journey-row-step.is-detail-open {
+      grid-template-rows: auto auto;
+      row-gap: 1rem;
+      align-items: start;
+    }
+
+    .journey-row-step.is-detail-open .journey-card-col {
+      grid-row: 1 / span 2;
+    }
+
+    .journey-row-step.is-detail-open .journey-callout-col-pain {
+      grid-row: 1;
+    }
+
+    .journey-row-step.is-detail-open .journey-callout-col-solution {
+      grid-row: 2;
     }
 
     .journey-shape-card,
