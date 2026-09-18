@@ -266,7 +266,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                               alt={review.logo.alt}
                               width={review.logo.width}
                               height={review.logo.height}
-                              loading="lazy"
+                              loading="eager"
                               decoding="async"
                             />
                           </div>
@@ -362,10 +362,12 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                             </div>
                             <figure>
                               <img
+                                class:list={{ "is-transparent": step.feature.media.transparentBackground }}
                                 src={step.feature.media.src}
                                 alt={step.feature.media.alt}
                                 width={step.feature.media.width}
                                 height={step.feature.media.height}
+                                style={`aspect-ratio: ${step.feature.media.width} / ${step.feature.media.height}`}
                                 loading="lazy"
                                 decoding="async"
                               />
@@ -433,6 +435,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                       alt={section.media.alt}
                       width={section.media.width}
                       height={section.media.height}
+                      style={`aspect-ratio: ${section.media.width} / ${section.media.height}`}
+                      style={`aspect-ratio: ${section.media.width} / ${section.media.height}`}
                       loading="lazy"
                       decoding="async"
                     />
@@ -463,6 +467,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                           alt={media.alt}
                           width={media.width}
                           height={media.height}
+                          style={`aspect-ratio: ${media.width} / ${media.height}`}
+                          style={`aspect-ratio: ${media.width} / ${media.height}`}
                           loading="lazy"
                           decoding="async"
                         />
@@ -474,10 +480,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
               )}
 
               {section.embed && (
-                <div
-                  class="case-study-embed"
-                  style={`--embed-aspect-ratio: ${section.embed.width} / ${section.embed.height}`}
-                >
+                <div class="case-study-embed">
                   <div class="case-study-embed-mobile">
                     {section.embed.mobilePreview && (
                       <img
@@ -485,6 +488,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                         alt={section.embed.mobilePreview.alt}
                         width={section.embed.mobilePreview.width}
                         height={section.embed.mobilePreview.height}
+                        style={`aspect-ratio: ${section.embed.mobilePreview.width} / ${section.embed.mobilePreview.height}`}
+                        style={`aspect-ratio: ${section.embed.mobilePreview.width} / ${section.embed.mobilePreview.height}`}
                         loading="lazy"
                         decoding="async"
                       />
@@ -501,15 +506,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                       </svg>
                     </a>
                   </div>
-                  <iframe
-                    data-case-study-embed
-                    data-src={section.embed.src}
-                    title={section.embed.title}
-                    width={section.embed.width}
-                    height={section.embed.height}
-                    loading="eager"
-                    allowfullscreen
-                  ></iframe>
                 </div>
               )}
 
@@ -1526,8 +1522,10 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   .case-study-step-feature.is-media-wide img {
     max-width: 100%;
     max-height: none;
+  }
+
+  .case-study-step-feature img.is-transparent {
     border: 0;
-    border-radius: 0;
     box-shadow: none;
   }
 
@@ -1661,35 +1659,19 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   .case-study-embed {
-    --embed-height: clamp(36rem, 50vw, 43.75rem);
-    --embed-footer-height: 3.5rem;
-    position: relative;
     width: min(100%, 60.625rem);
-    height: var(--embed-height);
+    min-height: 22rem;
     margin: clamp(3rem, 7vw, 5rem) auto 0;
-    overflow: hidden;
-  }
-
-  .case-study-embed::after {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    height: var(--embed-footer-height);
-    background: var(--color-body);
-    content: "";
-  }
-
-  .case-study-embed iframe {
-    display: block;
-    width: 100%;
-    height: var(--embed-height);
-    border: 0;
   }
 
   .case-study-embed-mobile {
-    display: none;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem 2rem;
+    border-radius: 1rem;
+    background: var(--color-light);
   }
 
   .case-study-embed-mobile > img {
@@ -2134,11 +2116,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       overflow: visible;
     }
 
-    .case-study-embed::after,
-    .case-study-embed iframe {
-      display: none;
-    }
-
     .case-study-embed-mobile {
       display: grid;
       place-items: center;
@@ -2179,11 +2156,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       overflow: visible;
     }
 
-    .case-study-embed::after,
-    .case-study-embed iframe {
-      display: none;
-    }
-
     .case-study-embed-mobile {
       display: grid;
       place-items: center;
@@ -2210,11 +2182,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       height: auto;
       min-height: 22rem;
       overflow: visible;
-    }
-
-    .case-study-embed::after,
-    .case-study-embed iframe {
-      display: none;
     }
 
     .case-study-embed-mobile {
@@ -2343,7 +2310,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   let cleanupCaseStudyFeedback: (() => void) | undefined;
   let cleanupCaseStudyQuoteNotes: (() => void) | undefined;
   let cleanupCaseStudyLightbox: (() => void) | undefined;
-  let cleanupCaseStudyEmbeds: (() => void) | undefined;
 
   const initCaseStudyHero = () => {
     cleanupCaseStudyHero?.();
@@ -2653,63 +2619,12 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     };
   };
 
-  const initCaseStudyEmbeds = () => {
-    cleanupCaseStudyEmbeds?.();
-
-    const embeds = Array.from(
-      document.querySelectorAll<HTMLIFrameElement>("[data-case-study-embed][data-src]"),
-    );
-    if (embeds.length === 0) return;
-
-    const mobileEmbedQuery = window.matchMedia(
-      "(max-width: 639px), (max-width: 1023px) and (max-height: 600px) and (orientation: landscape), (min-width: 640px) and (max-width: 1023px) and (orientation: portrait), (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) and (pointer: coarse)",
-    );
-    let loaded = false;
-    let idleCallback: number | undefined;
-    let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
-
-    const loadEmbeds = () => {
-      if (loaded || mobileEmbedQuery.matches) return;
-      loaded = true;
-
-      embeds.forEach((embed) => {
-        const src = embed.dataset.src;
-        if (!src || embed.src === src) return;
-        embed.src = src;
-      });
-    };
-
-    mobileEmbedQuery.addEventListener("change", loadEmbeds);
-
-    if (document.readyState === "complete") {
-      loadEmbeds();
-    } else {
-      window.addEventListener("load", loadEmbeds, { once: true });
-
-      if ("requestIdleCallback" in window) {
-        idleCallback = window.requestIdleCallback(loadEmbeds, { timeout: 3000 });
-      } else {
-        fallbackTimer = setTimeout(loadEmbeds, 1500);
-      }
-    }
-
-    cleanupCaseStudyEmbeds = () => {
-      window.removeEventListener("load", loadEmbeds);
-      if (idleCallback !== undefined && "cancelIdleCallback" in window) {
-        window.cancelIdleCallback(idleCallback);
-      }
-      if (fallbackTimer !== undefined) clearTimeout(fallbackTimer);
-      mobileEmbedQuery.removeEventListener("change", loadEmbeds);
-    };
-  };
-
   const initCaseStudyPage = () => {
     initCaseStudyHero();
     initCaseStudyNavigation();
     initCaseStudyFeedback();
     initCaseStudyQuoteNotes();
     initCaseStudyLightbox();
-    initCaseStudyEmbeds();
   };
 
   if (document.readyState === "loading") {

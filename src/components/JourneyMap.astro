@@ -91,6 +91,7 @@ const finishLabel = journey.finishLabel ?? "Finish";
                         alt={node.final.alt}
                         width={node.final.width}
                         height={node.final.height}
+                        style={`aspect-ratio: ${node.final.width} / ${node.final.height}`}
                         loading="lazy"
                         decoding="async"
                       />
