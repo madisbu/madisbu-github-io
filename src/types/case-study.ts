@@ -37,6 +37,10 @@ export interface CaseStudyMetric {
   label: string;
 }
 
+export interface CaseStudyNumberedItem {
+  text: string;
+}
+
 export interface CaseStudyFinding {
   prefix?: string;
   value: string;
@@ -74,6 +78,9 @@ export interface CaseStudyQuote {
 export interface CaseStudyStep {
   title: string;
   description: string;
+  /** Optional short badge shown above the step title (e.g. "Custom build"). */
+  tag?: string;
+  details?: string[];
   feature?: {
     paragraphs: string[];
     paragraphEmphasis?: string[];
@@ -119,6 +126,17 @@ export interface CaseStudyJourney {
   nodes: CaseStudyJourneyNode[];
 }
 
+export interface CaseStudySitemapNode {
+  label: string;
+  /** Renders the node with a dashed border to signal an optional/secondary page. */
+  dashed?: boolean;
+  children?: CaseStudySitemapNode[];
+}
+
+export interface CaseStudySitemap {
+  root: CaseStudySitemapNode;
+}
+
 export interface CaseStudyCallout {
   label?: string;
   text: string;
@@ -145,6 +163,7 @@ export interface CaseStudySection {
   paragraphs?: string[];
   paragraphEmphasis?: string[];
   bullets?: string[];
+  numberedItems?: CaseStudyNumberedItem[];
   metrics?: CaseStudyMetric[];
   findings?: CaseStudyFindingGroup;
   feedback?: CaseStudyFeedback;
@@ -156,6 +175,7 @@ export interface CaseStudySection {
   mediaGallery?: CaseStudyMedia[];
   embed?: CaseStudyEmbed;
   links?: CaseStudyLink[];
+  sitemap?: CaseStudySitemap;
 }
 
 export interface ProjectCaseStudy {

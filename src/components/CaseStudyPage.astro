@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import JourneyMap from "./JourneyMap.astro";
+import SitemapTree from "./SitemapTree.astro";
 import type { ProjectCaseStudy, ProjectDiscipline } from "../types/case-study";
 
 export interface Props {
@@ -19,7 +20,7 @@ const disciplineDetails: Record<
   },
   "web-design": {
     caseStudyLabel: "Web Design Case Study",
-    accent: "#a84900",
+    accent: "rgb(243, 100, 18)",
   },
   "product-development": {
     caseStudyLabel: "Product Development Case Study",
@@ -325,6 +326,56 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                 </div>
               )}
 
+              {section.id === "problem" && (section.media || section.numberedItems) ? (
+                <div class="case-study-problem-grid">
+                  {section.media && (
+                    <figure class="case-study-media">
+                      <button
+                        type="button"
+                        class="case-study-media-trigger"
+                        data-case-study-media-trigger
+                        data-zoom-src={section.media.zoomSrc ?? section.media.src}
+                        aria-label={`Enlarge image: ${section.media.alt}`}
+                      >
+                        <img
+                          class:list={{ "is-transparent": section.media.transparentBackground }}
+                          src={section.media.src}
+                          alt={section.media.alt}
+                          width={section.media.width}
+                          height={section.media.height}
+                          style={`aspect-ratio: ${section.media.width} / ${section.media.height}`}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </button>
+                      {section.media.caption && <figcaption>{section.media.caption}</figcaption>}
+                    </figure>
+                  )}
+
+                  {section.numberedItems && section.numberedItems.length > 0 && (
+                    <ol class="case-study-numbered-list">
+                      {section.numberedItems.map((item, itemIndex) => (
+                        <li>
+                          <span>{String(itemIndex + 1).padStart(2, "0")}</span>
+                          <p>{item.text}</p>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
+              ) : (
+                section.numberedItems && section.numberedItems.length > 0 && (
+                  <ol class="case-study-numbered-list">
+                    {section.numberedItems.map((item, itemIndex) => (
+                      <li>
+                        <span>{String(itemIndex + 1).padStart(2, "0")}</span>
+                        <p>{item.text}</p>
+                      </li>
+                    ))}
+                  </ol>
+                )
+              )}
+
               {section.callout && (
                 <blockquote class="case-study-callout">
                   {section.callout.label && <p>{section.callout.label}</p>}
@@ -334,7 +385,55 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
               {section.journey && <JourneyMap journey={section.journey} />}
 
-              {section.steps && section.steps.length > 0 && (
+              {section.id === "process" && section.steps && section.steps.length > 0 && (
+                <>
+                  <p class="case-study-journey-hint">Click to expand</p>
+                  <ol class="case-study-journey" style={`--journey-steps: ${section.steps.length}`}>
+                  {section.steps.map((step, stepIndex) => (
+                    <li class="case-study-journey-item" style={`--journey-col: ${stepIndex + 1}`}>
+                      <div class="case-study-journey-node">
+                        <span class="case-study-journey-ring" aria-hidden="true"></span>
+                        <button
+                          class="case-study-journey-number"
+                          type="button"
+                          aria-label={`Show tasks for ${step.title}`}
+                          aria-controls={`${section.id}-step-${stepIndex + 1}-tasks`}
+                          aria-expanded="false"
+                          data-journey-node
+                        >
+                          {String(stepIndex + 1).padStart(2, "0")}
+                        </button>
+                      </div>
+                      <div class="case-study-journey-content">
+                        <div class="case-study-journey-summary">
+                          {step.tag && <span class="case-study-journey-tag">{step.tag}</span>}
+                          <h3>{step.title}</h3>
+                        </div>
+                        {step.details && step.details.length > 0 && (
+                          <details
+                            id={`${section.id}-step-${stepIndex + 1}-tasks`}
+                            class="case-study-journey-tasks"
+                            data-journey-tasks
+                          >
+                            <summary>
+                              <span>View tasks</span>
+                              <svg viewBox="0 0 16 16" aria-hidden="true">
+                                <path d="M4 6l4 4 4-4"></path>
+                              </svg>
+                            </summary>
+                            <ul class="case-study-step-details">
+                              {step.details.map((detail) => <li>{detail}</li>)}
+                            </ul>
+                          </details>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                  </ol>
+                </>
+              )}
+
+              {section.id !== "process" && section.steps && section.steps.length > 0 && (
                 <ol class="case-study-steps">
                   {section.steps.map((step, stepIndex) => (
                     <li class:list={{ "has-feature": step.feature || step.quotes?.length }}>
@@ -384,7 +483,14 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                             </a>
                           </div>
                         ) : (
-                          <p>{step.description}</p>
+                          <>
+                            <p>{step.description}</p>
+                            {step.details && step.details.length > 0 && (
+                              <ul class="case-study-step-details">
+                                {step.details.map((detail) => <li>{detail}</li>)}
+                              </ul>
+                            )}
+                          </>
                         )}
                         {step.quotes && step.quotes.length > 0 && (
                           <div class="case-study-step-quotes" data-quote-board>
@@ -420,7 +526,11 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                 </ul>
               )}
 
-              {section.media && (
+              {section.sitemap && (
+                <SitemapTree node={section.sitemap.root} isRoot />
+              )}
+
+              {section.media && section.id !== "problem" && (
                 <figure class="case-study-media">
                   <button
                     type="button"
@@ -435,7 +545,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                       alt={section.media.alt}
                       width={section.media.width}
                       height={section.media.height}
-                      style={`aspect-ratio: ${section.media.width} / ${section.media.height}`}
                       style={`aspect-ratio: ${section.media.width} / ${section.media.height}`}
                       loading="lazy"
                       decoding="async"
@@ -468,7 +577,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                           width={media.width}
                           height={media.height}
                           style={`aspect-ratio: ${media.width} / ${media.height}`}
-                          style={`aspect-ratio: ${media.width} / ${media.height}`}
                           loading="lazy"
                           decoding="async"
                         />
@@ -488,7 +596,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                         alt={section.embed.mobilePreview.alt}
                         width={section.embed.mobilePreview.width}
                         height={section.embed.mobilePreview.height}
-                        style={`aspect-ratio: ${section.embed.mobilePreview.width} / ${section.embed.mobilePreview.height}`}
                         style={`aspect-ratio: ${section.embed.mobilePreview.width} / ${section.embed.mobilePreview.height}`}
                         loading="lazy"
                         decoding="async"
@@ -562,7 +669,15 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     </footer>
   </article>
 
-  <div class="case-study-lightbox" data-case-study-lightbox hidden>
+  <div
+    class="case-study-lightbox"
+    data-case-study-lightbox
+    role="dialog"
+    aria-modal="true"
+    aria-label="Enlarged case study image"
+    tabindex="-1"
+    hidden
+  >
     <button
       type="button"
       class="case-study-lightbox-close"
@@ -1638,6 +1753,350 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     content: "";
   }
 
+  .case-study-numbered-list {
+    display: grid;
+    gap: 0;
+    max-width: 48rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-study-numbered-list li {
+    display: grid;
+    grid-template-columns: clamp(3.25rem, 9vw, 4rem) minmax(0, 1fr);
+    gap: clamp(0.8rem, 3vw, 1.5rem);
+    align-items: center;
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+    border-top: 1px dashed var(--color-text-light);
+  }
+
+  .case-study-numbered-list li:first-child {
+    border-top: 0;
+  }
+
+  .case-study-numbered-list li > span {
+    color: var(--case-study-accent);
+    font-family: var(--font-secondary);
+    font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .case-study-numbered-list p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .case-study-step-details {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0.75rem 0 0;
+    padding-left: 0;
+    color: var(--color-text-light);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    text-align: center;
+    list-style: none;
+  }
+
+  .case-study-step-details li {
+    padding-left: 0.15rem;
+  }
+
+  /* Interactive workflow journey (Process section) */
+  .case-study-journey-hint {
+    max-width: 20rem;
+    margin: 2.25rem auto 0;
+    color: var(--color-text-light);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .case-study-journey-tag {
+    display: inline-block;
+    margin: 0 0 0.84rem;
+    padding: 0.15rem 0.45rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.45rem;
+    background: rgba(68, 68, 68, 0.02);
+    color: var(--color-text-light);
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .case-study-journey {
+    position: relative;
+    display: grid;
+    gap: 0;
+    max-width: 44rem;
+    margin: 3.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-study-journey-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: clamp(3.25rem, 9vw, 4rem) minmax(0, 1fr);
+    gap: clamp(1rem, 4vw, 1.75rem);
+    padding-bottom: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .case-study-journey-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .case-study-journey-item::before {
+    content: "";
+    position: absolute;
+    top: clamp(3.25rem, 9vw, 4rem);
+    bottom: 0;
+    left: calc(clamp(3.25rem, 9vw, 4rem) / 2 - 1px);
+    width: 2px;
+    background-image: linear-gradient(to bottom, var(--case-study-accent) 0 6px, transparent 6px 14px);
+    background-size: 2px 14px;
+    background-repeat: repeat-y;
+  }
+
+  .case-study-journey-item:last-child::before {
+    display: none;
+  }
+
+  .case-study-journey-node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: clamp(3.25rem, 9vw, 4rem);
+    height: clamp(3.25rem, 9vw, 4rem);
+    border-radius: 50%;
+    background: var(--color-light);
+  }
+
+  .case-study-journey-ring {
+    position: absolute;
+    inset: 0;
+    border: 2px dashed var(--case-study-accent);
+    border-radius: 50%;
+  }
+
+  .case-study-journey-number {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    position: relative;
+    color: var(--case-study-accent);
+    font-family: var(--font-secondary);
+    font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .case-study-journey-number:hover,
+  .case-study-journey-number:focus-visible {
+    color: var(--color-text-dark);
+    transform: scale(1.12);
+  }
+
+  .case-study-journey-number:focus-visible {
+    outline: 2px solid var(--case-study-accent);
+    outline-offset: 0.25rem;
+  }
+
+  .case-study-journey-number.is-active {
+    color: var(--color-text-dark);
+    transform: scale(1.15);
+  }
+
+  .case-study-journey-content h3 {
+    margin: 0 0 0.4rem;
+    color: var(--color-text-dark);
+    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+    font-weight: 400;
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .case-study-journey-content p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .case-study-journey-tasks {
+    margin-top: 0.75rem;
+  }
+
+  .case-study-journey-tasks summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--case-study-accent);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .case-study-journey-tasks summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .case-study-journey-tasks summary svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.2s ease;
+  }
+
+  .case-study-journey-tasks[open] summary svg {
+    transform: rotate(180deg);
+  }
+
+  .case-study-journey-tasks .case-study-step-details {
+    margin-top: 0.65rem;
+    text-align: center;
+  }
+
+  @media (max-width: 1023px) {
+    .case-study-journey-tasks .case-study-step-details {
+      text-align: left;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .case-study-journey {
+      max-width: none;
+      display: grid;
+      grid-auto-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(3.5rem, auto) auto minmax(3.5rem, auto);
+      align-items: center;
+      column-gap: 0;
+      margin-top: 4.5rem;
+      padding-top: 0;
+    }
+
+    .case-study-journey::before {
+      content: "";
+      grid-row: 2;
+      grid-column: 1 / calc(var(--journey-steps) + 1);
+      align-self: center;
+      height: 2px;
+      background-image: repeating-linear-gradient(
+        to right,
+        var(--case-study-accent) 0 10px,
+        transparent 10px 20px
+      );
+    }
+
+    .case-study-journey-item {
+      display: contents;
+    }
+
+    .case-study-journey-item::before {
+      display: none;
+    }
+
+    .case-study-journey-node {
+      grid-row: 2;
+      grid-column: var(--journey-col);
+      justify-self: center;
+    }
+
+    .case-study-journey-content {
+      grid-row: 1;
+      grid-column: var(--journey-col);
+      align-self: end;
+      justify-self: center;
+      max-width: 15rem;
+      padding-bottom: 1.75rem;
+      text-align: center;
+      display: contents;
+    }
+
+    .case-study-journey-summary,
+    .case-study-journey-tasks {
+      grid-column: var(--journey-col);
+      justify-self: center;
+      width: min(100%, 15rem);
+    }
+
+    .case-study-journey-summary {
+      grid-row: 1;
+      align-self: end;
+      padding-bottom: 1.75rem;
+    }
+
+    .case-study-journey-summary h3 {
+      margin-bottom: 0.4rem;
+    }
+
+    .case-study-journey-tasks {
+      grid-row: 3;
+      align-self: start;
+      margin-top: 0;
+      padding-top: 1.75rem;
+    }
+
+    .case-study-journey-tasks summary {
+      justify-content: center;
+    }
+  }
+
+  .case-study-section#problem > .case-study-section-heading,
+  .case-study-section#problem > .case-study-copy {
+    width: 100%;
+    max-width: 50rem;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  .case-study-problem-grid {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .case-study-problem-grid .case-study-media {
+    width: min(100%, 37.5rem);
+    margin: 0 auto;
+    align-self: center;
+  }
+
+  .case-study-problem-grid .case-study-media img.is-transparent {
+    padding: 0;
+  }
+
+  .case-study-problem-grid .case-study-numbered-list {
+    margin: 0;
+    max-width: none;
+  }
+
   .case-study-media {
     margin: 2.5rem 0 0;
   }
@@ -1939,6 +2398,11 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       align-items: start;
     }
 
+    .case-study-problem-grid {
+      grid-template-columns: minmax(12rem, 0.8fr) minmax(0, 1.2fr);
+      align-items: center;
+    }
+
     .case-study-nav-wrap {
       position: sticky;
       top: 2rem;
@@ -2195,6 +2659,12 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     }
   }
 
+  @media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    .case-study-journey-tasks .case-study-step-details {
+      text-align: left;
+    }
+  }
+
   @media (min-width: 2560px) {
     .case-study-heading h1 {
       font-size: 4.5rem;
@@ -2307,6 +2777,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
   let cleanupCaseStudyNavigation: (() => void) | undefined;
   let cleanupCaseStudyHero: (() => void) | undefined;
+  let cleanupCaseStudyJourney: (() => void) | undefined;
   let cleanupCaseStudyFeedback: (() => void) | undefined;
   let cleanupCaseStudyQuoteNotes: (() => void) | undefined;
   let cleanupCaseStudyLightbox: (() => void) | undefined;
@@ -2428,6 +2899,72 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
       window.removeEventListener("hashchange", requestUpdate);
+    };
+  };
+
+  const initCaseStudyJourney = () => {
+    cleanupCaseStudyJourney?.();
+
+    const journey = document.querySelector<HTMLElement>(".case-study-journey");
+    if (!journey) return;
+
+    const nodes = Array.from(
+      journey.querySelectorAll<HTMLButtonElement>("[data-journey-node]"),
+    );
+    const items = nodes.map((node) => ({
+      node,
+      tasks: node
+        .closest<HTMLElement>(".case-study-journey-item")
+        ?.querySelector<HTMLDetailsElement>("[data-journey-tasks]"),
+    }));
+    const syncExpandedState = (node: HTMLButtonElement, tasks: HTMLDetailsElement | null | undefined) => {
+      const isOpen = tasks?.open ?? false;
+      node.setAttribute("aria-expanded", String(isOpen));
+      node.classList.toggle("is-active", isOpen);
+    };
+    const closeOtherTasks = (currentTasks: HTMLDetailsElement) => {
+      items.forEach(({ node, tasks }) => {
+        if (tasks && tasks !== currentTasks && tasks.open) {
+          tasks.open = false;
+          syncExpandedState(node, tasks);
+        }
+      });
+    };
+    const toggleHandlers = new Map<HTMLDetailsElement, () => void>();
+
+    const handleClick = (event: MouseEvent) => {
+      const item = items.find(({ node }) => node === event.currentTarget);
+      if (!item?.tasks) return;
+
+      item.tasks.open = !item.tasks.open;
+      if (item.tasks.open) closeOtherTasks(item.tasks);
+      syncExpandedState(item.node, item.tasks);
+    };
+
+    nodes.forEach((node) => {
+      const item = items.find(({ node: itemNode }) => itemNode === node);
+      syncExpandedState(node, item?.tasks);
+      node.addEventListener("click", handleClick);
+      if (item?.tasks) {
+        const handleToggle = () => {
+          if (item.tasks?.open) closeOtherTasks(item.tasks);
+          syncExpandedState(node, item.tasks);
+        };
+        toggleHandlers.set(item.tasks, handleToggle);
+        item.tasks.addEventListener("toggle", handleToggle);
+      }
+    });
+
+    cleanupCaseStudyJourney = () => {
+      nodes.forEach((node) => {
+        const item = items.find(({ node: itemNode }) => itemNode === node);
+        node.removeEventListener("click", handleClick);
+        if (item?.tasks) {
+          const handleToggle = toggleHandlers.get(item.tasks);
+          if (handleToggle) item.tasks.removeEventListener("toggle", handleToggle);
+        }
+      });
+      toggleHandlers.clear();
     };
   };
 
@@ -2564,12 +3101,14 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     if (!lightbox || !lightboxImage || !closeButton || triggers.length === 0) return;
 
     let lastTrigger: HTMLButtonElement | null = null;
+    let previousBodyOverflow = "";
 
     const openLightbox = (trigger: HTMLButtonElement) => {
       const image = trigger.querySelector("img");
       if (!image) return;
 
       lastTrigger = trigger;
+      previousBodyOverflow = document.body.style.overflow;
       lightboxImage.src = trigger.dataset.zoomSrc || image.currentSrc || image.src;
       lightboxImage.alt = image.alt;
       lightbox.hidden = false;
@@ -2584,7 +3123,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       if (lightbox.hidden) return;
 
       lightbox.classList.remove("is-open");
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousBodyOverflow;
       lastTrigger?.focus();
 
       window.setTimeout(() => {
@@ -2602,7 +3141,17 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     };
 
     const handleKeydown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+      if (lightbox.hidden) return;
+
+      if (event.key === "Escape") {
+        closeLightbox();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      event.preventDefault();
+      closeButton.focus();
     };
 
     triggers.forEach((trigger) => trigger.addEventListener("click", handleTriggerClick));
@@ -2615,13 +3164,14 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       closeButton.removeEventListener("click", closeLightbox);
       lightbox.removeEventListener("click", handleBackdropClick);
       document.removeEventListener("keydown", handleKeydown);
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousBodyOverflow;
     };
   };
 
   const initCaseStudyPage = () => {
     initCaseStudyHero();
     initCaseStudyNavigation();
+    initCaseStudyJourney();
     initCaseStudyFeedback();
     initCaseStudyQuoteNotes();
     initCaseStudyLightbox();

@@ -24,8 +24,9 @@ const project = {
   },
   metadata: [
     { label: "My Role", value: "Web Designer" },
-    { label: "Deliverables", value: "Website and order flow" },
-    { label: "Platform", value: "Responsive web" },
+    { label: "Platforms", value: "HTML/CSS · Vue.js · Wix" },
+    { label: "Deliverables", value: "Web Design, Order Form, Migration" },
+    { label: "Tools", value: "Figma · Miro · Google Analytics" },
   ],
   sections: [
     {
@@ -34,8 +35,8 @@ const project = {
       eyebrow: "Business context",
       summary: "Make a detailed operational service easy to understand and easy to order.",
       paragraphs: [
-        "Waste collection involves details that can quickly overwhelm a customer: material type, volume, location, timing, and access requirements. This project organizes those decisions into a straightforward website and guided request flow.",
-        "Clear language and strong hierarchy help customers understand the service while enabling the business to receive more complete order information.",
+        "Waste collection involves details that can quickly overwhelm a customer: material type, volume, location, timing, and access requirements. This project organizes those decisions into a straightforward website and guided order request flow, giving customers a clearer path from exploring the service to submitting the details the business needs.",
+        "Clear language and strong visual hierarchy make the service easier to understand while creating a more reliable alternative to phone-only ordering.",
       ],
       metrics: [
         { value: "2 formats", label: "Desktop and mobile experiences" },
@@ -45,87 +46,118 @@ const project = {
       ],
     },
     {
-      id: "goals",
-      title: "Goals and audience",
+      id: "problem",
+      title: "Problem",
       eyebrow: "Strategy",
       summary: "Connect customer tasks with the information the business needs to fulfill an order.",
-      callout: {
-        label: "Primary goal",
-        text: "Help customers identify the right service and submit a useful request without calling for basic clarification.",
-      },
-      bullets: [
-        "Explain the available services in plain, practical language.",
-        "Support customers ordering from a work site as well as a desktop.",
-        "Collect relevant details without presenting one long generic form.",
-        "Build trust through clear contact, terms, and next-step information.",
+      paragraphs: [
+        "The primary goal was to establish an online presence where none existed before, while making the ordering process more efficient. Previously, customers placed orders by phone, and many were unable to reach a company representative. Without an alternative way to submit a request, potential orders were missed. Four key problem areas emerged from this context:",
       ],
+      numberedItems: [
+        { text: "The company had no online presence, so few people in its service area knew it existed." },
+        { text: "The available services and pricing were difficult to discover, leaving customers without clear information before ordering." },
+        { text: "The business lacked a consistent brand identity and social media presence, making it harder to build recognition and trust." },
+        { text: "Orders depended entirely on phone calls, so customers had no alternative way to submit a request when representatives were unavailable." },
+      ],
+      media: {
+        src: "/images/projects/waste-disposal-website/focus-areas-waste.webp",
+        alt: "Waste disposal website shown on two mobile screens",
+        width: 600,
+        height: 695,
+        transparentBackground: true,
+      },
     },
     {
-      id: "content",
-      title: "Content and structure",
-      eyebrow: "Information architecture",
-      summary: "Organize the website around customer questions rather than the company’s internal structure.",
+      id: "process",
+      title: "Workflow",
+      eyebrow: "Challenge",
+      summary: "Translate the brief into a clear set of design, content, branding, and delivery priorities.",
       steps: [
         {
-          title: "Understand the service",
-          description: "Introduce the company, coverage area, and most common waste collection options.",
+          title: "Scoping & Design",
+          description: "Project scope",
+          tag: "Build • Phase 1",
+          details: [
+            "Project scoping",
+            "Sitemap creation",
+            "Figma sketches",
+            "Client alignments",
+          ],
         },
         {
-          title: "Compare options",
-          description: "Give each service a concise purpose, capacity, and suitability explanation.",
+          title: "Web Content",
+          description: "Content assets",
+          tag: "Build • Phase 1",
+          details: [
+            "Text and assets",
+            "Add images",
+            "Testing",
+          ],
         },
         {
-          title: "Start an order",
-          description: "Move from the selected service into a request flow with relevant fields.",
+          title: "Branding & SEO",
+          description: "Search visibility",
+          tag: "Build • Phase 1",
+          details: [
+            "SEO setup",
+            "Page optimization",
+          ],
         },
         {
-          title: "Confirm next steps",
-          description: "Set expectations for pricing, contact, timing, and order confirmation.",
+          title: "Custom Order Form",
+          description: "Custom Vue.js form",
+          tag: "Build • Phase 2",
+          details: [
+            "Order flow architecture",
+            "Vue.js development",
+            "Order validation",
+          ],
+        },
+        {
+          title: "Wix Platform",
+          description: "Rebuilt Wix experience",
+          tag: "Migration • Phase 3",
+          details: [
+            "Wix platform migration",
+            "Page recreation",
+            "Flow reconfiguration",
+            "Functionality matching",
+            "Client handover",
+          ],
         },
       ],
     },
     {
-      id: "visual-system",
-      title: "Visual system",
+      id: "sitemap",
+      title: "Sitemap",
       eyebrow: "Interface design",
       summary: "Use the company’s industrial character without sacrificing clarity or accessibility.",
-      paragraphs: [
-        "The visual direction combines strong imagery and brand orange with a neutral content system. Repeated spacing, type, button, and form patterns make the site feel consistent across service pages.",
-      ],
-      bullets: [
-        "A restrained palette with orange reserved for actions and emphasis.",
-        "Reusable headings, service cards, controls, and feedback states.",
-        "Readable typography and sufficient contrast over imagery.",
-        "Consistent responsive behavior rather than separate mobile layouts.",
-      ],
+      sitemap: {
+        root: {
+          label: "Main",
+          children: [
+            {
+              label: "Services",
+              children: [
+                { label: "Scrapping", dashed: true },
+                { label: "Containers", dashed: true },
+              ],
+            },
+            {
+              label: "Terms",
+              children: [
+                { label: "Waste Types", dashed: true },
+              ],
+            },
+            { label: "Order" },
+            { label: "Contact" },
+          ],
+        },
+      },
     },
     {
-      id: "order-flow",
-      title: "Custom order flow",
-      eyebrow: "Conversion",
-      summary: "Progressively reveal the questions needed for a complete waste collection request.",
-      steps: [
-        {
-          title: "Waste type",
-          description: "Choose the material category so later questions remain relevant.",
-        },
-        {
-          title: "Service and size",
-          description: "Select the collection method and appropriate container or quantity.",
-        },
-        {
-          title: "Location and timing",
-          description: "Provide delivery, access, collection, and preferred schedule details.",
-        },
-        {
-          title: "Review and submit",
-          description: "Check all selections and contact information before sending the request.",
-        },
-      ],
-    },
-    {
-      id: "responsive-quality",
-      title: "Responsive quality",
+      id: "sketches",
+      title: "Sketches",
       eyebrow: "Delivery",
       summary: "A web design case study should show that the interface works beyond a polished desktop screenshot.",
       bullets: [
@@ -137,8 +169,8 @@ const project = {
       ],
     },
     {
-      id: "outcome",
-      title: "Outcome and handoff",
+      id: "visuals",
+      title: "Visuals",
       eyebrow: "Impact",
       summary: "Connect the finished website to business value and ongoing ownership.",
       paragraphs: [
@@ -147,8 +179,8 @@ const project = {
       ],
     },
     {
-      id: "reflection",
-      title: "Reflection",
+      id: "reflections",
+      title: "Reflections",
       eyebrow: "Learn",
       bullets: [
         "Explain which content decision had the largest effect on usability.",
