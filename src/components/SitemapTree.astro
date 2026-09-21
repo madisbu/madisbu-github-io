@@ -43,8 +43,8 @@ const hasChildren = Boolean(node.children && node.children.length > 0);
   .case-study-sitemap {
     display: flex;
     width: 100%;
-    justify-content: flex-start;
-    margin: 3rem 0 0;
+    justify-content: center;
+    margin: 2.25rem 0 0;
     padding: 1.25rem 0.5rem;
     overflow-x: auto;
   }
@@ -168,14 +168,46 @@ const hasChildren = Boolean(node.children && node.children.length > 0);
     font-weight: 600;
   }
 
+  @media (min-width: 1024px) {
+    .case-study-sitemap {
+      margin-top: 1.75rem;
+    }
+
+    .case-study-sitemap-tree {
+      transform: scale(0.92);
+      transform-origin: center top;
+    }
+
+    .case-study-sitemap-node {
+      padding: 0.7rem 1.1rem;
+      font-size: 0.9rem;
+    }
+  }
+
   @media (max-width: 1023px) {
     .case-study-sitemap {
       justify-content: flex-start;
+      overflow-x: auto;
     }
 
     .case-study-sitemap-tree {
       margin-right: 0;
       margin-left: 0;
+      transform-origin: top left;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .case-study-sitemap {
+      padding: 0.75rem 0.25rem 0;
+    }
+
+    .case-study-sitemap-tree {
+      transform: scale(0.92);
+    }
+
+    .case-study-sitemap-node {
+      font-size: 0.9rem;
     }
   }
 </style>

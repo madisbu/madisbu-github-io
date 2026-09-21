@@ -387,49 +387,58 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
               {section.id === "process" && section.steps && section.steps.length > 0 && (
                 <>
+                  <p class="case-study-journey-intro">
+                    A multi-phase, highly iterative web development workflow continuously refined across project lifecycles through close collaboration with clients and myself.
+                  </p>
                   <p class="case-study-journey-hint">Click to expand</p>
-                  <ol class="case-study-journey" style={`--journey-steps: ${section.steps.length}`}>
-                  {section.steps.map((step, stepIndex) => (
-                    <li class="case-study-journey-item" style={`--journey-col: ${stepIndex + 1}`}>
-                      <div class="case-study-journey-node">
-                        <span class="case-study-journey-ring" aria-hidden="true"></span>
-                        <button
-                          class="case-study-journey-number"
-                          type="button"
-                          aria-label={`Show tasks for ${step.title}`}
-                          aria-controls={`${section.id}-step-${stepIndex + 1}-tasks`}
-                          aria-expanded="false"
-                          data-journey-node
-                        >
-                          {String(stepIndex + 1).padStart(2, "0")}
-                        </button>
-                      </div>
-                      <div class="case-study-journey-content">
-                        <div class="case-study-journey-summary">
-                          {step.tag && <span class="case-study-journey-tag">{step.tag}</span>}
-                          <h3>{step.title}</h3>
-                        </div>
-                        {step.details && step.details.length > 0 && (
-                          <details
-                            id={`${section.id}-step-${stepIndex + 1}-tasks`}
-                            class="case-study-journey-tasks"
-                            data-journey-tasks
+                  <div class="case-study-journey-wrap">
+                    <span class="case-study-journey-label case-study-journey-label--start" aria-hidden="true">Start</span>
+                    <ol class="case-study-journey" style={`--journey-steps: ${section.steps.length}`}>
+                    {section.steps.map((step, stepIndex) => (
+                      <li class="case-study-journey-item" style={`--journey-col: ${stepIndex + 1}`}>
+                        <div class="case-study-journey-node">
+                          <span class="case-study-journey-ring" aria-hidden="true"></span>
+                          <button
+                            class="case-study-journey-number"
+                            type="button"
+                            aria-label={`Show tasks for ${step.title}`}
+                            aria-controls={`${section.id}-step-${stepIndex + 1}-tasks`}
+                            aria-expanded="false"
+                            data-journey-node
                           >
-                            <summary>
-                              <span>View tasks</span>
-                              <svg viewBox="0 0 16 16" aria-hidden="true">
-                                <path d="M4 6l4 4 4-4"></path>
-                              </svg>
-                            </summary>
-                            <ul class="case-study-step-details">
-                              {step.details.map((detail) => <li>{detail}</li>)}
-                            </ul>
-                          </details>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                  </ol>
+                            {String(stepIndex + 1).padStart(2, "0")}
+                          </button>
+                        </div>
+                        <div class="case-study-journey-content">
+                          <div class="case-study-journey-summary">
+                            <div class="case-study-journey-tag">
+                              {step.tag && <span>{step.tag}</span>}
+                              <h3>{step.title}</h3>
+                            </div>
+                          </div>
+                          {step.details && step.details.length > 0 && (
+                            <details
+                              id={`${section.id}-step-${stepIndex + 1}-tasks`}
+                              class="case-study-journey-tasks"
+                              data-journey-tasks
+                            >
+                              <summary>
+                                <span>View tasks</span>
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                  <path d="M4 6l4 4 4-4"></path>
+                                </svg>
+                              </summary>
+                              <ul class="case-study-step-details">
+                                {step.details.map((detail) => <li>{detail}</li>)}
+                              </ul>
+                            </details>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                    </ol>
+                    <span class="case-study-journey-label case-study-journey-label--end" aria-hidden="true">Now</span>
+                  </div>
                 </>
               )}
 
@@ -949,7 +958,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   .case-study-nav {
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -1808,9 +1817,21 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   /* Interactive workflow journey (Process section) */
+  .case-study-journey-intro {
+    width: 100%;
+    max-width: none;
+    margin: 2rem 0 0;
+    color: var(--color-text);
+    font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+    font-weight: 400;
+    line-height: 1.7;
+    text-align: left;
+    white-space: normal;
+  }
+
   .case-study-journey-hint {
     max-width: 20rem;
-    margin: 2.25rem auto 0;
+    margin: 3rem auto 0;
     color: var(--color-text-light);
     font-size: 0.66rem;
     font-weight: 600;
@@ -1820,13 +1841,49 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     text-transform: uppercase;
   }
 
+  .case-study-journey-wrap {
+    position: relative;
+    margin-top: 0;
+    padding-top: 3rem;
+  }
+
+  .case-study-journey-label {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    color: var(--case-study-accent);
+    font-family: "Segoe Print", "Bradley Hand", cursive;
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    transform: rotate(-8deg);
+    white-space: nowrap;
+  }
+
+  .case-study-journey-label--start {
+    left: 0.1rem;
+  }
+
+  .case-study-journey-label--end {
+    right: 0.1rem;
+    transform: rotate(8deg);
+  }
+
   .case-study-journey-tag {
-    display: inline-block;
-    margin: 0 0 0.84rem;
-    padding: 0.15rem 0.45rem;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: max-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 0.4rem 0.65rem;
     border: 1px solid var(--color-border);
     border-radius: 0.45rem;
     background: rgba(68, 68, 68, 0.02);
+  }
+
+  .case-study-journey-tag > span {
     color: var(--color-text-light);
     font-size: 0.58rem;
     font-weight: 600;
@@ -1834,6 +1891,18 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     line-height: 1.4;
     text-transform: uppercase;
     white-space: nowrap;
+  }
+
+  .case-study-journey-content .case-study-journey-tag h3 {
+    margin: 0;
+    color: var(--color-text-dark);
+    font-family: var(--font-primary);
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: normal;
   }
 
   .case-study-journey {
@@ -1930,6 +1999,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   .case-study-journey-content h3 {
     margin: 0 0 0.4rem;
     color: var(--color-text-dark);
+    font-family: var(--font-primary);
     font-size: clamp(0.95rem, 2.2vw, 1.05rem);
     font-weight: 400;
     line-height: 1.35;
@@ -1984,8 +2054,166 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   }
 
   @media (max-width: 1023px) {
-    .case-study-journey-tasks .case-study-step-details {
+    .case-study-section#process {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .case-study-section#process > .case-study-section-heading,
+    .case-study-section#process > .case-study-journey-intro {
+      width: 100%;
+      align-self: flex-start;
       text-align: left;
+    }
+
+    .case-study-section#process > .case-study-journey-hint,
+    .case-study-section#process > .case-study-journey-wrap {
+      width: min(100%, 38rem);
+      text-align: center;
+    }
+
+    .case-study-section#process > .case-study-journey-intro {
+      max-width: none;
+    }
+
+    .case-study-journey {
+      margin-inline: auto;
+    }
+
+    .case-study-journey-tasks .case-study-step-details {
+      text-align: center;
+    }
+
+    .case-study-journey-tasks summary {
+      justify-content: center;
+    }
+
+    .case-study-journey-wrap {
+      padding-top: 3rem;
+    }
+
+    .case-study-journey-label {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .case-study-journey-wrap {
+      overflow-x: auto;
+      padding-top: 3rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .case-study-journey {
+      min-width: 19rem;
+      margin: 0 auto;
+      justify-items: center;
+    }
+
+    .case-study-journey-item {
+      width: 100%;
+      padding-left: 2.5rem;
+    }
+
+    .case-study-journey-item::before {
+      left: calc(clamp(3.25rem, 9vw, 4rem) / 2 + 2.5rem - 1px);
+    }
+
+    .case-study-journey-content h3 {
+      white-space: normal;
+    }
+
+    .case-study-journey-label {
+      top: 0.25rem;
+      font-size: 0.74rem;
+    }
+
+    .case-study-journey-label--end {
+      top: auto;
+      right: 0.5rem;
+      bottom: 0.25rem;
+      transform: rotate(8deg);
+    }
+  }
+
+  @media (max-width: 1023px) and (orientation: landscape) {
+    .case-study-section#process {
+      width: 100%;
+    }
+
+    .case-study-section#process > .case-study-section-heading,
+    .case-study-section#process > .case-study-journey-intro {
+      width: 100%;
+      text-align: left;
+    }
+
+    .case-study-section#process > .case-study-journey-hint,
+    .case-study-section#process > .case-study-journey-wrap {
+      width: min(100%, 30rem);
+      text-align: center;
+    }
+
+    .case-study-journey-wrap {
+      width: min(100%, 30rem);
+      margin-inline: auto;
+      padding-top: 3rem;
+      padding-bottom: 1rem;
+    }
+
+    .case-study-journey {
+      min-width: 0;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .case-study-journey-item {
+      grid-template-columns: 2.2rem minmax(0, 1fr);
+      gap: 0.4rem;
+      padding-left: 2.5rem;
+    }
+
+    .case-study-journey-item::before {
+      left: calc(2.2rem / 2 + 2.5rem - 1px);
+      top: 2.2rem;
+    }
+
+    .case-study-journey-node {
+      width: 2.2rem;
+      height: 2.2rem;
+    }
+
+    .case-study-journey-number {
+      font-size: 0.8rem;
+    }
+
+    .case-study-journey-label {
+      top: auto;
+      bottom: 0.15rem;
+    }
+
+    .case-study-journey-label--start {
+      left: 0.25rem;
+      top: 0.15rem;
+      bottom: auto;
+    }
+
+    .case-study-journey-label--end {
+      right: 0.25rem;
+      bottom: 0.15rem;
+      top: auto;
+    }
+
+    .case-study-journey-tasks {
+      margin-top: 0.55rem;
+    }
+
+    .case-study-journey-tasks summary {
+      justify-content: center;
+    }
+
+    .case-study-step-details {
+      text-align: center;
     }
   }
 
@@ -1997,8 +2225,30 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       grid-template-rows: minmax(3.5rem, auto) auto minmax(3.5rem, auto);
       align-items: center;
       column-gap: 0;
-      margin-top: 4.5rem;
+      margin-top: 0;
       padding-top: 0;
+    }
+
+    .case-study-journey-wrap {
+      margin-top: 0;
+      padding-top: 3rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .case-study-journey-label {
+      top: 0.85rem;
+      font-size: 0.9rem;
+    }
+
+    .case-study-journey-label--start {
+      left: -1rem;
+      top: 0;
+    }
+
+    .case-study-journey-label--end {
+      right: -1rem;
+      top: auto;
+      bottom: 0;
     }
 
     .case-study-journey::before {
@@ -2090,6 +2340,18 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
   .case-study-problem-grid .case-study-media img.is-transparent {
     padding: 0;
+  }
+
+  @media (max-width: 1023px) {
+    .case-study-problem-grid .case-study-media {
+      width: min(100%, 27rem);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .case-study-problem-grid .case-study-media {
+      width: min(100%, 21rem);
+    }
   }
 
   .case-study-problem-grid .case-study-numbered-list {
