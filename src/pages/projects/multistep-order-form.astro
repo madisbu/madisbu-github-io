@@ -47,7 +47,7 @@ const project = {
     },
     {
       id: "opportunity",
-      title: "Problem and opportunity",
+      title: "Problem",
       eyebrow: "Discover",
       summary: "Customers need guidance; the business needs complete, structured order data.",
       paragraphs: [
@@ -59,23 +59,13 @@ const project = {
       },
     },
     {
-      id: "success",
-      title: "Goals and success criteria",
-      eyebrow: "Define",
-      summary: "Product development should state what success means before describing features.",
-      bullets: [
-        "Customers understand their current step and what remains.",
-        "Each step asks only questions relevant to the current decision.",
-        "Validation happens close to the field and never discards completed work.",
-        "The review step clearly summarizes choices before submission.",
-        "The business receives data in a structure that can support later automation.",
+      id: "approach",
+      title: "Product Approach",
+      eyebrow: "Define and prioritize",
+      summary: "Define the smallest valuable release, then make decisions that keep the order journey understandable and recoverable.",
+      paragraphs: [
+        "The MVP focuses on one measurable outcome: helping customers submit a complete order while giving the business structured data that can support later automation.",
       ],
-    },
-    {
-      id: "scope",
-      title: "MVP scope",
-      eyebrow: "Prioritize",
-      summary: "Separate the smallest valuable release from attractive but unvalidated additions.",
       steps: [
         {
           title: "Must have",
@@ -89,15 +79,22 @@ const project = {
           title: "Later",
           description: "Accounts, saved addresses, order history, administration, notifications, and integrations.",
         },
-        {
-          title: "Non-goals",
-          description: "Features that do not help validate the core order journey in the first release.",
-        },
       ],
+      bullets: [
+        "Use progressive disclosure so each step asks only questions relevant to the current decision.",
+        "Preserve entered values when moving backward or correcting an error.",
+        "Show progress with meaningful step names rather than percentage alone.",
+        "Keep a single primary action and make backward navigation predictable.",
+        "Treat location confirmation as a visual check, not only a text field.",
+      ],
+      callout: {
+        label: "Key trade-off",
+        text: "More steps can feel longer, but focused steps improve comprehension when each one has a clear purpose.",
+      },
     },
     {
       id: "flow",
-      title: "Core product flow",
+      title: "Multistep Order Form Flow",
       eyebrow: "Experience",
       summary: "Keep the mental model stable while the form progressively reveals detail.",
       steps: [
@@ -116,58 +113,28 @@ const project = {
       ],
     },
     {
-      id: "product-decisions",
-      title: "Product decisions",
-      eyebrow: "Design rationale",
-      summary: "Explain why the product behaves as it does, not only how the screens look.",
-      bullets: [
-        "Use progressive disclosure to reduce visible complexity.",
-        "Preserve entered values when moving backward or correcting an error.",
-        "Show progress with meaningful step names rather than percentage alone.",
-        "Keep a single primary action and make backward navigation predictable.",
-        "Treat location confirmation as a visual check, not only a text field.",
-      ],
-      callout: {
-        label: "Key trade-off",
-        text: "More steps can feel longer, but focused steps improve comprehension when each one has a clear purpose.",
-      },
-    },
-    {
-      id: "states",
-      title: "States and safeguards",
-      eyebrow: "Reliability",
-      summary: "A production-ready web app must design the paths between ideal screens.",
-      bullets: [
-        "Empty, loading, incomplete, valid, invalid, submitting, success, and failure states.",
-        "Accessible labels, descriptions, keyboard order, focus movement, and error summaries.",
-        "Server-side validation matching client-side constraints.",
-        "Protection against duplicate submissions and accidental data loss.",
-        "Clear handling for unavailable locations, network failures, and expired sessions.",
-      ],
-    },
-    {
       id: "delivery",
-      title: "Technical delivery",
+      title: "Technical Delivery",
       eyebrow: "Build",
       summary: "Connect product decisions to architecture, data, quality, and maintainability.",
       paragraphs: [
-        "This section should document the chosen framework, form-state strategy, validation model, API contract, data persistence, map integration, analytics events, and deployment approach.",
-        "Include only technical details that explain a meaningful decision, constraint, risk, or user-facing outcome rather than listing tools without context.",
+        "The frontend is a Vue 3 single-page application built with Vite, using Pinia to hold order state across the three steps and Vue Router for navigation. Vue-i18n adds Estonian and Russian locales with a persisted language toggle, since the audience needed the form in their own language rather than English only.",
+        "The backend is a Node.js and Express API that stores completed orders in Firestore through the Firebase Admin SDK and sends confirmation and admin notification emails through NodeMailer. Winston with Google Cloud Logging keeps a structured trail of requests, errors, and submission outcomes in production.",
       ],
     },
     {
       id: "outcome",
-      title: "Validation and roadmap",
-      eyebrow: "Measure",
-      summary: "Evaluate the MVP against its success criteria and use evidence to choose the next investment.",
+      title: "Outcome & Reflections",
+      eyebrow: "Measure and learn",
+      summary: "Separate what has been built from what still needs to be validated.",
       paragraphs: [
-        "Useful evidence could include completion rate, errors per step, abandonment by step, time to complete, support requests, and the percentage of submissions requiring manual clarification.",
+        "The MVP establishes a working foundation for a clearer order journey, but its strongest product claims still need evidence from real customers and submitted orders.",
       ],
       bullets: [
-        "Report validated outcomes separately from expected benefits.",
-        "Show what changed after usability tests or production feedback.",
-        "Prioritize roadmap items by observed need, business value, and delivery effort.",
-        "Close with the largest remaining risk and the next experiment.",
+        "Measure completion rate, abandonment by step, errors per step, and time to complete.",
+        "Compare the percentage of submissions that require manual clarification.",
+        "Use usability testing and production feedback to identify confusing steps.",
+        "Prioritize accounts, saved addresses, notifications, and integrations only after observing a validated need.",
       ],
     },
   ],

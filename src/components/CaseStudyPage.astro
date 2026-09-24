@@ -103,12 +103,22 @@ const splitLinkedText = (
   >
     <header class="case-study-hero" data-case-study-hero>
       <div class="case-study-hero-shell">
-        <a href="/projects" class="case-study-back">
-          <svg viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M13 8H3m4-4L3 8l4 4"></path>
-          </svg>
-          All projects
-        </a>
+        <div class="case-study-hero-topbar">
+          <a href="/projects" class="case-study-back">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M13 8H3m4-4L3 8l4 4"></path>
+            </svg>
+            All projects
+          </a>
+
+          <a href={project.nextProject.href} class="case-study-next">
+            <span>Next project</span>
+            <strong>{project.nextProject.label}</strong>
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4"></path>
+            </svg>
+          </a>
+        </div>
 
         <div class="case-study-hero-grid">
           <div class="case-study-heading">
@@ -805,7 +815,15 @@ const splitLinkedText = (
     padding: clamp(1.5rem, 4vw, 3rem) 1rem clamp(2rem, 5vw, 4rem);
   }
 
-  .case-study-back {
+  .case-study-hero-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .case-study-back,
+  .case-study-next {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
@@ -816,11 +834,37 @@ const splitLinkedText = (
     text-transform: uppercase;
   }
 
-  .case-study-back:hover {
+  .case-study-back:hover,
+  .case-study-next:hover {
     color: var(--case-study-accent);
   }
 
+  .case-study-next {
+    margin-left: auto;
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .case-study-next span {
+    color: var(--color-text-light);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 640px) {
+    .case-study-next span {
+      display: none;
+    }
+  }
+
+  .case-study-next strong {
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
   .case-study-back svg,
+  .case-study-next svg,
   .case-study-links svg,
   .case-study-footer svg {
     width: 1rem;
