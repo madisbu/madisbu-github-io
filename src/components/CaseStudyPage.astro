@@ -68,6 +68,24 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
       emphasized: phrases.includes(part),
     }));
 };
+
+const splitLinkedText = (
+  text: string,
+  links: ProjectCaseStudy["sections"][number]["paragraphLinks"] = [],
+) => {
+  if (links.length === 0) return [{ text, link: undefined }];
+
+  const escapedLabels = links.map((link) => link.label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const pattern = new RegExp(`(${escapedLabels.join("|")})`, "g");
+
+  return text
+    .split(pattern)
+    .filter(Boolean)
+    .map((part) => ({
+      text: part,
+      link: links.find((link) => link.label === part),
+    }));
+};
 ---
 
 <Layout
@@ -195,7 +213,26 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                     {splitEmphasizedText(
                       section.paragraphs.join(" "),
                       section.paragraphEmphasis,
-                    ).map((part) => part.emphasized ? <strong>{part.text}</strong> : part.text)}
+                    ).flatMap((part) =>
+                      splitLinkedText(part.text, section.paragraphLinks).map((linkedPart) =>
+                        linkedPart.link ? (
+                          <a
+                            class="case-study-inline-link"
+                            href={linkedPart.link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${linkedPart.text} website, opens in a new tab`}
+                          >
+                            {linkedPart.text}
+                            <span class="case-study-inline-link-arrow" aria-hidden="true">↗</span>
+                          </a>
+                        ) : part.emphasized ? (
+                          <strong>{linkedPart.text}</strong>
+                        ) : (
+                          linkedPart.text
+                        ),
+                      ),
+                    )}
                   </p>
                 </div>
               )}
@@ -390,9 +427,9 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                   <p class="case-study-journey-intro">
                     A multi-phase, highly iterative web development workflow continuously refined across project lifecycles through close collaboration with clients and myself.
                   </p>
-                  <p class="case-study-journey-hint">Click to expand</p>
                   <div class="case-study-journey-wrap">
                     <span class="case-study-journey-label case-study-journey-label--start" aria-hidden="true">Start</span>
+                    <span class="case-study-journey-label case-study-journey-label--end" aria-hidden="true">Now</span>
                     <ol class="case-study-journey" style={`--journey-steps: ${section.steps.length}`}>
                     {section.steps.map((step, stepIndex) => (
                       <li class="case-study-journey-item" style={`--journey-col: ${stepIndex + 1}`}>
@@ -437,7 +474,6 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
                       </li>
                     ))}
                     </ol>
-                    <span class="case-study-journey-label case-study-journey-label--end" aria-hidden="true">Now</span>
                   </div>
                 </>
               )}
@@ -1079,6 +1115,29 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
   .case-study-copy strong {
     color: var(--color-text-dark);
     font-weight: 700;
+  }
+
+  .case-study-inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: var(--case-study-accent);
+    border-bottom: 0.08em solid currentColor;
+  }
+
+  .case-study-inline-link:hover {
+    color: var(--color-text-dark);
+  }
+
+  .case-study-inline-link:focus-visible {
+    outline: 0.12rem solid var(--case-study-accent);
+    outline-offset: 0.15rem;
+    border-radius: 0.15rem;
+  }
+
+  .case-study-inline-link-arrow {
+    font-size: 0.9em;
+    line-height: 1;
   }
 
   .case-study-scenarios {
@@ -1843,7 +1902,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
   .case-study-journey-wrap {
     position: relative;
-    margin-top: 0;
+    margin-top: clamp(2rem, 5vw, 3.5rem);
     padding-top: 3rem;
   }
 
@@ -1897,7 +1956,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     margin: 0;
     color: var(--color-text-dark);
     font-family: var(--font-primary);
-    font-size: 0.58rem;
+    font-size: 0.82rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     line-height: 1.4;
@@ -2094,6 +2153,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     }
 
     .case-study-journey-label {
+      display: none;
       font-size: 0.8rem;
     }
   }
@@ -2130,9 +2190,9 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     }
 
     .case-study-journey-label--end {
-      top: auto;
       right: 0.5rem;
-      bottom: 0.25rem;
+      top: 0.25rem;
+      bottom: auto;
       transform: rotate(8deg);
     }
   }
@@ -2200,8 +2260,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
     .case-study-journey-label--end {
       right: 0.25rem;
-      bottom: 0.15rem;
-      top: auto;
+      top: 0.15rem;
+      bottom: auto;
     }
 
     .case-study-journey-tasks {
@@ -2230,7 +2290,7 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
     }
 
     .case-study-journey-wrap {
-      margin-top: 0;
+      margin-top: clamp(2rem, 5vw, 3.5rem);
       padding-top: 3rem;
       padding-bottom: 1.5rem;
     }
@@ -2247,8 +2307,8 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
     .case-study-journey-label--end {
       right: -1rem;
-      top: auto;
-      bottom: 0;
+      top: 0;
+      bottom: auto;
     }
 
     .case-study-journey::before {
@@ -2433,6 +2493,10 @@ const splitEmphasizedText = (text: string, phrases: string[] = []) => {
 
   .case-study-media img {
     padding: clamp(1rem, 3vw, 2rem);
+  }
+
+  .case-study-media img.is-transparent {
+    padding: 0;
   }
 
   .case-study-links {

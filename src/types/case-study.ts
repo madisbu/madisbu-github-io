@@ -162,6 +162,7 @@ export interface CaseStudySection {
   summary?: string;
   paragraphs?: string[];
   paragraphEmphasis?: string[];
+  paragraphLinks?: CaseStudyLink[];
   bullets?: string[];
   numberedItems?: CaseStudyNumberedItem[];
   metrics?: CaseStudyMetric[];
