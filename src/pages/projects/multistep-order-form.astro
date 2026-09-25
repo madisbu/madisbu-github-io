@@ -23,10 +23,16 @@ const project = {
     caption: "MVP order experience combining customer details and location confirmation.",
   },
   metadata: [
-    { label: "Product stage", value: "Minimum viable product" },
-    { label: "Role", value: "Product designer and developer" },
-    { label: "Platform", value: "Responsive web application" },
-    { label: "Core flow", value: "Multi-step order submission" },
+    { label: "My Role", value: "Product Owner & Developer" },
+    { label: "Platform", value: "Web Application" },
+    {
+      label: "Deliverables",
+      value: "Full-Stack Web Development",
+    },
+    {
+      label: "Tools",
+      value: "Vue.js · Node.js · Firebase · Google APIs · Nodemailer · Google Cloud Logging",
+    },
   ],
   sections: [
     {
@@ -35,8 +41,8 @@ const project = {
       eyebrow: "Product context",
       summary: "Turn a long, error-prone order into a guided product experience.",
       paragraphs: [
-        "Long order forms make it difficult to understand what information is needed and how much work remains. This product concept breaks the process into focused steps with a clear sense of progress.",
-        "The MVP prioritizes the core purchase journey and creates a foundation that can be validated before investing in broader account, administration, and automation features.",
+        "Multistep Order Form is a responsive web application for customers who need to submit a detailed service order online. It guides them through a focused three-step journey for configuring an order, entering contact and location details, and reviewing the request before submission.",
+        "I designed and developed the product as an MVP (Minimum Viable Product), with the main goal of making a complex order easier to complete while giving the business complete, structured information for fulfilment. The MVP focuses on the core purchase journey and provides a foundation for future validation and product development.",
       ],
       metrics: [
         { value: "MVP", label: "Focused first release" },
@@ -49,14 +55,24 @@ const project = {
       id: "opportunity",
       title: "Problem",
       eyebrow: "Discover",
-      summary: "Customers need guidance; the business needs complete, structured order data.",
+      summary: "An ordinary contact form left the most important delivery detail unclear: the exact location where the container or big-bag should be placed.",
       paragraphs: [
-        "A single large form exposes every field at once, mixes unrelated decisions, and often reports errors only after submission. This increases cognitive load and makes abandonment or incomplete data more likely.",
+        "Customers could submit an order through a standard contact form, but an address alone was often not precise enough for a waste-disposal delivery or container placement. After every request, a dispatcher had to call the customer to clarify the exact drop-off location, then pass those details on to the driver. This repeated coordination slowed down fulfilment and created room for misunderstandings.",
+        "The problem affected both sides of the service: customers had to repeat information after submitting an order, while dispatchers and drivers spent time resolving location details that should have been captured at the start. A missing or inaccurate placement point could lead to delays, extra calls, or a container being delivered to the wrong part of a property.",
       ],
-      callout: {
-        label: "Product opportunity",
-        text: "Create a flow that feels shorter to customers while improving the completeness and usability of submitted order data.",
+      media: {
+        src: "/images/projects/multistep-order-form/order-confusion.svg",
+        alt: "Customer, dispatcher, and driver passing unclear delivery details between them",
+        width: 1200,
+        height: 260,
+        transparentBackground: true,
       },
+      callout: {
+        label: "Product Improvement Opportunity",
+        text: "Replace the standard form with a multi-step guided order flow that lets customers confirm an exact map location. Once order is submitted, reliable coordinates will be sent to dispatcher and driver, eliminating communication delays.",
+      },
+      closing:
+        "At that point, it was clear that the improved order form could help the waste-disposal company.",
     },
     {
       id: "approach",

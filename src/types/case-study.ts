@@ -172,6 +172,7 @@ export interface CaseStudySection {
   journey?: CaseStudyJourney;
   scenarios?: CaseStudyScenario[];
   callout?: CaseStudyCallout;
+  closing?: string;
   media?: CaseStudyMedia;
   mediaGallery?: CaseStudyMedia[];
   embed?: CaseStudyEmbed;

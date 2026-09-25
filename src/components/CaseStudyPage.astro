@@ -219,31 +219,49 @@ const splitLinkedText = (
 
               {section.paragraphs && section.paragraphs.length > 0 && (
                 <div class="case-study-copy">
-                  <p>
-                    {splitEmphasizedText(
-                      section.paragraphs.join(" "),
-                      section.paragraphEmphasis,
-                    ).flatMap((part) =>
-                      splitLinkedText(part.text, section.paragraphLinks).map((linkedPart) =>
-                        linkedPart.link ? (
-                          <a
-                            class="case-study-inline-link"
-                            href={linkedPart.link.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`${linkedPart.text} website, opens in a new tab`}
-                          >
-                            {linkedPart.text}
-                            <span class="case-study-inline-link-arrow" aria-hidden="true">↗</span>
-                          </a>
-                        ) : part.emphasized ? (
-                          <strong>{linkedPart.text}</strong>
-                        ) : (
-                          linkedPart.text
-                        ),
-                      ),
-                    )}
-                  </p>
+                  {section.paragraphs.map((paragraph, paragraphIndex) => (
+                    <>
+                      <p>
+                        {splitEmphasizedText(paragraph, section.paragraphEmphasis).flatMap((part) =>
+                          splitLinkedText(part.text, section.paragraphLinks).map((linkedPart) =>
+                            linkedPart.link ? (
+                              <a
+                                class="case-study-inline-link"
+                                href={linkedPart.link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`${linkedPart.text} website, opens in a new tab`}
+                              >
+                                {linkedPart.text}
+                                <span class="case-study-inline-link-arrow" aria-hidden="true">↗</span>
+                              </a>
+                            ) : part.emphasized ? (
+                              <strong>{linkedPart.text}</strong>
+                            ) : (
+                              linkedPart.text
+                            ),
+                          ),
+                        )}
+                      </p>
+                      {section.id === "opportunity" &&
+                        paragraphIndex === 0 &&
+                        section.media && (
+                          <figure class="case-study-media case-study-media--inline">
+                            <img
+                              class:list={{ "is-transparent": section.media.transparentBackground }}
+                              src={section.media.src}
+                              alt={section.media.alt}
+                              width={section.media.width}
+                              height={section.media.height}
+                              style={`aspect-ratio: ${section.media.width} / ${section.media.height}`}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            {section.media.caption && <figcaption>{section.media.caption}</figcaption>}
+                          </figure>
+                        )}
+                    </>
+                  ))}
                 </div>
               )}
 
@@ -430,6 +448,8 @@ const splitLinkedText = (
                 </blockquote>
               )}
 
+              {section.closing && <p class="case-study-section-closing">{section.closing}</p>}
+
               {section.journey && <JourneyMap journey={section.journey} />}
 
               {section.id === "process" && section.steps && section.steps.length > 0 && (
@@ -585,7 +605,7 @@ const splitLinkedText = (
                 <SitemapTree node={section.sitemap.root} isRoot />
               )}
 
-              {section.media && section.id !== "problem" && (
+              {section.media && section.id !== "problem" && section.id !== "opportunity" && (
                 <figure class="case-study-media">
                   <button
                     type="button"
@@ -1027,6 +1047,14 @@ const splitLinkedText = (
     opacity: 0.6;
   }
 
+  .case-study-media--inline {
+    margin: clamp(2.5rem, 6vw, 4rem) 0 1.75rem;
+  }
+
+  .case-study-copy > .case-study-media--inline + p {
+    margin-top: 1.75rem !important;
+  }
+
   .case-study-layout {
     display: grid;
     gap: clamp(3rem, 8vw, 7rem);
@@ -1159,6 +1187,14 @@ const splitLinkedText = (
   .case-study-copy strong {
     color: var(--color-text-dark);
     font-weight: 700;
+  }
+
+  .case-study-section-closing {
+    max-width: 48rem;
+    margin: 2rem 0 0;
+    color: var(--color-text);
+    font-size: 0.98rem;
+    line-height: 1.75;
   }
 
   .case-study-inline-link {
