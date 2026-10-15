@@ -1,13 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ResumeHeader from "../components/resume/ResumeHeader.astro";
+import ResumeSections from "../components/resume/ResumeSections.astro";
+import Timeline from "../components/resume/Timeline.astro";
+import { resume } from "../data/resume";
+
+// Newest first, regardless of the order in the data file.
+const experience = [...resume.experience].sort((a, b) => b.start.localeCompare(a.start));
 ---
 
-<Layout title="Resume" description="Resume and professional profile for Mabux.">
-  <section class="max-w-2xl">
-    <h1 class="mb-4 text-4xl text-text-dark">Resume</h1>
-    <p class="text-text-light">
-      Resume details will be added here soon. You can replace this section with a downloadable CV link or a full
-      experience timeline.
-    </p>
-  </section>
+<Layout
+  title="Resume"
+  description={`Resume of ${resume.name}, IT Project Manager with over a decade of experience: work history, education, skills, and tools.`}
+>
+  <ResumeHeader name={resume.name} title={resume.title} intro={resume.intro} resumeUrl={resume.resumeUrl} />
+  <Timeline items={experience} />
+  <ResumeSections
+    education={resume.education}
+    certifications={resume.certifications}
+    skills={resume.skills}
+    tools={resume.tools}
+    languages={resume.languages}
+  />
 </Layout>

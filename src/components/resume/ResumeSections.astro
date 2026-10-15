@@ -1,0 +1,346 @@
+---
+import type { Certification, Education, Language, SkillGroup } from "../../types/resume";
+import { formatYearMonth } from "../../utils/resume-dates";
+
+interface Props {
+  education: Education[];
+  certifications: Certification[];
+  skills: SkillGroup[];
+  tools: SkillGroup[];
+  languages: Language[];
+}
+
+const { education, certifications, skills, tools, languages } = Astro.props;
+---
+
+<div class="resume-sections">
+  <div class="split split-even">
+    {
+      education.length > 0 && (
+        <section aria-labelledby="education-heading">
+          <h2 id="education-heading">Education</h2>
+          <ul class="cert-list">
+            {education.map((entry) => (
+              <li>
+                <div>
+                  {entry.start && (
+                    <p class="muted small">
+                      <time datetime={entry.start}>{formatYearMonth(entry.start)}</time>
+                      {" – "}
+                      {entry.end ? <time datetime={entry.end}>{formatYearMonth(entry.end)}</time> : <span>Present</span>}
+                    </p>
+                  )}
+                  <h3>{entry.degree}</h3>
+                  {entry.institution && <p class="strong">{entry.institution}</p>}
+                  {entry.description && <p class="muted small">{entry.description}</p>}
+                </div>
+                {entry.url && (
+                  <a class="cert-link" href={entry.url} target="_blank" rel="noopener noreferrer">
+                    Diploma
+                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17 17 7" /><path d="M8 7h9v9" />
+                    </svg>
+                    <span class="sr-only"> for {entry.degree} (opens in a new tab)</span>
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      certifications.length > 0 && (
+        <section aria-labelledby="certifications-heading">
+          <h2 id="certifications-heading">Courses & Certifications</h2>
+          <ul class="cert-list">
+            {certifications.map((cert) => (
+              <li>
+                <div>
+                  <h3>{cert.name}</h3>
+                  {cert.detail && <p class="muted small">{cert.detail}</p>}
+                </div>
+                {cert.url && (
+                  <a class="cert-link" href={cert.url} target="_blank" rel="noopener noreferrer">
+                    Certificate
+                    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17 17 7" /><path d="M8 7h9v9" />
+                    </svg>
+                    <span class="sr-only"> for {cert.name} (opens in a new tab)</span>
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+
+  <div class="split">
+    {
+      skills.length > 0 && (
+        <section aria-labelledby="skills-heading">
+          <h2 id="skills-heading">Skills</h2>
+          <div class="groups">
+            {skills.map((group) => (
+              <div>
+                <h3>{group.title}</h3>
+                <ul class="chips">
+                  {group.skills.map((skill) => (
+                    <li>{skill}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      languages.length > 0 && (
+        <section aria-labelledby="languages-heading">
+          <h2 id="languages-heading">Languages</h2>
+          <dl class="languages">
+            {languages.map((language) => (
+              <div>
+                <dt>{language.name}</dt>
+                <dd>{language.level}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
+  </div>
+
+  {
+    tools.length > 0 && (
+      <section aria-labelledby="tools-heading">
+        <h2 id="tools-heading">Tools</h2>
+        <dl class="tools">
+          {tools.map((group, index) => (
+            <div>
+              <dt>
+                <span class="level" aria-hidden="true">
+                  {tools.map((_, dot) => (
+                    <span class:list={["dot", dot < tools.length - index && "filled"]} />
+                  ))}
+                </span>
+                {group.title}
+              </dt>
+              <dd>
+                <ul class="chips">
+                  {group.skills.map((tool) => (
+                    <li>{tool}</li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )
+  }
+</div>
+
+<style>
+  .resume-sections {
+    display: grid;
+    gap: 4rem;
+    margin-top: 5rem;
+    padding-top: 4rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  p {
+    margin: 0.2rem 0 0;
+  }
+
+  .muted {
+    color: var(--color-text-light);
+  }
+
+  .small {
+    font-size: 0.85rem;
+  }
+
+  .strong {
+    font-weight: 600;
+    color: var(--color-text-dark);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .split {
+    display: grid;
+    gap: 4rem;
+  }
+
+  .cert-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cert-list li:first-child {
+    padding-top: 0;
+  }
+
+  .cert-link {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--color-text-dark);
+    border-radius: 0.375rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text-dark);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .cert-link:hover,
+  .cert-link:focus-visible {
+    background: var(--color-text-dark);
+    color: var(--color-body);
+  }
+
+  .groups {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+  }
+
+  .chips li {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-light);
+    font-size: 0.85rem;
+    color: var(--color-text-dark);
+  }
+
+  .languages {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .languages div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .languages dt {
+    font-weight: 600;
+    color: var(--color-text-dark);
+  }
+
+  .languages dd {
+    margin: 0;
+    color: var(--color-text-light);
+  }
+
+  .tools {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+  }
+
+  .tools dt {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+  }
+
+  .tools dd {
+    margin: 0;
+  }
+
+  .tools .chips {
+    margin-top: 0.5rem;
+  }
+
+  .level {
+    display: inline-flex;
+    gap: 0.2rem;
+  }
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+  }
+
+  .dot.filled {
+    background: var(--color-primary);
+  }
+
+  @media (min-width: 768px) {
+    .split {
+      grid-template-columns: 2fr 1fr;
+    }
+
+    .split-even {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .tools div {
+      display: grid;
+      grid-template-columns: 9rem 1fr;
+      align-items: start;
+      gap: 1rem;
+    }
+
+    .tools dt {
+      padding-top: 0.3rem;
+    }
+
+    .tools .chips {
+      margin-top: 0;
+    }
+  }
+</style>
