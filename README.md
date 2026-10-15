@@ -59,6 +59,29 @@ Run commands from the project root:
     └── styles/         # Global styles
 ```
 
+## About page
+
+The About page recreates the profile and motivation content from the original
+Wix portfolio, while retaining this site's navigation and footer. Edit the copy,
+profile tabs and interest descriptions in `src/pages/about.astro`.
+Its styles are scoped to that page and use the shared Heebo body and Signika
+heading fonts. The profile is capped at 1140px (with a 708px desktop text column),
+while the interest
+bubbles sit in a separate column beside the motivation heading on wide screens.
+Social links are provided by the shared footer, not duplicated in the page.
+The closing call to action links directly to the same email address as the footer.
+Its heading fits on one line on desktop and wraps on smaller screens.
+The profile portrait is hidden below 640px in portrait orientation only.
+
+The original portrait and cropped interest photos are stored
+locally in `public/images/about/`. Photo attribution is preserved in the image
+alt text. Interest descriptions appear on hover or keyboard focus and can also
+be toggled by tap/click; Escape dismisses a reveal. Age is calculated from
+1 May 1989 in `src/utils/profile-age.ts`, rendered at build time, and refreshed
+in the browser on page load and when returning to the tab, without a rebuild.
+It follows the current calendar date in the visitor's local time zone.
+Run the birthday-boundary tests with `node --test src/utils/profile-age.test.ts`.
+
 ## Deployment
 
 Pushing to `main` runs the GitHub Actions workflow that builds the site and

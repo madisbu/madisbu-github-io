@@ -1,81 +1,488 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getProfileAge } from "../utils/profile-age";
+
+const tabs = ["General", "Goals", "Frustrations"];
+const goals = [
+  "Keep growing my technical, leadership, and design skills.",
+  "Create digital products that solve real problems for people.",
+  "Combine project delivery experience with a user-centered approach.",
+  "Lead by example and inspire my children to stay curious.",
+];
+const frustrations = [
+  "Limited opportunities to learn, grow, or take on meaningful challenges.",
+  "Contributions going unrecognized or feedback being overlooked.",
+  "Poor communication and a lack of trust or shared ownership.",
+  "Constant firefighting that leaves little room for focused, thoughtful work.",
+];
+const interests = [
+  {
+    id: "travelling",
+    label: "Travelling",
+    description: "Japan, Iceland, Morocco, Nepal... my travel wish list keeps growing.",
+    alt: "Image by Jonah Brown",
+    size: 480,
+  },
+  {
+    id: "football",
+    label: "Football",
+    description: "I've played football for over 20 years. It's in my DNA.",
+    alt: "Football",
+    size: 720,
+  },
+  {
+    id: "family",
+    label: "Family",
+    description: "My family means everything to me. It's as simple as that.",
+    alt: "Image by Adam Sherez",
+    size: 400,
+  },
+  {
+    id: "bbq",
+    label: "BBQ",
+    description: "Something on the grill and a cold beer in hand. That's my kind of evening.",
+    alt: "BBQ - Image by Fábio Alves",
+    size: 400,
+  },
+  {
+    id: "gaming",
+    label: "Gaming",
+    description: "Gaming is my way to unwind. I lose track of time playing The Last of Us or Red Dead Redemption 2.",
+    alt: "PlayStation - Image by Igor Karimov",
+    size: 480,
+  },
+];
 ---
 
-<Layout title="About">
-  <section class="max-w-2xl">
-    <h1 class="mb-4 text-4xl text-text-dark">About</h1>
-    <p class="mb-4 text-text-light">
-      I build fast, minimal websites with strong visual design and maintainable code.
-    </p>
-    <p class="mb-12 text-text-light">
-      This site keeps the Astroplate look while intentionally removing feature bloat like complex content routing,
-      search indexing, and heavy dynamic integrations.
-    </p>
+<Layout
+  title="About"
+  description="Meet Madis Burmeister, a Senior Technical Project Manager with a passion for UX and web design, and discover his goals and daily motivation."
+  wide
+>
+  <div class="about">
+    <section class="profile" aria-labelledby="about-heading">
+      <img
+        class="portrait"
+        src="/images/about/portrait.webp"
+        alt="Madis Burmeister"
+        width="608"
+        height="1351"
+        fetchpriority="high"
+      />
+      <div class="profile-copy">
+        <h1 id="about-heading">Who am I?</h1>
+        <p class="bio">
+          Hi, I'm Madis, a father of two and a Senior Technical Project Manager. I've spent most of my career
+          delivering IT projects, and I have a passion for UX and web design. I bring together creativity,
+          technical expertise, and a user-centered mindset to create digital products that make people's lives easier.
+        </p>
+        <div class="profile-tabs" data-profile-tabs>
+          <div class="tab-list" role="tablist" aria-label="About Madis">
+            {tabs.map((tab, index) => (
+              <button
+                type="button"
+                role="tab"
+                id={`about-tab-${index}`}
+                aria-controls={`about-panel-${index}`}
+                aria-selected={index === 0 ? "true" : "false"}
+                tabindex={index === 0 ? 0 : -1}
+              >{tab}</button>
+            ))}
+          </div>
+          <div class="tab-panels">
+            <div role="tabpanel" id="about-panel-0" aria-labelledby="about-tab-0" aria-hidden="false" tabindex="0">
+              <dl>
+                <div><dt>Age:</dt><dd data-profile-age>{getProfileAge()}</dd></div>
+                <div><dt>Location:</dt><dd>Estonia</dd></div>
+                <div><dt>Current occupation:</dt><dd>Senior Technical Project Manager</dd></div>
+                <div><dt>Certification:</dt><dd>EQF Level 5 in UX Design</dd></div>
+              </dl>
+            </div>
+            {[goals, frustrations].map((items, index) => (
+              <div
+                role="tabpanel"
+                id={`about-panel-${index + 1}`}
+                aria-labelledby={`about-tab-${index + 1}`}
+                tabindex="0"
+                aria-hidden="true"
+                inert
+              >
+                <ul>{items.map((item) => <li>{item}</li>)}</ul>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p class="outro">
+          When I'm not working, I love traveling, especially taking road trips that create long-lasting memories.
+          Check out my full motivation package below…
+        </p>
+      </div>
+    </section>
 
-    <h2 class="mb-4 text-2xl text-text-dark">What I do</h2>
-    <p class="mb-4 text-text-light">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </p>
-    <p class="mb-12 text-text-light">
-      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
-      aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-    </p>
+    <section class="motivation" aria-labelledby="motivation-heading">
+      <div class="motivation-intro">
+        <h2 id="motivation-heading">Madis's<br /><span>motivation</span> package</h2>
+        <p id="interest-instruction"><mark>Tap or hover</mark> over each image to discover what gives me energy every day.</p>
+      </div>
+      <div class="interests" aria-describedby="interest-instruction">
+        {interests.map((interest) => (
+          <div class:list={["interest", interest.id]} data-interest>
+            <button
+              class="interest-toggle"
+              type="button"
+              aria-label={interest.label}
+              aria-expanded="false"
+              aria-controls={`interest-${interest.id}`}
+            >
+              <img
+                src={`/images/about/${interest.id}.webp`}
+                alt={interest.alt}
+                width={interest.size}
+                height={interest.size}
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="interest-description" id={`interest-${interest.id}`} aria-hidden="true">
+                {interest.description}
+              </span>
+            </button>
+            <span class="interest-label" aria-hidden="true">{interest.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
 
-    <h2 class="mb-4 text-2xl text-text-dark">Experience</h2>
-    <p class="mb-4 text-text-light">
-      Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
-      eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-      consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
-      quaerat voluptatem.
-    </p>
-    <p class="mb-4 text-text-light">
-      Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
-      commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
-      consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.
-    </p>
-    <p class="mb-12 text-text-light">
-      At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque
-      corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-      culpa qui officia deserunt mollitia animi.
-    </p>
-
-    <h2 class="mb-4 text-2xl text-text-dark">Skills</h2>
-    <p class="mb-4 text-text-light">
-      Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat
-      facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut
-      officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non
-      recusandae.
-    </p>
-    <p class="mb-12 text-text-light">
-      Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
-      perferendis doloribus asperiores repellat. Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-      accusantium doloremque laudantium totam rem aperiam.
-    </p>
-
-    <h2 class="mb-4 text-2xl text-text-dark">Philosophy</h2>
-    <p class="mb-4 text-text-light">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante
-      dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris fusce
-      nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
-    </p>
-    <p class="mb-4 text-text-light">
-      Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Curabitur sodales
-      ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque
-      sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor.
-    </p>
-    <p class="mb-4 text-text-light">
-      Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet.
-      Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum
-      velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos.
-    </p>
-    <p class="text-text-light">
-      Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis
-      turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet.
-      Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit.
-    </p>
-  </section>
+    <section class="connect" aria-labelledby="connect-heading">
+      <h2 id="connect-heading">Have a project in mind, a shared interest or a <span>question</span>?</h2>
+      <a class="connect-cta" href="mailto:madis.burmeister@mabux.me">
+        Let's talk <span aria-hidden="true">&rarr;</span>
+      </a>
+    </section>
+  </div>
 </Layout>
+
+<script>
+  import { getProfileAge } from "../utils/profile-age";
+
+  const updateProfileAge = () => {
+    document.querySelectorAll<HTMLElement>("[data-profile-age]").forEach((element) => {
+      element.textContent = String(getProfileAge());
+    });
+  };
+
+  const initializeAbout = () => {
+    updateProfileAge();
+    document.querySelectorAll<HTMLElement>("[data-profile-tabs]").forEach((root) => {
+      if (root.dataset.initialized) return;
+      root.dataset.initialized = "true";
+      const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+      const selectTab = (index: number) => {
+        tabs.forEach((tab, i) => {
+          tab.setAttribute("aria-selected", String(i === index));
+          tab.tabIndex = i === index ? 0 : -1;
+          panels[i].setAttribute("aria-hidden", String(i !== index));
+          panels[i].inert = i !== index;
+        });
+      };
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectTab(index));
+        tab.addEventListener("keydown", (event) => {
+          let next = index;
+          if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+          else if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+          else if (event.key === "Home") next = 0;
+          else if (event.key === "End") next = tabs.length - 1;
+          else return;
+          event.preventDefault();
+          selectTab(next);
+          tabs[next].focus();
+        });
+      });
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-interest]").forEach((root) => {
+      if (root.dataset.initialized) return;
+      root.dataset.initialized = "true";
+      const button = root.querySelector<HTMLButtonElement>("button")!;
+      const description = root.querySelector<HTMLElement>(".interest-description")!;
+      let pinned = false;
+      let hovered = false;
+      let focused = false;
+      const update = () => {
+        const expanded = pinned || hovered || focused;
+        button.setAttribute("aria-expanded", String(expanded));
+        description.setAttribute("aria-hidden", String(!expanded));
+        if (expanded) button.setAttribute("aria-describedby", description.id);
+        else button.removeAttribute("aria-describedby");
+      };
+      root.addEventListener("pointerenter", (event) => {
+        if (event.pointerType === "touch") return;
+        hovered = true;
+        update();
+      });
+      root.addEventListener("pointerleave", () => {
+        hovered = false;
+        update();
+      });
+      button.addEventListener("focus", () => {
+        focused = button.matches(":focus-visible");
+        update();
+      });
+      button.addEventListener("blur", () => {
+        focused = false;
+        pinned = false;
+        update();
+      });
+      button.addEventListener("click", () => {
+        pinned = !pinned;
+        hovered = false;
+        focused = false;
+        update();
+      });
+      button.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        pinned = false;
+        hovered = false;
+        focused = false;
+        update();
+      });
+    });
+  };
+  initializeAbout();
+  document.addEventListener("astro:page-load", initializeAbout);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") updateProfileAge();
+  });
+</script>
+
+<style>
+  .about {
+    --about-lime: #eff93b;
+    width: 100%;
+    margin: 0 auto;
+    color: #000;
+    font-family: var(--font-primary);
+    font-weight: 400;
+  }
+  .about h2, .interest-label {
+    color: #000;
+    font-family: var(--font-secondary);
+    font-weight: 700;
+  }
+  .profile {
+    display: grid;
+    grid-template-columns: 304px minmax(0, 1fr);
+    align-items: center;
+    gap: 128px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+  .portrait { display: block; width: 304px; height: 824px; object-fit: cover; }
+  .profile-copy { min-width: 0; }
+  .profile h1 {
+    font-family: var(--font-secondary);
+    font-size: 57px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+  }
+  .bio, .outro { font-size: 16px; line-height: 1.8; }
+  .bio { margin-top: 20px; }
+  .profile-tabs { margin: 46px 0 38px; }
+  .tab-list { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 12px; }
+  .tab-list button {
+    padding: 7px 12px;
+    border: 2px solid #e5e5e5;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font: 600 17px/1.35 var(--font-primary);
+    cursor: pointer;
+  }
+  .tab-list button[aria-selected="true"] { border-color: #000; background: #000; color: #fff; }
+  .tab-panels {
+    display: grid;
+    margin-top: 30px;
+    padding: 20px 36px;
+    border: 2px solid #e5e5e5;
+    border-radius: 30px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  /* Inactive panels reserve space while visibility and inert keep them inaccessible. */
+  .tab-panels [role="tabpanel"] { grid-area: 1 / 1; align-self: center; }
+  .tab-panels [role="tabpanel"][aria-hidden="true"] { visibility: hidden; pointer-events: none; }
+  dl { margin: 0; }
+  dl div { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 3px 0; }
+  dt { font-weight: 600; }
+  dd { margin: 0; }
+  .tab-panels ul { margin: 0; padding-left: 18px; list-style: disc; }
+  .tab-panels li { padding-left: 5px; }
+  .motivation {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 100px;
+    margin-top: 140px;
+  }
+  .motivation-intro { padding-top: 155px; text-align: center; }
+  .motivation h2 { font-size: 65px; line-height: 1.1; }
+  .motivation h2 span { text-decoration: underline var(--about-lime) 5px; text-underline-offset: 8px; }
+  .motivation-intro > p { margin: 90px 25px 0; font-size: 24px; line-height: 1.45; }
+  mark { background: var(--about-lime); color: #000; }
+  .interests { position: relative; min-height: 1000px; }
+  .interest { position: absolute; }
+  .travelling { left: 20px; top: 0; width: 240px; }
+  .football { left: 0; top: 480px; width: 359px; }
+  .family { left: 350px; top: 280px; width: 200px; }
+  .bbq { right: 60px; top: 40px; width: 200px; }
+  .gaming { right: 30px; top: 620px; width: 240px; }
+  .interest-toggle {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    background: var(--about-lime);
+    box-shadow: 0 0 7px #0003;
+    cursor: pointer;
+    color: #000;
+    font: inherit;
+  }
+  .interest-toggle img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: opacity 0.2s ease-out;
+  }
+  .interest-description {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 12px;
+    border-radius: 50%;
+    opacity: 0;
+    font-size: 19px;
+    line-height: 1.25;
+    letter-spacing: normal;
+    transition: opacity 0.4s ease-in-out;
+  }
+  .interest-label {
+    position: absolute;
+    width: max-content;
+    opacity: 0;
+    font-size: 25px;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    pointer-events: none;
+    transition: opacity 0.4s ease-in-out;
+  }
+  .travelling .interest-label { top: -38px; right: -105px; transform: rotate(45.5deg); }
+  .football .interest-label { top: 150px; right: -140px; transform: rotate(29deg); }
+  .family .interest-label { top: 80px; right: -130px; }
+  .bbq .interest-label { top: -38px; right: -60px; transform: rotate(-30.6deg); }
+  .gaming .interest-label { bottom: -35px; left: -115px; transform: rotate(-25deg); }
+  .interest:has([aria-expanded="true"]) .interest-toggle img { opacity: 0; }
+  .interest:has([aria-expanded="true"]) .interest-description,
+  .interest:has([aria-expanded="true"]) .interest-label { opacity: 1; }
+  .connect { margin: 80px auto 100px; padding-inline: 8px; text-align: center; }
+  .connect h2 {
+    font-family: var(--font-secondary);
+    font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+  }
+  .connect h2 span {
+    position: relative;
+    display: inline-block;
+    padding-inline: 0.12em;
+    color: var(--color-text-dark);
+    isolation: isolate;
+  }
+  .connect h2 span::after {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: -0.2rem;
+    left: 0;
+    height: 0.2rem;
+    background: var(--about-lime);
+    content: "";
+  }
+  .connect-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 48px;
+    margin-top: 28px;
+    padding: 12px 28px;
+    border: 2px solid var(--color-text-dark);
+    border-radius: 999px;
+    background: var(--color-body);
+    color: var(--color-text-dark);
+    font-weight: 700;
+    transition: background-color 0.22s ease;
+  }
+  .connect-cta:focus-visible { background: var(--about-lime); }
+  @media (hover: hover) and (pointer: fine) {
+    .connect-cta:hover,
+    .connect:has(h2 span:hover) .connect-cta {
+      background: var(--about-lime);
+    }
+  }
+  .about button:focus-visible, .about a:focus-visible, .about [role="tabpanel"]:focus-visible {
+    outline: 3px solid #000;
+    outline-offset: 5px;
+  }
+  @media (max-width: 1279px) {
+    .motivation { display: block; margin-top: 100px; }
+    .motivation-intro { max-width: 600px; margin: 0 auto 100px; padding-top: 0; }
+    .motivation h2 { font-size: 56px; }
+    .motivation-intro > p { margin-top: 35px; }
+    .interests { min-height: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 85px 65px; }
+    .interest { position: relative; inset: auto; width: 240px; }
+    .football { width: 300px; }
+    .interest .interest-label { top: auto; right: auto; bottom: -37px; left: 50%; transform: translateX(-50%); }
+    .interest-label { opacity: 1; font-size: 23px; }
+    .connect { margin-top: 110px; }
+  }
+  @media (max-width: 959px) {
+    .profile { grid-template-columns: 240px minmax(0, 1fr); gap: 72px; }
+    .portrait { width: 240px; height: 650px; }
+    .profile h1 { font-size: 46px; }
+    .profile-tabs { margin-block: 30px; }
+    .tab-list { gap: 6px; }
+    .tab-list button { padding-inline: 7px; font-size: 15px; }
+    .tab-panels { padding: 18px 22px; }
+  }
+  @media (max-width: 639px) {
+    .profile { display: flex; flex-direction: column; gap: 30px; }
+    .portrait { width: 200px; height: auto; max-height: 470px; object-fit: contain; }
+    .profile-copy { width: 100%; max-width: 520px; }
+    .profile h1 { font-size: 44px; line-height: 1.2; }
+    .tab-panels { padding: 20px; border-radius: 24px; }
+    .motivation { margin-top: 75px; }
+    .motivation h2 { font-size: 48px; }
+    .motivation-intro > p { font-size: 20px; }
+    .interests { gap: 65px; }
+    .interest { width: 240px; }
+    .football { width: min(300px, 100%); }
+    .connect { margin-block: 100px 50px; }
+  }
+  @media (max-width: 639px) and (orientation: portrait) {
+    .portrait { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .interest-toggle img, .interest-description, .interest-label, .connect h2 span::after, .connect-cta { transition: none; }
+  }
+</style>
