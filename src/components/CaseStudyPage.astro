@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import JourneyMap from "./JourneyMap.astro";
 import SitemapTree from "./SitemapTree.astro";
+import CaseStudyMediaTabs from "./CaseStudyMediaTabs.astro";
 import type { ProjectCaseStudy, ProjectDiscipline } from "../types/case-study";
 
 export interface Props {
@@ -24,7 +25,7 @@ const disciplineDetails: Record<
   },
   "product-development": {
     caseStudyLabel: "Product Development Case Study",
-    accent: "#6b4bb5",
+    accent: "#34765d",
   },
 };
 
@@ -508,7 +509,15 @@ const splitLinkedText = (
                 </>
               )}
 
-              {section.id !== "process" && section.steps && section.steps.length > 0 && (
+              {section.mediaTabs && section.steps && section.media && (
+                <CaseStudyMediaTabs
+                  id={section.id}
+                  steps={section.steps}
+                  media={[section.media, ...(section.mediaGallery ?? [])]}
+                />
+              )}
+
+              {!section.mediaTabs && section.id !== "process" && section.steps && section.steps.length > 0 && (
                 <ol class="case-study-steps">
                   {section.steps.map((step, stepIndex) => (
                     <li class:list={{ "has-feature": step.feature || step.quotes?.length }}>
@@ -605,7 +614,7 @@ const splitLinkedText = (
                 <SitemapTree node={section.sitemap.root} isRoot />
               )}
 
-              {section.media && section.id !== "problem" && section.id !== "opportunity" && (
+              {!section.mediaTabs && section.media && section.id !== "problem" && section.id !== "opportunity" && (
                 <figure class="case-study-media">
                   <button
                     type="button"
@@ -629,7 +638,7 @@ const splitLinkedText = (
                 </figure>
               )}
 
-              {section.mediaGallery && section.mediaGallery.length > 0 && (
+              {!section.mediaTabs && section.mediaGallery && section.mediaGallery.length > 0 && (
                 <div class="case-study-media-gallery">
                   {section.mediaGallery.map((media) => (
                     <figure
@@ -777,6 +786,17 @@ const splitLinkedText = (
     padding-bottom: clamp(3rem, 7vw, 6rem);
   }
 
+  .case-study[data-discipline="product-development"] {
+    --color-light: #f5f5f1;
+    --case-study-hero-start: #f7f9f5;
+    --case-study-hero-end: #eef3ed;
+  }
+
+  .case-study[data-discipline="product-development"] :is(.case-study-back, .case-study-next, .case-study-nav a):is(:hover, :focus-visible) {
+    color: var(--case-study-accent);
+    background: color-mix(in srgb, var(--case-study-accent) 8%, var(--color-body));
+  }
+
   .case-study-hero {
     --hero-pointer-x: 72%;
     --hero-pointer-y: 38%;
@@ -798,7 +818,7 @@ const splitLinkedText = (
         color-mix(in srgb, var(--case-study-accent) 18%, transparent) 0,
         transparent min(34rem, 42vw)
       ),
-      linear-gradient(120deg, #f7f9fa 0%, #eef3f5 100%);
+      linear-gradient(120deg, var(--case-study-hero-start, #f7f9fa) 0%, var(--case-study-hero-end, #eef3f5) 100%);
     transition: background-position 180ms ease-out;
   }
 
@@ -995,6 +1015,11 @@ const splitLinkedText = (
     margin: 0;
   }
 
+  .case-study[data-discipline="product-development"] .case-study-cover {
+    width: 88%;
+    justify-self: center;
+  }
+
   .case-study-cover img,
   .case-study-media img {
     width: 100%;
@@ -1187,6 +1212,10 @@ const splitLinkedText = (
   .case-study-copy strong {
     color: var(--color-text-dark);
     font-weight: 700;
+  }
+
+  .case-study[data-discipline="product-development"] #outcome .case-study-copy > p + p {
+    margin-top: 1.5rem;
   }
 
   .case-study-section-closing {
@@ -1638,6 +1667,24 @@ const splitLinkedText = (
     font-family: var(--font-secondary);
     font-size: clamp(1.25rem, 3vw, 2rem);
     line-height: 1.35;
+  }
+
+  .case-study[data-discipline="product-development"] :is(#opportunity, #flow) .case-study-callout {
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    border-left-width: 0.2rem;
+    background: color-mix(in srgb, var(--case-study-accent) 6%, var(--color-body));
+  }
+
+  .case-study[data-discipline="product-development"] :is(#opportunity, #flow) .case-study-callout > p {
+    color: var(--case-study-accent);
+  }
+
+  .case-study[data-discipline="product-development"] :is(#opportunity, #flow) .case-study-callout strong {
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    font-size: 0.98rem;
+    font-weight: 400;
+    line-height: 1.75;
   }
 
   .case-study-steps {

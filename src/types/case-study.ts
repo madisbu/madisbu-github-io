@@ -175,6 +175,7 @@ export interface CaseStudySection {
   closing?: string;
   media?: CaseStudyMedia;
   mediaGallery?: CaseStudyMedia[];
+  mediaTabs?: boolean;
   embed?: CaseStudyEmbed;
   links?: CaseStudyLink[];
   sitemap?: CaseStudySitemap;

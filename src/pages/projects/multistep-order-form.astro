@@ -17,10 +17,10 @@ const project = {
   },
   cover: {
     src: "/images/projects/multistep-order-form/cover.webp",
-    alt: "Multistep order form with contact fields, a pinned map location, and a continue action",
+    alt: "Order form location and date step with an address, date fields, a pinned map, and a continue action",
     width: 1200,
     height: 900,
-    caption: "MVP order experience combining customer details and location confirmation.",
+    caption: "Step 2 captures the delivery address and dates, with a map pin to confirm the exact drop-off location.",
   },
   metadata: [
     { label: "My Role", value: "Product Owner & Developer" },
@@ -31,7 +31,7 @@ const project = {
     },
     {
       label: "Tools",
-      value: "Vue.js · Node.js · Firebase · Google APIs · Nodemailer · Google Cloud Logging",
+      value: "Vue.js · Node.js · Firebase · Google Maps APIs · Nodemailer · Google Cloud",
     },
   ],
   sections: [
@@ -41,8 +41,8 @@ const project = {
       eyebrow: "Product context",
       summary: "Turn a long, error-prone order into a guided product experience.",
       paragraphs: [
-        "Multistep Order Form is a responsive web application for customers who need to submit a detailed service order online. It guides them through a focused three-step journey for configuring an order, entering contact and location details, and reviewing the request before submission.",
-        "I designed and developed the product as an MVP (Minimum Viable Product), with the main goal of making a complex order easier to complete while giving the business complete, structured information for fulfilment. The MVP focuses on the core purchase journey and provides a foundation for future validation and product development.",
+        "The multistep order form is a responsive web application that helps customers submit detailed service orders online. It guides them through three steps: choosing a service and size, confirming the location and dates, and adding contact details before submitting the order.",
+        "I designed and developed the application as a minimum viable product (MVP) to make complex orders easier to complete and give the business the structured information needed for fulfilment. This first release focuses on the core ordering journey and provides a foundation for future validation and product development.",
       ],
       metrics: [
         { value: "MVP", label: "Focused first release" },
@@ -57,8 +57,8 @@ const project = {
       eyebrow: "Discover",
       summary: "An ordinary contact form left the most important delivery detail unclear: the exact location where the container or big-bag should be placed.",
       paragraphs: [
-        "Customers could submit an order through a standard contact form, but an address alone was often not precise enough for a waste-disposal delivery or container placement. After every request, a dispatcher had to call the customer to clarify the exact drop-off location, then pass those details on to the driver. This repeated coordination slowed down fulfilment and created room for misunderstandings.",
-        "The problem affected both sides of the service: customers had to repeat information after submitting an order, while dispatchers and drivers spent time resolving location details that should have been captured at the start. A missing or inaccurate placement point could lead to delays, extra calls, or a container being delivered to the wrong part of a property.",
+        "The business owner identified a bottleneck in the existing contact form: addresses did not specify exactly where a container or big bag should be placed. Follow-up emails delayed fulfilment, while calls added staff workload and friction for customers.",
+        "Customers had to repeat information, and dispatchers had to clarify the location before passing it to drivers. Capturing the drop-off point upfront could reduce this coordination and the risk of misplaced deliveries.",
       ],
       media: {
         src: "/images/projects/multistep-order-form/order-confusion.svg",
@@ -68,63 +68,80 @@ const project = {
         transparentBackground: true,
       },
       callout: {
-        label: "Product Improvement Opportunity",
-        text: "Replace the standard form with a multi-step guided order flow that lets customers confirm an exact map location. Once order is submitted, reliable coordinates will be sent to dispatcher and driver, eliminating communication delays.",
+        label: "Improvement opportunity",
+        text: "Replace the standard contact form with a guided, multistep order flow that lets customers confirm the exact drop-off point on a map. Include those coordinates with the submitted order so the dispatcher and driver have a clear location, reducing the need for follow-up calls.",
       },
       closing:
-        "At that point, it was clear that the improved order form could help the waste-disposal company.",
+        "Capturing the drop-off point during ordering offered a practical way to reduce manual coordination for the waste-disposal company.",
     },
     {
       id: "approach",
       title: "Product Approach",
       eyebrow: "Define and prioritize",
-      summary: "Define the smallest valuable release, then make decisions that keep the order journey understandable and recoverable.",
+      summary: "Keep the existing process, but capture the missing location detail at the source.",
       paragraphs: [
-        "The MVP focuses on one measurable outcome: helping customers submit a complete order while giving the business structured data that can support later automation.",
+        "The approach retained the existing three-step process and email communication, replacing repeated location clarification with a precise map selection during ordering.",
       ],
       steps: [
         {
-          title: "Must have",
-          description: "Order type, customer details, location, contextual validation, review, and confirmation.",
+          title: "Make location the core feature",
+          description: "Give the map fields prominence in Step 2. A draggable Google Maps pin captures the exact drop-off coordinates for customer and administrator emails, ready to share through the existing dispatch workflow.",
         },
         {
-          title: "Should have",
-          description: "Saved progress during the session, clear error recovery, and responsive behavior.",
+          title: "Fit the existing workflow",
+          description: "Support Estonian, English, and Russian, with a mobile-friendly form and clickable coordinates in emails so drivers can open the location on their phones.",
         },
         {
-          title: "Later",
-          description: "Accounts, saved addresses, order history, administration, notifications, and integrations.",
+          title: "Keep the MVP focused",
+          description: "Deliver the three-step order form and coordinate emails first. Leave cost calculation out of the initial scope.",
         },
       ],
-      bullets: [
-        "Use progressive disclosure so each step asks only questions relevant to the current decision.",
-        "Preserve entered values when moving backward or correcting an error.",
-        "Show progress with meaningful step names rather than percentage alone.",
-        "Keep a single primary action and make backward navigation predictable.",
-        "Treat location confirmation as a visual check, not only a text field.",
-      ],
-      callout: {
-        label: "Key trade-off",
-        text: "More steps can feel longer, but focused steps improve comprehension when each one has a clear purpose.",
-      },
     },
     {
       id: "flow",
+      mediaTabs: true,
       title: "Multistep Order Form Flow",
       eyebrow: "Experience",
       summary: "Keep the mental model stable while the form progressively reveals detail.",
       steps: [
         {
-          title: "Configure order",
-          description: "Select the order type and provide details that determine later questions.",
+          title: "Complete the order form",
+          description: "Choose a service, drag the Google Maps pin to the exact drop-off point, set the dates, and add contact details.",
         },
         {
-          title: "Contact and location",
-          description: "Enter standard contact fields and confirm the service location on a map.",
+          title: "Receive confirmation",
+          description: "A success screen confirms that the order was received and displays a reference number.",
         },
         {
-          title: "Review and submit",
-          description: "Verify all selections, correct errors in context, and submit a complete order.",
+          title: "Share the delivery details",
+          description: "Customer and administrator emails bring together the order and exact drop-off coordinates, ready to share with the driver.",
+        },
+      ],
+      media: {
+        src: "/images/projects/multistep-order-form/flow-overview.webp",
+        alt: "Three order form screens showing service and quantity selection, location and dates, and customer contact details",
+        width: 1200,
+        height: 720,
+        caption: "A guided three-step journey, from choosing a service to submitting contact details.",
+      },
+      callout: {
+        label: "One precise location, shared by everyone",
+        text: "An address gets the driver to the property; a draggable map pin identifies the actual drop-off point. Customer and administrator emails include the coordinates as a clickable Google Maps link, giving dispatchers a precise location to share with the driver.",
+      },
+      mediaGallery: [
+        {
+          src: "/images/projects/multistep-order-form/order-success.webp",
+          alt: "Successful order screen with a green checkmark, order number T-000001, and a countdown before the form resets",
+          width: 1200,
+          height: 800,
+          caption: "Order received. A clear success state and reference number confirm that submission is complete.",
+        },
+        {
+          src: "/images/projects/multistep-order-form/order-email.webp",
+          alt: "Example confirmation email in an inbox, with order details, delivery dates, coordinates, and a schematic map marking the drop-off point",
+          width: 1200,
+          height: 1100,
+          caption: "The location travels with the order. The email brings together service details, dates, and the confirmed drop-off coordinates. Recreated with fictional customer data and a schematic map.",
         },
       ],
     },
@@ -132,10 +149,35 @@ const project = {
       id: "delivery",
       title: "Technical Delivery",
       eyebrow: "Build",
-      summary: "Connect product decisions to architecture, data, quality, and maintainability.",
+      summary: "From a draggable map pin to a saved order and a shared location link.",
       paragraphs: [
-        "The frontend is a Vue 3 single-page application built with Vite, using Pinia to hold order state across the three steps and Vue Router for navigation. Vue-i18n adds Estonian and Russian locales with a persisted language toggle, since the audience needed the form in their own language rather than English only.",
-        "The backend is a Node.js and Express API that stores completed orders in Firestore through the Firebase Admin SDK and sends confirmation and admin notification emails through NodeMailer. Winston with Google Cloud Logging keeps a structured trail of requests, errors, and submission outcomes in production.",
+        "The core data flow is simple: select the drop-off point, save its coordinates with the order, and email a location link that can be opened on a phone.",
+      ],
+      steps: [
+        {
+          title: "Frontend and location capture",
+          description: "Vue 3, Vite, Vue Router, and Pinia manage the three-step form and retain order details between steps. Vue-i18n supports Estonian, Russian, and English. Google Maps address search positions the map; dragging the marker updates the stored coordinates, with reverse geocoding to resolve the address.",
+        },
+        {
+          title: "Validated order storage",
+          description: "A Node.js and Express API uses Firebase anonymous authentication to associate orders with a user session. Server-side checks cover contact details, coordinates, service options, quantities, delivery dates, and terms acceptance. Firestore stores the order with a server-assigned sequential reference.",
+        },
+        {
+          title: "Email and driver handoff",
+          description: "Nodemailer builds an Estonian summary from the saved order and sends it to the customer and configured administrator. It includes a Google Maps Static API preview and clickable coordinates that open Google Maps. Dispatchers can share this location with drivers; a separate driver email recipient is not configured.",
+        },
+        {
+          title: "Recoverable submission",
+          description: "If saving succeeds but email delivery fails, the interface offers an email retry using the original order reference rather than creating another order. Delivery status prevents concurrent sends and repeat sends after recorded success. An interrupted send with an uncertain outcome requires an operator to check delivery before retrying.",
+        },
+        {
+          title: "Deployment and observability",
+          description: "GitHub Actions deploys the frontend to Firebase Hosting and the containerized backend to Google Cloud Run. Hosting routes API requests to Cloud Run. Firebase token verification and rate limits protect requests, email content is HTML-escaped, and Winston sends redacted production logs to Google Cloud Logging.",
+        },
+        {
+          title: "Testing",
+          description: "Repository tests cover order validation, date handling, map coordinates and previews, autocomplete request races, email safety, terms acceptance, and runtime protections. Firestore rules tests use the Firebase emulator. These checks do not replace real-device usability testing or production delivery monitoring.",
+        },
       ],
     },
     {
@@ -144,13 +186,8 @@ const project = {
       eyebrow: "Measure and learn",
       summary: "Separate what has been built from what still needs to be validated.",
       paragraphs: [
-        "The MVP establishes a working foundation for a clearer order journey, but its strongest product claims still need evidence from real customers and submitted orders.",
-      ],
-      bullets: [
-        "Measure completion rate, abandonment by step, errors per step, and time to complete.",
-        "Compare the percentage of submissions that require manual clarification.",
-        "Use usability testing and production feedback to identify confusing steps.",
-        "Prioritize accounts, saved addresses, notifications, and integrations only after observing a validated need.",
+        "The MVP retained the existing three-step ordering process while adding precise drop-off selection and emailed location links. Support for Estonian, English, and Russian, a mobile-friendly form, and clickable coordinates addressed the core workflow requirements.",
+        "The key lesson was to improve the information captured at the start rather than add more coordination afterward. Next, I would validate the flow with customers and drivers, track how often orders still need clarification, and use those findings to guide further development.",
       ],
     },
   ],

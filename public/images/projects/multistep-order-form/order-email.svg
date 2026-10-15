@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1100" viewBox="0 0 1200 1100" fill="none">
+  <title>Order confirmation in an email inbox</title>
+  <desc>Illustrative inbox with fictional customer information, order T-000001, screened soil delivery, dates, and a schematic map of the confirmed coordinates.</desc>
+  <rect width="1200" height="1100" rx="28" fill="#F5F5F1"/>
+  <rect x="32" y="32" width="1136" height="1036" rx="20" fill="#FFF" stroke="#E0E6DF"/>
+  <path d="M32 112H1168" stroke="#E0E6DF"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#292F2B">
+    <text x="62" y="81" font-size="23" font-weight="700">Mail</text>
+    <rect x="230" y="52" width="700" height="40" rx="12" fill="#F5F5F1"/>
+    <text x="254" y="78" font-size="15" fill="#77817A">Search mail</text>
+    <circle cx="1117" cy="72" r="20" fill="#214C3E"/>
+    <text x="1117" y="78" font-size="15" font-weight="700" text-anchor="middle" fill="#FFF">JD</text>
+    <rect x="48" y="139" width="158" height="42" rx="10" fill="#EDF5EF"/>
+    <text x="66" y="166" font-size="16" font-weight="700" fill="#34765D">Inbox</text>
+    <text x="182" y="166" font-size="14" text-anchor="end" fill="#34765D">1</text>
+    <g font-size="15" fill="#77817A">
+      <text x="66" y="214">Starred</text>
+      <text x="66" y="258">Sent</text>
+      <text x="66" y="302">Drafts</text>
+    </g>
+    <path d="M224 112V1068" stroke="#E0E6DF"/>
+    <text x="258" y="164" font-size="26" font-weight="700">Order confirmation: T-000001</text>
+    <rect x="258" y="185" width="63" height="23" rx="5" fill="#EDF5EF"/>
+    <text x="289" y="201" text-anchor="middle" font-size="12" fill="#34765D">Inbox</text>
+    <circle cx="280" cy="250" r="22" fill="#EDF5EF"/>
+    <path d="M269 243h22v15h-22z m0 0 11 8 11-8" fill="none" stroke="#34765D" stroke-width="1.8" stroke-linejoin="round"/>
+    <text x="316" y="243" font-size="16" font-weight="700">Order notifications</text>
+    <text x="316" y="267" font-size="13" fill="#77817A">orders@example.com · to john.doe@example.com</text>
+    <text x="1128" y="244" text-anchor="end" font-size="13" fill="#77817A">10:42</text>
+    <path d="M258 292H1132" stroke="#E0E6DF"/>
+    <text x="270" y="328" font-size="18" font-weight="700">Your order details</text>
+    <text x="270" y="355" font-size="14" fill="#626B65">Reference T-000001 · Keep this email for your delivery details.</text>
+    <g font-size="18" font-weight="700">
+      <text x="270" y="406">Service</text>
+      <text x="720" y="406">Quantity</text>
+      <text x="270" y="475">Delivery</text>
+      <text x="720" y="475">Removal / end date</text>
+    </g>
+    <g font-size="15">
+      <text x="270" y="435">Filling material · Screened soil</text>
+      <text x="720" y="435">1 ton</text>
+      <text x="270" y="504">29 October 2026</text>
+      <text x="720" y="504">31 October 2026</text>
+    </g>
+    <text x="270" y="570" font-size="18" font-weight="700">Confirmed drop-off point</text>
+    <text x="270" y="597" font-size="15" fill="#34765D">58.221791, 26.401247</text>
+    <path d="M270 602H434" stroke="#34765D"/>
+    <text x="1118" y="597" text-anchor="end" font-size="14" fill="#626B65">Distance from city: 11 km</text>
+    <rect x="270" y="615" width="848" height="195" rx="14" fill="#F1F2EE" stroke="#DFE2DC"/>
+    <svg x="270" y="615" width="848" height="195" viewBox="0 0 848 195" fill="none">
+      <path d="M0 64c152-33 225 14 346-14s185-6 303-36 125-28 199-20" stroke="#FFF" stroke-width="22" stroke-linecap="round"/>
+      <path d="M72 195c29-53 98-65 187-80s89-50 185-64 150 9 210-16S752-2 848 3" stroke="#FFF" stroke-width="16" stroke-linecap="round"/>
+      <path d="M250 0c-24 40 18 60-14 88s-18 56 3 107M564 0c-18 37 16 57-9 88s5 62-13 107M0 108c134-10 185 12 279 7s203-9 306 3 169 12 263 4M0 154c129 6 188-10 277-5s183 16 292 6 170-8 279 1" stroke="#E0E4DE" stroke-width="2"/>
+    </svg>
+    <circle cx="670" cy="696" r="30" fill="#E8BE45" fill-opacity=".25"/>
+    <path d="M670 668c-15 0-27 12-27 27 0 21 27 48 27 48s27-27 27-48c0-15-12-27-27-27Z" fill="#C64E43"/>
+    <circle cx="670" cy="695" r="8" fill="#FFF"/>
+    <rect x="818" y="774" width="284" height="24" rx="8" fill="#FFF"/>
+    <text x="960" y="791" font-size="12" text-anchor="middle" fill="#77817A">Illustrative map · not for navigation</text>
+    <text x="270" y="849" font-size="18" font-weight="700">Customer information</text>
+    <g font-size="15">
+      <text x="270" y="879">John Doe · Acme Ltd.</text>
+      <text x="720" y="879">Personal ID: 12345678901</text>
+      <text x="270" y="907">john.doe@example.com</text>
+      <text x="720" y="907">Phone: +372 0000 0000</text>
+      <text x="270" y="935">Additional information: ASAP</text>
+      <text x="720" y="935">Address: Kase 24, Tartu, Estonia</text>
+    </g>
+    <path d="M270 961H1118" stroke="#E0E6DF"/>
+    <text x="270" y="991" font-size="14" fill="#626B65">A shared location reference for the customer, dispatcher, and driver.</text>
+    <text x="270" y="1022" font-size="12" fill="#77817A">Recreated email example. Customer and contact details are fictional.</text>
+  </g>
+</svg>
