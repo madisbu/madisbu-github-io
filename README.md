@@ -1,8 +1,7 @@
 # madisbu-github-io
 
-Personal portfolio site built with [Astro](https://astro.build/) and
-[Tailwind CSS](https://tailwindcss.com/). The site is deployed to GitHub Pages
-from the `main` branch.
+Personal portfolio for Madis Burmeister, built with Astro and Tailwind CSS. It
+is a static site deployed to GitHub Pages.
 
 ## Requirements
 
@@ -11,96 +10,63 @@ from the `main` branch.
 
 ## Getting started
 
-```powershell
+```sh
 npm ci
 npm run dev
 ```
 
-Open <http://localhost:4321> after the development server starts.
-
-## VS Code Run and Debug
-
-The repository includes a **Development server** configuration:
-
-1. Open **Run and Debug** (`Ctrl+Shift+D`).
-2. Select **Development server**.
-3. Press `F5`.
-
-The configuration starts Astro in the background on
-<http://127.0.0.1:4321>, streams its logs in the debug terminal, and stops the
-managed server when the debug session ends. It also connects an available
-Android device through ADB for local mobile testing.
+The development server listens at <http://127.0.0.1:4321>.
 
 ## Commands
 
-Run commands from the project root:
+Run from the repository root:
 
-| Command               | Action                                             |
-| :-------------------- | :------------------------------------------------- |
-| `npm ci`              | Install the exact locked dependencies              |
-| `npm run dev`         | Start the local development server                 |
-| `npm run check`       | Check Astro files and TypeScript types             |
-| `npm run build`       | Build the production site in `dist/`               |
-| `npm run preview`     | Preview the production build locally               |
-| `npm run images:hero` | Regenerate responsive hero images from their source |
+| Command | Purpose |
+| --- | --- |
+| `npm ci` | Install the exact versions in `package-lock.json` |
+| `npm run dev` | Start the local development server |
+| `npm run check` | Check Astro files and TypeScript types |
+| `node --test src/utils/profile-age.test.ts src/utils/resume-dates.test.ts` | Run unit tests |
+| `npm run build` | Build the static site into `dist/` |
+| `npm run preview` | Preview the production build locally |
+| `npm run images:hero` | Regenerate responsive hero images |
+| `npm audit` | Check dependencies for known vulnerabilities |
+
+The hero-image generator uses `public/main_hero.webp` as its source and writes
+responsive AVIF and WebP variants to `public/images/`. These generated assets
+are checked in and used by the home page.
 
 ## Project structure
 
 ```text
 .
-├── .github/workflows/  # GitHub Pages deployment
-├── .vscode/            # Run, task, and Android development settings
-├── public/             # Static assets and custom-domain configuration
-├── scripts/            # Asset-generation scripts
+├── .github/workflows/  # GitHub Pages build and deployment
+├── .vscode/            # Optional VS Code tasks and Android device setup
+├── public/             # Static images, resume PDF, favicon, and CNAME
+├── scripts/            # Hero-image generation
 └── src/
-    ├── components/     # Reusable Astro components
-    ├── layouts/        # Shared page layout
-    ├── pages/          # File-based routes
-    └── styles/         # Global styles
+    ├── components/     # Shared UI and case-study/resume components
+    ├── data/           # Resume content
+    ├── layouts/        # Shared page layout and metadata
+    ├── pages/          # Home, about, contact, projects, and resume routes
+    ├── styles/         # Global styles and design tokens
+    ├── types/           # Shared TypeScript types
+    └── utils/           # Date/age helpers and unit tests
 ```
 
-## About page
+Pages are Astro file-based routes. Project case-study copy and media are defined
+in `src/pages/projects/`; resume entries are maintained in `src/data/resume.ts`.
+The branded `404.html` is generated from `src/pages/404.astro`.
 
-The About page recreates the profile and motivation content from the original
-Wix portfolio, while retaining this site's navigation and footer. Edit the copy,
-profile tabs and interest descriptions in `src/pages/about.astro`.
-Its styles are scoped to that page and use the shared Heebo body and Signika
-heading fonts. The profile is capped at 1140px (with a 708px desktop text column),
-while the interest
-bubbles sit in a separate column beside the motivation heading on wide screens.
-Social links are provided by the shared footer, not duplicated in the page.
-The closing call to action links directly to the same email address as the footer.
-Its heading fits on one line on desktop and wraps on smaller screens.
-The profile portrait is hidden below 640px in portrait orientation only.
-
-The original portrait and cropped interest photos are stored
-locally in `public/images/about/`. Photo attribution is preserved in the image
-alt text. Interest descriptions appear on hover or keyboard focus and can also
-be toggled by tap/click; Escape dismisses a reveal. Age is calculated from
-1 May 1989 in `src/utils/profile-age.ts`, rendered at build time, and refreshed
-in the browser on page load and when returning to the tab, without a rebuild.
-It follows the current calendar date in the visitor's local time zone.
-Run the birthday-boundary tests with `node --test src/utils/profile-age.test.ts`.
-
-## Shared design and accessibility
-
-Body copy uses the `--color-text` token in `src/styles/global.css` across pages.
-Use `--color-text-dark` for headings and strong labels, and `--color-text-light`
-for secondary metadata and captions. Project discipline accents are retained for
-category labels, links, and diagrams, with sufficient contrast for small text.
-
-The shared layout provides a keyboard skip link, visible focus styles, and
-reduced-motion support. Mobile navigation uses a scrollable, focus-trapped
-dialog, with ordinary navigation links available when JavaScript is disabled.
-The header, page gutters, and fixed mobile contact bar respect device safe-area
-insets.
-
-`src/pages/404.astro` generates the branded `404.html` used by GitHub Pages for
-unknown URLs, including nested paths. It is excluded from search indexing and
-offers links back to Home and Projects.
+The optional **Development server** launch configuration in VS Code also
+prepares Android debugging and ADB port forwarding. It requires ADB and a
+connected or wirelessly pairable Android device; when no device is connected,
+the task prompts you to pair over Wireless debugging. For ordinary local
+development, use `npm run dev` without ADB.
 
 ## Deployment
 
-Pushing to `main` runs the GitHub Actions workflow that builds the site and
-publishes the `dist/` artifact to GitHub Pages. The custom domain is configured
-in `public/CNAME`.
+Pushing to `main`, or manually starting the GitHub Actions workflow, builds the
+site and deploys the `dist/` artifact to GitHub Pages. The workflow supplies the
+site URL and base path at build time. The custom domain is configured in
+`public/CNAME`.
