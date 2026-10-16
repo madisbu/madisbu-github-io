@@ -2,12 +2,168 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Contact" description="Contact Mabux for project inquiries and collaboration.">
-  <section class="max-w-2xl">
-    <h1 class="mb-4 text-4xl text-text-dark">Contact</h1>
-    <p class="text-text-light">
-      Contact information will be added here soon. You can replace this section with your preferred email, socials, or
-      contact form.
-    </p>
-  </section>
+<Layout
+  title="Contact"
+  description="Have a project in mind? Let's make something happen. Email Madis Burmeister in Estonia to talk about your next web project or collaboration."
+  wide
+>
+  <div class="contact">
+    <section class="invitation" aria-labelledby="contact-heading">
+      <div class="invitation-copy">
+        <p class="eyebrow"><span aria-hidden="true"></span> A NEW PROJECT? A ROUGH IDEA?</p>
+        <h1 id="contact-heading">Good things start with a <span class="hand-underline">conversation.</span></h1>
+        <div class="email-invitation">
+          <p class="email-label">No forms. No hoops. Just say hello.</p>
+          <a class="email-link" href="mailto:madis.burmeister@mabux.me">
+            <span>madis.burmeister<wbr />@mabux.me</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 19 19 5M5 5h14v14" />
+            </svg>
+          </a>
+          <p class="email-note">Your idea doesn't need to be polished. That's what working together is for.</p>
+        </div>
+      </div>
+
+      <aside class="conversation-card" aria-labelledby="conversation-heading">
+        <div class="card-top">
+          <span>FROM YOUR FIRST HELLO</span>
+          <svg class="spark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="m20 2 1 13L33 7 25 19l13 1-13 2 8 11-12-8-1 13-2-13-11 8 8-12-13-1 13-2L7 7l12 8Z" />
+          </svg>
+        </div>
+        <div class="letter-art" aria-hidden="true">
+          <svg viewBox="0 0 320 230" fill="none">
+            <path class="art-shadow" d="m54 116 205-12 13 107-205 12Z" />
+            <path class="art-paper" d="m88 27 156 14-12 137-156-14Z" />
+            <path class="art-ink" d="m110 62 97 9m-100 14 77 7m-80 16 95 9" />
+            <path class="art-envelope" d="m49 110 109-58 106 75-12 91-211-19Z" />
+            <path class="art-paper" d="m88 27 156 14-12 119-156-14Z" />
+            <path class="art-ink" d="m110 62 97 9m-100 14 77 7m-80 16 95 9" />
+            <path class="art-envelope" d="m49 110 95 69 120-52-12 91-211-19Z" />
+            <path class="art-ink" d="m42 198 81-55m129 74-70-69M27 55l-13-8m19-7-4-15m244 54 19-7m-20 21 14 3" />
+          </svg>
+          <span class="letter-note">big ideas start small</span>
+        </div>
+        <h2 id="conversation-heading">Let's make<br />something happen.</h2>
+        <p>You bring the idea.<br />We'll figure out the next step together.</p>
+        <div class="card-bottom"><span>LESS OVERTHINKING, MORE HELLO.</span><span aria-hidden="true">&darr;</span></div>
+      </aside>
+    </section>
+
+    <section class="good-to-know" aria-labelledby="details-heading">
+      <h2 id="details-heading">A little good to know</h2>
+      <dl class="contact-details">
+        <div class="reply-detail">
+          <dt>WHEN TO REACH OUT</dt>
+          <dd>Drop me a message anytime.</dd>
+          <dd class="detail-note">I usually reply within 1&ndash;2 days.</dd>
+        </div>
+        <div>
+          <dt>BASED IN</dt>
+          <dd>Estonia (EET/EEST)</dd>
+          <dd class="detail-note">A small country. A wide world of ideas.</dd>
+        </div>
+        <div>
+          <dt>LET'S TALK IN</dt>
+          <dd>English or Estonian</dd>
+          <dd class="detail-note">Plain language, not technical jargon.</dd>
+        </div>
+      </dl>
+    </section>
+  </div>
 </Layout>
+
+<style>
+  .contact {
+    --contact-lime: #eff93b;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 2rem 0 1rem;
+    color: var(--color-text-dark);
+  }
+
+  .invitation {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 5.5rem);
+  }
+
+  .invitation-copy { min-width: 0; }
+  .eyebrow, .email-label, dt, .card-top, .card-bottom {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .eyebrow { display: flex; align-items: center; gap: 0.65rem; margin: 0 0 1.5rem; }
+  .eyebrow > span { width: 0.6rem; height: 0.6rem; flex-shrink: 0; background: var(--contact-lime); border: 1px solid currentColor; border-radius: 50%; }
+  h1 { font-size: clamp(3.25rem, 5.7vw, 4.75rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.035em; }
+  .hand-underline { position: relative; display: inline; padding-bottom: 0.22em; }
+  .hand-underline::after {
+    content: "";
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    bottom: 0;
+    height: 0.25em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M1,7 C8,3 14,9 26,6 C38,3 44,8 58,5.5 C72,3 80,8 96,6 C112,4 120,8.5 138,6 C155,3.5 163,8 180,5.5 C190,4 196,7 199,6' stroke='%23EFF93B' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    animation: draw-underline 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards 1.2s;
+  }
+  @keyframes draw-underline { to { background-size: 100% 100%; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hand-underline::after { animation: none; background-size: 100% 100%; }
+  }
+  .email-invitation { margin-top: 4rem; }
+  .email-label { margin: 0 0 0.5rem; letter-spacing: 0.015em; font-size: 0.8rem; }
+  .email-link { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; padding: 0.4rem 0 0.65rem; border-bottom: 2px solid currentColor; font-size: clamp(1.1rem, 2.2vw, 1.65rem); font-weight: 600; }
+  .email-link > span { min-width: 0; overflow-wrap: anywhere; }
+  .email-link > svg { width: 1.6rem; height: 1.6rem; flex-shrink: 0; stroke: currentColor; stroke-width: 1.8; }
+  .email-link:hover { color: var(--color-text); background: var(--contact-lime); }
+  .email-link:focus-visible { outline: 3px solid var(--color-text-dark); outline-offset: 6px; background: var(--contact-lime); }
+  .email-note { max-width: 27rem; margin: 0.8rem 0 0; color: var(--color-text); font-size: 0.8rem; line-height: 1.7; }
+
+  .conversation-card { position: relative; min-width: 0; padding: 1.5rem 1.75rem; border: 1.5px solid var(--color-text-dark); border-radius: 3px; background: var(--contact-lime); box-shadow: 7px 7px 0 var(--color-text-dark); transform: rotate(2deg); }
+  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .spark { width: 2rem; height: 2rem; flex-shrink: 0; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
+  .letter-art { position: relative; max-width: 21rem; margin: 0 auto 1.5rem; }
+  .letter-art > svg { display: block; width: 100%; height: auto; }
+  .art-shadow { fill: var(--color-text-dark); }
+  .art-paper { fill: var(--color-body); stroke: var(--color-text-dark); stroke-width: 2; stroke-linejoin: round; }
+  .art-envelope { fill: var(--contact-lime); stroke: var(--color-text-dark); stroke-width: 2; stroke-linejoin: round; }
+  .art-ink { stroke: var(--color-text-dark); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .letter-note { position: absolute; right: 0; bottom: -0.7rem; font-family: "Architects Daughter", cursive; font-size: 1rem; transform: rotate(-7deg); }
+  .conversation-card h2 { font-size: clamp(2rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.025em; }
+  .conversation-card > p { margin: 1rem 0 1.75rem; font-size: 0.9rem; line-height: 1.7; }
+  .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 0.85rem; border-top: 1px solid currentColor; font-size: 0.6rem; }
+  .card-bottom > span:last-child { font-size: 1.3rem; line-height: 1; }
+
+  .good-to-know { margin-top: 5rem; padding-top: 1.75rem; border-top: 1px solid var(--color-border); }
+  .good-to-know h2 { margin-bottom: 1.5rem; font-family: "Architects Daughter", cursive; font-size: 1.1rem; font-weight: 400; }
+  .contact-details { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 2rem; margin: 0; }
+  dt { margin-bottom: 0.65rem; color: var(--color-text); font-size: 0.65rem; }
+  dd { margin: 0; font-size: 0.95rem; font-weight: 600; }
+  dd.detail-note { margin-top: 0.25rem; color: var(--color-text); font-size: 0.8rem; font-weight: 400; }
+
+  @media (max-width: 767px) {
+    .contact { max-width: 36rem; padding-top: 0; }
+    .invitation { grid-template-columns: minmax(0, 1fr); gap: 2.75rem; }
+    h1 { max-width: 32rem; font-size: clamp(2.6rem, 9.5vw, 4rem); }
+    .eyebrow { font-size: 0.6rem; margin-bottom: 1.25rem; }
+    .email-invitation { margin-top: 2.75rem; }
+    .email-link { font-size: clamp(1rem, 4.5vw, 1.5rem); }
+    .conversation-card { width: calc(100% - 1rem); max-width: 25rem; margin: 0 auto; padding: 1.25rem 1.5rem; transform: rotate(1deg); }
+    .letter-art { max-width: 17rem; }
+    .conversation-card h2 { font-size: 2.25rem; }
+    .good-to-know { margin-top: 3rem; }
+    .contact-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+    .reply-detail { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 374px) {
+    .contact-details { grid-template-columns: minmax(0, 1fr); }
+    .conversation-card { padding: 1rem; }
+    .conversation-card h2 { font-size: 2rem; }
+  }
+</style>
