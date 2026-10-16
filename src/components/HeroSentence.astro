@@ -15,10 +15,10 @@ const {
     class="mobile-hero-sentence mb-2 text-balance text-center text-2xl font-black leading-[1.05] tracking-tight text-text-dark sm:mb-3 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
   >
     <span class="sr-only">{greetings[0]} {name} UX Engineer from Estonia</span>
-    <span class="inline-flex flex-col items-center gap-y-1 sm:gap-y-2">
-      <span class="inline-flex flex-nowrap items-baseline justify-center gap-x-2 whitespace-nowrap" data-typing-root>
+    <span class="inline-flex flex-col items-center gap-y-1 sm:gap-y-2" aria-hidden="true">
+      <span class="inline-flex flex-nowrap items-baseline justify-center gap-x-2 whitespace-nowrap" data-typing-root data-greetings={JSON.stringify(greetings)}>
         <span class="hero-sentence__typing">
-          <span class="hero-sentence__typing-word" data-typing-word></span>
+          <span class="hero-sentence__typing-word" data-typing-word>{greetings[0]}</span>
         </span>
         <span>{name}</span>
       </span>
@@ -32,7 +32,7 @@ const {
 <style>
   @media (max-width: 639px) and (orientation: portrait) {
     .mobile-hero-sentence {
-      font-size: clamp(1.875rem, 8vw, 2rem);
+      font-size: clamp(1.5rem, 8vw, 2rem);
       line-height: 1;
     }
   }
@@ -156,23 +156,8 @@ const {
     const word = root.querySelector<HTMLElement>("[data-typing-word]");
     if (!word) return;
 
-    const greetings = Array.from(root.querySelectorAll<HTMLElement>("[data-typing-greeting]"))
-      .map((el) => el.textContent?.trim() ?? "")
-      .filter(Boolean);
-
-    const fallbackGreetings = [
-      "Hello...",
-      "你好...",
-      "नमस्ते...",
-      "Hola...",
-      "مرحبا...",
-      "Bonjour...",
-      "নমস্কার...",
-      "Olá...",
-      "Tere...",
-    ];
-
-    const sequence = greetings.length > 0 ? greetings : fallbackGreetings;
+    const sequence: string[] = JSON.parse(root.dataset.greetings!);
+    if (sequence.length === 0) return;
 
     // Create a persistent caret element
     const caret = document.createElement("span");

@@ -71,7 +71,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
   }
 
   .project-card[data-filter-key="web"] {
-    --discipline-accent: rgb(243, 100, 18);
+    --discipline-accent: #b94705;
   }
 
   .project-card[data-filter-key="product"] {
@@ -195,7 +195,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
 
   .project-card__description {
     margin: 0;
-    color: var(--color-text-light);
+    color: var(--color-text);
     font-size: 0.9rem;
     line-height: 1.6;
   }
@@ -206,7 +206,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
   }
 
   .project-card__link:focus-visible {
-    outline: 3px solid #eff93b;
+    outline: 3px solid var(--color-text-dark);
     outline-offset: -3px;
   }
 

@@ -34,10 +34,10 @@ const mobileQuickLinks = [
 ---
 
 <footer data-site-footer class="border-t border-border bg-body">
-  <div class="desktop-footer-shell mx-auto hidden w-full max-w-5xl items-center px-4 py-6 sm:grid sm:grid-cols-3">
+  <div class="desktop-footer-shell mx-auto hidden w-full max-w-5xl items-center gap-4 px-4 py-6 sm:grid sm:grid-cols-[minmax(0,1fr)_auto]">
     <p class="desktop-footer-copy text-sm font-[550] text-text-dark">{copyrightText}</p>
 
-    <nav aria-label="Desktop social links" class="justify-self-end sm:col-start-3">
+    <nav aria-label="Social links" class="justify-self-end">
       <ul class="flex items-center gap-4">
         {
           desktopSocials.map((item) => (
@@ -99,6 +99,15 @@ const mobileQuickLinks = [
 </footer>
 
 <style>
+  [data-mobile-quick-links] {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  [data-mobile-quick-links] nav {
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+
   @media
     (orientation: landscape) and
     (min-width: 481px) and

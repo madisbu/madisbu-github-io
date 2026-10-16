@@ -46,7 +46,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
 
   <section class="projects-section" aria-label="Portfolio projects">
     <div class="projects-toolbar">
-      <div class="projects-filters" aria-label="Project categories">
+      <div class="projects-filters" role="group" aria-label="Project categories">
         {
           filters.map((filter, index) => (
             <button
@@ -62,6 +62,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
       </div>
     </div>
 
+    <p class="sr-only" role="status" data-project-status></p>
     <div class="projects-grid">
       {projects.map((project, index) => <ProjectCard {...project} index={index} />)}
     </div>
@@ -74,6 +75,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
     const grid = document.querySelector<HTMLElement>(".projects-grid");
     const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-project-filter]"));
     const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-project-card]"));
+    const status = document.querySelector<HTMLElement>("[data-project-status]");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (!section || !grid || section.dataset.filtersInitialized || !filters.length || !cards.length) return;
@@ -138,6 +140,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
       });
 
       grid.classList.toggle("is-single-result", visibleCount === 1);
+      if (status) status.textContent = `${visibleCount} ${visibleCount === 1 ? "project" : "projects"} shown`;
     };
 
     filters.forEach((filter) => {
@@ -184,7 +187,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
   }
 
   .projects-filter {
-    min-height: 2.5rem;
+    min-height: 2.75rem;
     padding: 0.55rem 0.95rem;
     border: 1px solid var(--color-border);
     border-radius: 999px;
@@ -212,7 +215,7 @@ const pageDescription = "UX/UI, web design, and product development projects by 
   }
 
   .projects-filter:focus-visible {
-    outline: 3px solid #eff93b;
+    outline: 3px solid var(--color-text-dark);
     outline-offset: 2px;
   }
 

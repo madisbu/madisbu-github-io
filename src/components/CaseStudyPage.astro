@@ -21,7 +21,7 @@ const disciplineDetails: Record<
   },
   "web-design": {
     caseStudyLabel: "Web Design Case Study",
-    accent: "rgb(243, 100, 18)",
+    accent: "#b94705",
   },
   "product-development": {
     caseStudyLabel: "Product Development Case Study",
@@ -1008,6 +1008,7 @@ const splitLinkedText = (
     font-weight: 400;
     line-height: 1.4;
     white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .case-study-cover {
@@ -1069,7 +1070,6 @@ const splitLinkedText = (
     margin-top: 0.75rem;
     color: var(--color-text-light);
     font-size: 0.78rem;
-    opacity: 0.6;
   }
 
   .case-study-media--inline {
@@ -1256,7 +1256,7 @@ const splitLinkedText = (
   }
 
   .case-study-scenario {
-    --scenario-accent: #9a671f;
+    --scenario-accent: #8a5c1c;
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: 0.85rem;
@@ -2076,7 +2076,7 @@ const splitLinkedText = (
     letter-spacing: 0.08em;
     line-height: 1.4;
     text-transform: uppercase;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .case-study-journey-content .case-study-journey-tag h3 {
@@ -2189,7 +2189,7 @@ const splitLinkedText = (
     font-size: clamp(0.95rem, 2.2vw, 1.05rem);
     font-weight: 400;
     line-height: 1.35;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .case-study-journey-content p {
@@ -2197,7 +2197,7 @@ const splitLinkedText = (
     color: var(--color-text);
     font-size: 0.92rem;
     line-height: 1.6;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .case-study-journey-tasks {
@@ -2428,12 +2428,12 @@ const splitLinkedText = (
     }
 
     .case-study-journey-label--start {
-      left: -1rem;
+      left: 0;
       top: 0;
     }
 
     .case-study-journey-label--end {
-      right: -1rem;
+      right: 0;
       top: 0;
       bottom: auto;
     }
@@ -2744,10 +2744,6 @@ const splitLinkedText = (
       grid-column: auto;
     }
 
-    .case-study-meta dd {
-      white-space: nowrap;
-    }
-
     .case-study-project-nav {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -2836,7 +2832,7 @@ const splitLinkedText = (
     }
 
     .case-study-meta {
-      grid-template-columns: repeat(var(--case-study-meta-columns), max-content);
+      grid-template-columns: repeat(var(--case-study-meta-columns), minmax(0, auto));
       justify-content: space-between;
     }
 
@@ -2902,7 +2898,7 @@ const splitLinkedText = (
       padding: 0.7rem 0;
       border: 0;
       border-radius: 0;
-      opacity: 0.6;
+      color: var(--color-text);
       white-space: normal;
       transition:
         color 180ms ease-out,
@@ -3555,6 +3551,7 @@ const splitLinkedText = (
 
     let lastTrigger: HTMLButtonElement | null = null;
     let previousBodyOverflow = "";
+    let backgroundElements: { element: HTMLElement; wasInert: boolean }[] = [];
 
     const openLightbox = (trigger: HTMLButtonElement) => {
       const image = trigger.querySelector("img");
@@ -3562,6 +3559,10 @@ const splitLinkedText = (
 
       lastTrigger = trigger;
       previousBodyOverflow = document.body.style.overflow;
+      backgroundElements = Array.from(document.querySelectorAll<HTMLElement>(
+        "[data-site-header], .case-study, [data-site-footer], #back-to-top, .skip-link",
+      )).map((element) => ({ element, wasInert: element.inert }));
+      backgroundElements.forEach(({ element }) => { element.inert = true; });
       lightboxImage.src = trigger.dataset.zoomSrc || image.currentSrc || image.src;
       lightboxImage.alt = image.alt;
       lightbox.hidden = false;
@@ -3573,16 +3574,16 @@ const splitLinkedText = (
     };
 
     const closeLightbox = () => {
-      if (lightbox.hidden) return;
+      if (lightbox.hidden || !lightbox.classList.contains("is-open")) return;
 
       lightbox.classList.remove("is-open");
+      lightbox.hidden = true;
       document.body.style.overflow = previousBodyOverflow;
+      backgroundElements.forEach(({ element, wasInert }) => { element.inert = wasInert; });
+      backgroundElements = [];
       lastTrigger?.focus();
 
-      window.setTimeout(() => {
-        lightbox.hidden = true;
-        lightboxImage.src = "";
-      }, 180);
+      lightboxImage.removeAttribute("src");
     };
 
     const handleTriggerClick = (event: MouseEvent) => {
@@ -3617,7 +3618,7 @@ const splitLinkedText = (
       closeButton.removeEventListener("click", closeLightbox);
       lightbox.removeEventListener("click", handleBackdropClick);
       document.removeEventListener("keydown", handleKeydown);
-      document.body.style.overflow = previousBodyOverflow;
+      closeLightbox();
     };
   };
 

@@ -82,6 +82,23 @@ in the browser on page load and when returning to the tab, without a rebuild.
 It follows the current calendar date in the visitor's local time zone.
 Run the birthday-boundary tests with `node --test src/utils/profile-age.test.ts`.
 
+## Shared design and accessibility
+
+Body copy uses the `--color-text` token in `src/styles/global.css` across pages.
+Use `--color-text-dark` for headings and strong labels, and `--color-text-light`
+for secondary metadata and captions. Project discipline accents are retained for
+category labels, links, and diagrams, with sufficient contrast for small text.
+
+The shared layout provides a keyboard skip link, visible focus styles, and
+reduced-motion support. Mobile navigation uses a scrollable, focus-trapped
+dialog, with ordinary navigation links available when JavaScript is disabled.
+The header, page gutters, and fixed mobile contact bar respect device safe-area
+insets.
+
+`src/pages/404.astro` generates the branded `404.html` used by GitHub Pages for
+unknown URLs, including nested paths. It is excluded from search indexing and
+offers links back to Home and Projects.
+
 ## Deployment
 
 Pushing to `main` runs the GitHub Actions workflow that builds the site and

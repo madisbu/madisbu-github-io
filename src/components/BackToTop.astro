@@ -165,7 +165,13 @@
     window.addEventListener('scroll', _scrollHandler, { passive: true });
     window.addEventListener('resize', _scrollHandler, { passive: true });
 
-    wrap.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    wrap.onclick = () => {
+      document.getElementById('main-content')?.focus({ preventScroll: true });
+      window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    };
   }
 
   document.addEventListener('DOMContentLoaded', initBackToTop);

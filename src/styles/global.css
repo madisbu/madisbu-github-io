@@ -8,7 +8,7 @@
   --color-dark: #040404;
   --color-text: #444444;
   --color-text-dark: #040404;
-  --color-text-light: #717171;
+  --color-text-light: #686868;
 
   --font-primary: Heebo, sans-serif;
   --font-secondary: Signika, sans-serif;
@@ -51,4 +51,37 @@
     text-decoration: none;
     transition: color 0.2s ease;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--color-text-dark);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 110;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  background: var(--color-body);
+  color: var(--color-text-dark);
+  font-weight: 700;
+  transform: translateY(calc(-100% - 2rem));
+}
+
+.skip-link:focus {
+  transform: none;
 }

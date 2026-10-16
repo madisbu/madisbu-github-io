@@ -202,7 +202,22 @@ export const resume: ResumeData = {
   skills: [
     {
       title: "Project & Product",
-      skills: ["Project Management", "Program Management", "Stakeholder Management", "Presentation Skills", "API Integration"],
+      skills: [
+        "Project Management",
+        "Program Management",
+        "Stakeholder Management",
+        "Presentation Skills",
+        "Agile",
+        "Scrum",
+        "Product Backlog",
+        "User Stories",
+        "QA",
+        "Platform Integrations",
+        "API Integration",
+        "API Documentation",
+        "Infrastructure Migration",
+        "Data Migration",
+      ],
     },
     {
       title: "UX & Design",
@@ -218,7 +233,7 @@ export const resume: ResumeData = {
     },
     {
       title: "Technical",
-      skills: ["HTML", "CSS", "JavaScript", "XML", "JSON", "REST", "Node.js", "Vue.js", "Google Maps API", "Firebase", "WordPress", "Wix"],
+      skills: ["HTML", "CSS", "JavaScript", "XML", "JSON", "REST", "Node.js", "Vue.js", "Google Maps API", "Firebase", "WordPress", "Wix", "Kubernetes", "Nomad", "ServiceNow", "XIMA", "Troubleshooting", "Technical Support"],
     },
     {
       title: "Soft Skills",
@@ -230,6 +245,7 @@ export const resume: ResumeData = {
         "Openness to Constructive Feedback",
         "Business Acumen",
         "Analyzing Competitor Products",
+        "Customer Service",
       ],
     },
   ],

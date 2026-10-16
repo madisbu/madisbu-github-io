@@ -12,6 +12,7 @@ export interface Props {
   wide?: boolean;
   flushTop?: boolean;
   preconnectOrigins?: string[];
+  noindex?: boolean;
 }
 
 const siteName = "Mabux";
@@ -19,12 +20,13 @@ const baseUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://www.mabux.
 
 const {
   title = siteName,
-  description = "Personal site built with a lean Astroplate-inspired design.",
+  description = "The portfolio of Madis Burmeister, a UX engineer and technical project manager based in Estonia.",
   ogImage,
   canonicalUrl,
   wide = false,
   flushTop = false,
   preconnectOrigins = [],
+  noindex = false,
 } = Astro.props;
 
 const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
@@ -37,7 +39,7 @@ const isHomePage = Astro.url.pathname === "/";
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {preconnectOrigins.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}
@@ -50,6 +52,7 @@ const isHomePage = Astro.url.pathname === "/";
     <meta name="generator" content={Astro.generator} />
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={resolvedCanonicalUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
@@ -68,8 +71,11 @@ const isHomePage = Astro.url.pathname === "/";
       isHomePage && "home-page overflow-hidden lg:overflow-visible",
     ]}
   >
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <Header />
     <main
+      id="main-content"
+      tabindex="-1"
       class:list={[
         "mx-auto w-full grow px-4 pb-24",
         flushTop ? "pt-0 sm:pt-0 sm:pb-12" : "pt-12 sm:py-12",
@@ -90,6 +96,18 @@ const isHomePage = Astro.url.pathname === "/";
     --header-height: 0px;
     --mobile-footer-height: 68px;
     --site-footer-height: 0px;
+  }
+
+  main {
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+
+  @media (max-width: 639px),
+    (orientation: landscape) and (min-width: 481px) and (max-width: 1023px) and (max-height: 480px) {
+    main:not(.home-main) {
+      padding-bottom: calc(var(--mobile-footer-height) + 2rem);
+    }
   }
 
   /* General portrait rule — applies to all portrait screens up to 1023px. */
@@ -156,7 +174,8 @@ const isHomePage = Astro.url.pathname === "/";
       display: flex;
       height: calc(var(--app-height) - var(--header-height));
       min-height: 0;
-      padding: 0.5rem 1rem var(--mobile-footer-height);
+      padding: 0.5rem max(1rem, env(safe-area-inset-right, 0px))
+        var(--mobile-footer-height) max(1rem, env(safe-area-inset-left, 0px));
       overflow: hidden;
     }
   }
@@ -179,7 +198,8 @@ const isHomePage = Astro.url.pathname === "/";
       );
       max-width: none;
       min-height: 0;
-      padding: 1rem 1rem 0;
+      padding: 1rem max(1rem, env(safe-area-inset-right, 0px))
+        0 max(1rem, env(safe-area-inset-left, 0px));
       overflow: hidden;
     }
   }

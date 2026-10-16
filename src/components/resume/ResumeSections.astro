@@ -32,7 +32,7 @@ const { education, certifications, skills, tools, languages } = Astro.props;
                   )}
                   <h3>{entry.degree}</h3>
                   {entry.institution && <p class="strong">{entry.institution}</p>}
-                  {entry.description && <p class="muted small">{entry.description}</p>}
+                  {entry.description && <p class="small">{entry.description}</p>}
                 </div>
                 {entry.url && (
                   <a class="cert-link" href={entry.url} target="_blank" rel="noopener noreferrer">
@@ -210,6 +210,11 @@ const { education, certifications, skills, tools, languages } = Astro.props;
     border-bottom: 1px solid var(--color-border);
   }
 
+  .cert-list li > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .cert-list li:first-child {
     padding-top: 0;
   }
@@ -317,6 +322,13 @@ const { education, certifications, skills, tools, languages } = Astro.props;
 
   .dot.filled {
     background: var(--color-primary);
+  }
+
+  @media (max-width: 479px) {
+    .cert-list li {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 
   @media (min-width: 768px) {
