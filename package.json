@@ -9,11 +9,13 @@
     "dev": "astro dev --host 127.0.0.1 --port 4321 --strictPort",
     "build": "astro build",
     "check": "astro check",
+    "test:seo": "npm run build && node --test scripts/seo.test.mjs",
     "images:hero": "node scripts/gen-hero.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.3",
     "roughjs": "^4.6.6",

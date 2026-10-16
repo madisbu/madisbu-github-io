@@ -19,9 +19,9 @@ const siteName = "Mabux";
 const baseUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://www.mabux.me";
 
 const {
-  title = siteName,
+  title = "Madis Burmeister - UX & Web Design",
   description = "The portfolio of Madis Burmeister, a UX engineer and technical project manager based in Estonia.",
-  ogImage,
+  ogImage = "/images/hero-1200.webp",
   canonicalUrl,
   wide = false,
   flushTop = false,
@@ -33,6 +33,29 @@ const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const resolvedCanonicalUrl = canonicalUrl ?? new URL(Astro.url.pathname, baseUrl).toString();
 const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefined;
 const isHomePage = Astro.url.pathname === "/";
+const siteUrl = new URL(import.meta.env.BASE_URL, baseUrl);
+const sitemapUrl = new URL("sitemap-index.xml", siteUrl);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      url: siteUrl.href,
+      name: siteName,
+      alternateName: "Madis Burmeister",
+      inLanguage: "en",
+      author: { "@id": `${siteUrl}#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}#person`,
+      name: "Madis Burmeister",
+      url: siteUrl.href,
+      jobTitle: "Senior Technical Project Manager",
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -52,8 +75,10 @@ const isHomePage = Astro.url.pathname === "/";
     <meta name="generator" content={Astro.generator} />
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Madis Burmeister" />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={resolvedCanonicalUrl} />
+    <link rel="sitemap" type="application/xml" href={sitemapUrl.href} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={resolvedTitle} />
@@ -64,6 +89,12 @@ const isHomePage = Astro.url.pathname === "/";
     <meta name="twitter:title" content={resolvedTitle} />
     <meta name="twitter:description" content={description} />
     {resolvedOgImage && <meta name="twitter:image" content={resolvedOgImage} />}
+    {!noindex && (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
+      />
+    )}
   </head>
   <body
     class:list={[
