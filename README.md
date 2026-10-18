@@ -65,6 +65,38 @@ connected or wirelessly pairable Android device; when no device is connected,
 the task prompts you to pair over Wireless debugging. For ordinary local
 development, use `npm run dev` without ADB.
 
+### Android wireless debugging
+
+Keep the PC and phone on the same Wi-Fi network with Wireless debugging enabled.
+When pairing is needed, the task uses this sequence:
+
+1. Open **Wireless debugging > Pair device with pairing code**.
+2. Enter the **IP address & Port from that pairing dialog**.
+3. Enter the **six-digit code from the same dialog**, keeping it open.
+4. Wait for pairing to succeed. Only then return to the main Wireless debugging
+   screen.
+5. If automatic connection discovery fails, enter the **IP address & Port from
+   the main Wireless debugging screen**. No second pairing code is requested.
+
+The pairing and connection ports are different. Pairing uses manual address
+entry so discovery cannot delay code entry or select another phone's pairing
+dialog.
+
+If ADB reports `protocol fault (couldn't read status message)`, reopen the
+pairing dialog and retry with its new port and code. If this persists, toggle
+Wireless debugging off/on, check VPN/firewall or Wi-Fi client-isolation settings,
+and ensure Android Platform Tools are current. The task preserves ADB's error
+output rather than stopping at Windows PowerShell's `NativeCommandError`.
+USB debugging with an authorized USB connection also bypasses wireless pairing.
+
+After the task succeeds, open <http://localhost:4321> in Chrome on the phone.
+The launch configuration runs the development server and sets up port forwarding;
+it does not itself attach a JavaScript debugger to Android Chrome. Use desktop
+Chrome's `chrome://inspect/#devices` to inspect the phone's tab.
+
+On Windows, run `node --test scripts/connect-adb.test.mjs` to check the connection
+task against simulated ADB responses in Windows PowerShell 5.1; no phone is needed.
+
 ## Deployment
 
 Pushing to `main`, or manually starting the GitHub Actions workflow, builds the
