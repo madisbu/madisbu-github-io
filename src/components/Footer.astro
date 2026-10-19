@@ -1,4 +1,6 @@
 ---
+import AnalyticsConsent from "./AnalyticsConsent.astro";
+
 const copyrightText = `Copyright © Madis Burmeister ${new Date().getFullYear()}`;
 
 const desktopSocials = [
@@ -34,10 +36,12 @@ const mobileQuickLinks = [
 ---
 
 <footer data-site-footer class="border-t border-border bg-body">
-  <div class="desktop-footer-shell mx-auto hidden w-full max-w-5xl items-center gap-4 px-4 py-6 sm:grid sm:grid-cols-[minmax(0,1fr)_auto]">
-    <p class="desktop-footer-copy text-sm font-[550] text-text-dark">{copyrightText}</p>
+  <div class="desktop-footer-shell mx-auto grid w-full max-w-5xl items-center gap-4 px-4 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:py-6">
+    <p class="desktop-footer-copy hidden whitespace-nowrap text-sm font-[550] text-text-dark sm:block">{copyrightText}</p>
 
-    <nav aria-label="Social links" class="justify-self-end">
+    <AnalyticsConsent />
+
+    <nav aria-label="Social links" class="desktop-footer-socials hidden justify-self-end sm:block">
       <ul class="flex items-center gap-4">
         {
           desktopSocials.map((item) => (
@@ -113,8 +117,13 @@ const mobileQuickLinks = [
     (min-width: 481px) and
     (max-width: 1023px) and
     (max-height: 480px) {
-    .desktop-footer-shell {
+    .desktop-footer-copy,
+    .desktop-footer-socials {
       display: none;
+    }
+
+    .desktop-footer-shell {
+      padding-block: 0;
     }
 
     [data-mobile-quick-links] {

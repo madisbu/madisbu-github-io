@@ -29,6 +29,7 @@ Run from the repository root:
 | `node --test src/utils/profile-age.test.ts src/utils/resume-dates.test.ts` | Run unit tests |
 | `npm run build` | Build the static site into `dist/` |
 | `npm run test:seo` | Build and validate generated SEO metadata and crawler files |
+| `npm run test:analytics` | Build and test consent flows in Chrome with Google endpoints mocked |
 | `npm run preview` | Preview the production build locally |
 | `npm run images:hero` | Regenerate responsive hero images |
 | `npm audit` | Check dependencies for known vulnerabilities |
@@ -140,8 +141,8 @@ Installing GA4 does not improve search rankings.
 
 Local builds default to `https://www.mabux.me`. Deployment uses the `SITE` and
 `BASE_PATH` values provided by GitHub Pages; ensure the custom domain in Pages
-settings matches `public/CNAME`. Neither analytics scripts nor analytics cookies
-are enabled by this setup.
+settings matches `public/CNAME`. Analytics requires explicit visitor consent and
+the configuration below.
 
 ### Google Search Console (recommended next step)
 
@@ -154,22 +155,67 @@ are enabled by this setup.
    and monitor indexing and search performance. Submission does not guarantee
    indexing or rankings.
 
-### GA4 (deferred until the measurement ID and consent plan are ready)
+### GA4 and consent
 
-1. Create a GA4 property and a Web data stream for `https://www.mabux.me`, then
-   obtain its `G-XXXXXXXXXX` measurement ID.
-2. Decide the privacy notice, applicable consent requirements, and consent UI
-   before enabling tracking. The recommended implementation loads no Google
-   Analytics resources and sends no analytics requests before explicit opt-in;
-   provide reject and withdrawal controls as well.
-3. Once those decisions are ready, add the Google tag to the shared layout,
-   gated by consent and production-only configuration. Do not add a second tag
-   through Tag Manager, as that can duplicate page views.
-4. Verify a single page view per navigation using GA4 DebugView and Realtime.
-   Consider consented resume downloads and contact-link clicks as events; these
-   clicks are not proof of a completed enquiry. Never send personal information.
+The GitHub Pages workflow builds with the public GA4 measurement ID
+`G-WN68N9308Y`. Set the repository Actions variable `PUBLIC_GA_MEASUREMENT_ID`
+to override it. The ID is not a secret. For local builds that need the ID, copy
+`.env.example` to `.env`; normal development and preview on localhost never send
+analytics, even with an accepted preference.
+
+Tracking requires all three: a production build, the exact
+`https://www.mabux.me` origin, and an explicit, unexpired acceptance. Before
+acceptance, or after rejection, no Analytics loader or collection request is
+made. There are no pre-consent cookieless pings. The accessible consent dialog
+offers equally styled accept/reject actions; Escape rejects an undecided choice.
+The Privacy and Cookies controls are centered in the copyright/social
+footer row on desktop and remain fixed above the quick links on small screens.
+Both use muted labels with a decorative separator and hover/focus feedback.
+The consent dialog uses a restrained lime accent and equally styled accept/reject
+actions; desktop footer height and mobile touch-target sizes are preserved.
+Without JavaScript, analytics stays off.
+
+The local-storage preference `mabux.analytics-consent.v1` expires after 180 days.
+Analytics cookies have a configured 60-day lifetime with automatic renewal
+disabled. Withdrawal sets Google's disable flag, removes accessible `_ga` and
+`_ga_*` cookies, and reloads to unload Google listeners. Preference changes
+propagate to other tabs. If storage is blocked, a console/UI warning is issued
+and choices apply only to the current page; subsequent pages default to off.
+
+The tag disables advertising consent, Google signals, and ad personalization.
+It sends one explicit `page_view` per full-page navigation, strips query strings
+and fragments from page and referrer URLs, and records `contact_click` with only
+`contact_method: email` and `resume_download` with only `file_name: resume.pdf`.
+Email addresses and message contents are not event parameters. It does not add
+custom outbound-click tracking.
+
+**Before deployment, configure the Web stream in GA4:**
+
+1. Under **Admin > Data streams > Mabux Website**, turn **Enhanced measurement
+   off**. This implementation owns page views, contact clicks, and resume
+   downloads. Automatic measurement can otherwise duplicate events or capture
+   unsanitized link/page URLs. This intentionally replaces the earlier suggestion
+   to use enhanced download/click tracking.
+2. Leave Google signals and advertising personalization off. Set **Data
+   retention** to **2 months**, with reset on new activity off. Review the
+   [privacy notice](src/pages/privacy.astro) for accuracy before publishing;
+   the website cannot enforce account-level retention settings.
+3. Do not install an additional Google tag or Tag Manager container.
+4. After deployment, verify a single page view per navigation in Realtime.
+   Use Google Tag Assistant's debug connection for DebugView, accepting consent
+   first. Rejection must produce no Analytics requests/cookies; acceptance must
+   load the tag once; withdrawal must stop tracking and remove its cookies.
+   Browser blockers can prevent data delivery; standard reports can take
+   24–48 hours to populate.
 5. Link the Search Console property to GA4 under **Admin > Product links >
    Search Console links** to combine search and engagement reporting.
 
-The measurement ID, consent UI, event tracking, and Google account configuration
-are intentionally not implemented or activated yet.
+Run consent/URL/origin unit tests with
+`node --test src/utils/analytics-consent.test.ts`, and generated-page checks with
+`npm run test:seo`. Run `npm run test:analytics` for browser regressions (requires
+installed Google Chrome). That command builds a configured production fixture,
+starts and stops its own local preview, and mocks the production origin and Google
+endpoints: no test visitor information is sent to Google. It covers opt-in,
+rejection, withdrawal, cross-tab changes, expiry, storage failure, mobile controls,
+and localhost exclusion. Google account configuration and live delivery
+verification must be completed separately.

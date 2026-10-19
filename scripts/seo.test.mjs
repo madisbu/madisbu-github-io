@@ -14,7 +14,7 @@ const pages = await Promise.all(
 );
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
-  assert.equal(pages.length, 9);
+  assert.equal(pages.length, 10);
   const titles = new Set();
   const descriptions = new Set();
   for (const { file, html } of pages) {
@@ -39,7 +39,9 @@ test("every generated page has unique search metadata and valid sharing URLs", (
       assert.notEqual(url.hostname, "localhost");
       assert.equal(url.search, "");
     }
-    assert.doesNotMatch(html, /googletagmanager\.com|google-analytics\.com/);
+    assert.doesNotMatch(html, /<script[^>]+src=["'][^"']*(googletagmanager\.com|google-analytics\.com)/);
+    assert.match(html, /data-cookie-settings/);
+    assert.match(html, /data-consent-reject/);
   }
 });
 
