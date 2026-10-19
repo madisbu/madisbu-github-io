@@ -127,6 +127,10 @@ test("revocation in another tab stops an accepted tab", async ({ context, page }
     other.waitForEvent("load"),
     other.getByRole("button", { name: "Reject analytics", exact: true }).click(),
   ]);
+  await Promise.all([
+    page.waitForLoadState("networkidle"),
+    other.waitForLoadState("networkidle"),
+  ]);
   expect(await commands(page)).toEqual([]);
   expect(await commands(other)).toEqual([]);
   expect(requests).toHaveLength(2);
@@ -246,7 +250,7 @@ test("privacy styling preserves touch targets, focus, and balanced responsive di
     if (viewport.width < 1024) expect((await settings.boundingBox()).height).toBeGreaterThanOrEqual(44);
     const normal = await settings.evaluate((element) => getComputedStyle(element).backgroundColor);
     await settings.hover();
-    expect(await settings.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(normal);
+    await expect.poll(() => settings.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(normal);
     await settings.focus();
     await page.keyboard.press("Tab");
     await page.keyboard.press("Shift+Tab");
