@@ -152,6 +152,11 @@ if (root && dialog && accept) {
   });
   document.addEventListener("click", (event) => {
     if (!active || preference?.status !== "accepted" || preference.expiresAt <= Date.now()) return;
+    const contactTarget = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-contact-method]") : null;
+    if (contactTarget?.dataset.contactMethod) {
+      window.gtag?.("event", "contact_click", { contact_method: contactTarget.dataset.contactMethod });
+      return;
+    }
     const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
     if (!(link instanceof HTMLAnchorElement)) return;
     const url = new URL(link.href);

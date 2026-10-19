@@ -1,5 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const email = "madis.burmeister@mabux.me";
+const encodedEmail = encodeURIComponent(email);
+const webmailLinks = [
+  { label: "Gmail", method: "gmail", href: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodedEmail}` },
+  { label: "Outlook", method: "outlook", href: `https://outlook.live.com/mail/0/deeplink/compose?to=${encodedEmail}` },
+];
 ---
 
 <Layout
@@ -14,12 +21,30 @@ import Layout from "../layouts/Layout.astro";
         <h1 id="contact-heading">Good things start with a <span class="hand-underline">conversation.</span></h1>
         <div class="email-invitation">
           <p class="email-label">No forms. No hoops. Just say hello.</p>
-          <a class="email-link" href="mailto:madis.burmeister@mabux.me">
+          <a class="email-link" href={`mailto:${email}`}>
             <span>madis.burmeister<wbr />@mabux.me</span>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M5 19 19 5M5 5h14v14" />
             </svg>
           </a>
+          <div class="email-options">
+            <span class="email-options-label">No mail app?</span>
+            <button type="button" class="email-option" data-copy-email={email} data-contact-method="copy">
+              Copy address
+            </button>
+            {webmailLinks.map((link) => (
+              <a
+                class="email-option"
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-contact-method={link.method}
+              >
+                Open in {link.label}<span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            ))}
+            <span class="email-copy-status" role="status" aria-live="polite" data-copy-status></span>
+          </div>
           <p class="email-note">Your idea doesn't need to be polished. That's what working together is for.</p>
         </div>
       </div>
@@ -73,6 +98,45 @@ import Layout from "../layouts/Layout.astro";
   </div>
 </Layout>
 
+<script>
+  const status = document.querySelector<HTMLElement>("[data-copy-status]");
+  let resetTimer: number | undefined;
+
+  function announce(message: string) {
+    if (!status) return;
+    status.textContent = message;
+    window.clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => (status.textContent = ""), 4000);
+  }
+
+  function legacyCopy(text: string) {
+    const field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.opacity = "0";
+    document.body.append(field);
+    field.select();
+    const copied = document.execCommand("copy");
+    field.remove();
+    return copied;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-email]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const email = button.dataset.copyEmail ?? "";
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(email);
+        copied = true;
+      } catch {
+        copied = legacyCopy(email);
+      }
+      announce(copied ? `Copied ${email} to your clipboard.` : `Couldn't copy automatically. The address is ${email}.`);
+    });
+  });
+</script>
+
 <style>
   .contact {
     --contact-lime: #eff93b;
@@ -123,6 +187,13 @@ import Layout from "../layouts/Layout.astro";
   .email-link:hover { color: var(--color-text); background: var(--contact-lime); }
   .email-link:focus-visible { outline: 3px solid var(--color-text-dark); outline-offset: 6px; background: var(--contact-lime); }
   .email-note { max-width: 27rem; margin: 0.8rem 0 0; color: var(--color-text); font-size: 0.8rem; line-height: 1.7; }
+  .email-options { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.6rem; margin-top: 0.9rem; font-size: 0.8rem; }
+  .email-options-label { color: var(--color-text); }
+  .email-option { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0.3rem 0.8rem; border: 1.5px solid var(--color-text-dark); border-radius: 999px; background: transparent; color: var(--color-text-dark); font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
+  .email-option:hover { background: var(--contact-lime); }
+  .email-option:focus-visible { outline: 3px solid var(--color-text-dark); outline-offset: 3px; background: var(--contact-lime); }
+  .email-copy-status { flex-basis: 100%; min-height: 1.2em; color: var(--color-text); font-size: 0.75rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
   .conversation-card { position: relative; min-width: 0; padding: 1.5rem 1.75rem; border: 1.5px solid var(--color-text-dark); border-radius: 3px; background: var(--contact-lime); box-shadow: 7px 7px 0 var(--color-text-dark); transform: rotate(2deg); }
   .card-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
