@@ -2,8 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Laptop (existing Chrome)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev -- --force",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "https?://127\\.0\\.0\\.1:([0-9]+)/?",
+        "uriFormat": "http://127.0.0.1:%s/"
+      }
+    },
+    {
       "command": ".\\node_modules\\.bin\\astro.cmd dev logs --follow",
-      "name": "Development server",
+      "name": "Android development server (ADB)",
       "preLaunchTask": "Prepare Android development",
       "postDebugTask": "Clean up Android development",
       "request": "launch",

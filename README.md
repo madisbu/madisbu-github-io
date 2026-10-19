@@ -42,7 +42,7 @@ are checked in and used by the home page.
 ```text
 .
 ├── .github/workflows/  # GitHub Pages build and deployment
-├── .vscode/            # Optional VS Code tasks and Android device setup
+├── .vscode/            # VS Code laptop debugging and optional Android setup
 ├── public/             # Static images, resume PDF, favicon, and CNAME
 ├── scripts/            # Hero-image generation
 └── src/
@@ -59,11 +59,31 @@ Pages are Astro file-based routes. Project case-study copy and media are defined
 in `src/pages/projects/`; resume entries are maintained in `src/data/resume.ts`.
 The branded `404.html` is generated from `src/pages/404.astro`.
 
-The optional **Development server** launch configuration in VS Code also
-prepares Android debugging and ADB port forwarding. It requires ADB and a
-connected or wirelessly pairable Android device; when no device is connected,
-the task prompts you to pair over Wireless debugging. For ordinary local
-development, use `npm run dev` without ADB.
+### Laptop run and debug (no ADB)
+
+In VS Code's **Run and Debug** panel, select **Laptop (existing Chrome)** and
+press **F5**. This runs `npm run dev` in a VS Code debug terminal. When Astro is
+ready, VS Code opens <http://127.0.0.1:4321/> in your default browser, using its
+existing window and signed-in profile when Chrome is already running. No phone,
+Android SDK, or ADB connection is required.
+
+The VS Code debugger is attached to the Astro server, so breakpoints in Astro
+frontmatter and server-side code work. Chrome does not allow VS Code to attach to
+your normal profile, so debug browser scripts in that tab with Chrome DevTools
+(**F12**). Closing the tab or window leaves the server running; stopping the
+VS Code debug session stops it. If a development server is already registered
+for this project, it is replaced.
+
+For running without a debugger, use `npm run dev` and open
+<http://127.0.0.1:4321> in your laptop browser.
+
+Run `node --test scripts/debug-config.test.mjs` to check that the laptop launch
+stays independent of ADB and that the Android launch retains its device tasks.
+
+The separate **Android development server (ADB)** launch configuration prepares
+Android debugging and ADB port forwarding. It requires ADB and a connected or
+wirelessly pairable Android device; when no device is connected, the task
+prompts you to pair over Wireless debugging.
 
 ### Android wireless debugging
 
