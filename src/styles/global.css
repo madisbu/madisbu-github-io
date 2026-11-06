@@ -15,6 +15,13 @@
 }
 
 @layer base {
+  /* Work-type accent colours shared by project cards and filters. */
+  :root {
+    --discipline-ux-ui: #1f6faf;
+    --discipline-web: #b94705;
+    --discipline-product: #34765d;
+  }
+
   html {
     scroll-behavior: smooth;
   }

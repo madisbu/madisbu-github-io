@@ -18,8 +18,8 @@ export const resume: ResumeData = {
       end: null,
       highlights: [
         "Led a 1.5-year Nomad to Kubernetes migration",
-        "Modernized casino hosting infrastructure",
-        "Delivered across 19 online gaming environments",
+        "Modernized Playtech Open Platform (POP) and Games Platform as a Service (GPAS) hosting infrastructure",
+        "Delivered new architecture across 19 online gaming environments",
         "Improved scalability, uptime and deployments",
       ],
       tags: ["Kubernetes", "Nomad", "Infrastructure Migration"],

@@ -190,9 +190,9 @@ const pageDescription = "UX/UI, web design, and product development projects by 
     min-height: 2.75rem;
     padding: 0.55rem 0.95rem;
     border: 1px solid var(--color-border);
-    border-radius: 999px;
+    border-radius: 0.375rem;
     background: var(--color-body);
-    color: var(--color-text);
+    color: var(--color-text-dark);
     cursor: pointer;
     font: inherit;
     font-size: 0.82rem;
@@ -204,14 +204,52 @@ const pageDescription = "UX/UI, web design, and product development projects by 
       transform 0.2s ease;
   }
 
-  .projects-filter:hover {
-    border-color: var(--color-text-dark);
+  .projects-filter {
+    --filter-accent: var(--color-text-dark);
   }
 
-  .projects-filter[aria-pressed="true"] {
-    border-color: var(--color-text-dark);
-    background: var(--color-text-dark);
+  .projects-filter[data-project-filter="ux-ui"] {
+    --filter-accent: var(--discipline-ux-ui);
+  }
+
+  .projects-filter[data-project-filter="web"] {
+    --filter-accent: var(--discipline-web);
+  }
+
+  .projects-filter[data-project-filter="product"] {
+    --filter-accent: var(--discipline-product);
+  }
+
+  .projects-filter[aria-pressed="true"]:not([data-project-filter="all"]) {
+    border-color: var(--filter-accent);
+    background: var(--filter-accent);
     color: var(--color-body);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .projects-filter:hover {
+      border-color: #a8a8a8;
+    }
+
+    .projects-filter:not([data-project-filter="all"]):hover {
+      border-color: var(--filter-accent);
+      background: var(--filter-accent);
+      color: var(--color-body);
+    }
+  }
+
+  /* Hovering a filter previews its cards by lighting up their number badges. */
+  @media (hover: hover) and (pointer: fine) {
+    .projects-section:has(.projects-filter[data-project-filter="ux-ui"]:hover)
+      :global(.project-card[data-filter-key="ux-ui"] .project-card__number),
+    .projects-section:has(.projects-filter[data-project-filter="web"]:hover)
+      :global(.project-card[data-filter-key="web"] .project-card__number),
+    .projects-section:has(.projects-filter[data-project-filter="product"]:hover)
+      :global(.project-card[data-filter-key="product"] .project-card__number) {
+      border-color: var(--discipline-accent);
+      background: var(--discipline-accent);
+      color: #fff;
+    }
   }
 
   .projects-filter:focus-visible {

@@ -9,7 +9,7 @@ const heroAlt = "Portrait of Madis";
 
 <Layout description={pageDescription}>
   <section class="hero-section relative flex h-full min-h-0 flex-col">
-    <div class="hero-copy pt-4 sm:pt-6 lg:pt-8">
+    <div class="hero-copy pt-4 sm:pt-6 lg:pt-2">
       <HeroSentence />
     </div>
 
@@ -266,7 +266,7 @@ const heroAlt = "Portrait of Madis";
 
     .hero-image-wrap {
       margin-bottom: -3rem;
-      transform: translateY(calc(-6% - 18px));
+      transform: translateY(-3rem);
     }
   }
 
@@ -356,7 +356,7 @@ const heroAlt = "Portrait of Madis";
 
   @media (min-width: 1920px) and (min-height: 1000px) {
     .hero-copy {
-      transform: translateY(clamp(2rem, 4svh, 4rem));
+      transform: translateY(clamp(0.5rem, 2svh, 2.5rem));
     }
 
     .hero-image-wrap {
