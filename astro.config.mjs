@@ -14,6 +14,13 @@ export default defineConfig({
   site: process.env.SITE || 'https://www.mabux.me',
   base: process.env.BASE_PATH,
 
+  // English is the primary language and stays at the root; Estonian lives under /et/.
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'et'],
+    routing: { prefixDefaultLocale: false }
+  },
+
   devToolbar: {
     enabled: false
   },
@@ -23,6 +30,10 @@ export default defineConfig({
   },
 
   integrations: [sitemap({
-    filter: (page) => !/\/404\/?$/.test(new URL(page).pathname)
+    filter: (page) => !/\/404\/?$/.test(new URL(page).pathname),
+    i18n: {
+      defaultLocale: 'en',
+      locales: { en: 'en-US', et: 'et-EE' }
+    }
   })]
 });

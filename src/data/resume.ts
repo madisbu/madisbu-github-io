@@ -1,4 +1,6 @@
+import type { Locale } from "../i18n";
 import type { ResumeData } from "../types/resume";
+import { resumeEt } from "./resume.et";
 
 export const resume: ResumeData = {
   name: "Madis Burmeister",
@@ -264,3 +266,7 @@ export const resume: ResumeData = {
     { name: "Spanish", level: "Beginner" },
   ],
 };
+
+export function getResume(locale: Locale): ResumeData {
+  return locale === "et" ? resumeEt : resume;
+}

@@ -1,10 +1,11 @@
 import { en, type Dictionary } from "./en.ts";
+import { et } from "./et.ts";
 
-export const locales = ["en"] as const;
+export const locales = ["en", "et"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "en";
 
-export const dictionaries: Record<Locale, Dictionary> = { en };
+export const dictionaries: Record<Locale, Dictionary> = { en, et };
 
 // Pages that exist in every locale. Anything else is English-only and is linked unprefixed.
 const translatedPaths = new Set(["/", "/projects", "/about", "/resume", "/contact", "/privacy"]);
@@ -22,7 +23,8 @@ export function parsePathname(pathname: string, base = "/"): { locale: Locale; p
   const prefix = trimBase(base);
   if (prefix && (rest === prefix || rest.startsWith(`${prefix}/`))) rest = rest.slice(prefix.length);
   let locale: Locale = defaultLocale;
-  for (const candidate of locales.filter((code): code is Locale => code !== defaultLocale)) {
+  for (const candidate of locales) {
+    if (candidate === defaultLocale) continue;
     if (rest === `/${candidate}` || rest.startsWith(`/${candidate}/`)) {
       locale = candidate;
       rest = rest.slice(candidate.length + 1);

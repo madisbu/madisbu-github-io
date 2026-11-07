@@ -14,7 +14,7 @@ const pages = await Promise.all(
 );
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
-  assert.equal(pages.length, 10);
+  assert.equal(pages.length, 16);
   const titles = new Set();
   const descriptions = new Set();
   for (const { file, html } of pages) {
@@ -70,4 +70,36 @@ test("sitemap matches all indexable pages and excludes the error page", async ()
   }
   assert.deepEqual(sitemapUrls.sort(), canonicals.sort());
   assert.match(robots, /User-agent: \*\nAllow: \//);
+});
+
+const translated = ["", "about", "contact", "privacy", "projects", "resume"];
+const pageFor = (file) => pages.find((page) => page.file.split(path.sep).join("/") === file);
+
+test("every translated page exists in English and Estonian", () => {
+  for (const name of translated) {
+    const en = pageFor(name ? `${name}/index.html` : "index.html");
+    const et = pageFor(name ? `et/${name}/index.html` : "et/index.html");
+    assert.ok(en, `missing English page: ${name || "home"}`);
+    assert.ok(et, `missing Estonian page: ${name || "home"}`);
+    assert.match(en.html, /<html lang="en">/);
+    assert.match(et.html, /<html lang="et">/);
+    assert.match(et.html, /<link rel="canonical" href="https:\/\/www\.mabux\.me\/et\//);
+  }
+});
+
+test("Estonian pages render translated, non-English interface text", () => {
+  const home = pageFor("et/index.html").html;
+  assert.match(home, /VAATA PROJEKTE/);
+  assert.match(home, /Keeldu analüütikast/);
+  assert.doesNotMatch(home, /VIEW PROJECTS|Reject analytics/);
+  // Google links in the privacy notice open in a new tab; the Estonian notice points at Google's Estonian pages.
+  for (const [file, language] of [["privacy/index.html", null], ["et/privacy/index.html", "et"]]) {
+    const links = [...pageFor(file).html.matchAll(/<a href="(https:\/\/policies\.google\.com[^"]*)"([^>]*)>/g)];
+    assert.equal(links.length, 2, `${file}: expected two Google policy links`);
+    for (const [, href, attributes] of links) {
+      assert.match(attributes, /target="_blank" rel="noopener noreferrer"/, `${file}: ${href} should open in a new tab`);
+      assert.equal(new URL(href).searchParams.get("hl"), language, `${file}: ${href} language`);
+    }
+  }
+  assert.match(pageFor("et/resume/index.html").html, /Töökogemus/);
 });

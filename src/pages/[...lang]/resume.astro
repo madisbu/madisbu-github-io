@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import ResumeHeader from "../../components/resume/ResumeHeader.astro";
 import ResumeSections from "../../components/resume/ResumeSections.astro";
 import Timeline from "../../components/resume/Timeline.astro";
-import { resume } from "../../data/resume";
+import { getResume } from "../../data/resume";
 import { localeStaticPaths } from "../../i18n";
 import { useI18n } from "../../i18n/astro";
 
@@ -11,7 +11,8 @@ export function getStaticPaths() {
   return localeStaticPaths();
 }
 
-const { t } = useI18n(Astro.url);
+const { locale, t } = useI18n(Astro.url);
+const resume = getResume(locale);
 
 // Newest first, regardless of the order in the data file.
 const experience = [...resume.experience].sort((a, b) => b.start.localeCompare(a.start));
