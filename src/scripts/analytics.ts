@@ -20,6 +20,11 @@ const dialog = root?.querySelector<HTMLDialogElement>("dialog");
 const notice = root?.querySelector<HTMLElement>("[data-consent-status]");
 const accept = root?.querySelector<HTMLButtonElement>("[data-consent-accept]");
 const measurementId = root?.dataset.measurementId ?? "";
+// Visitor-facing messages arrive pre-translated from the page.
+const messages: Record<
+  "storageUnreadable" | "loadFailed" | "storageUnwritable" | "statusOn" | "statusOff" | "disabled",
+  string
+> = JSON.parse(root?.dataset.messages ?? "{}");
 const allowed = isAnalyticsAllowed(root?.dataset.production === "true", measurementId, new URL(location.href));
 let active = false;
 let expiryTimer: ReturnType<typeof setTimeout> | undefined;
@@ -34,7 +39,7 @@ function savedPreference() {
   try {
     return readConsent(localStorage.getItem(CONSENT_KEY));
   } catch (error) {
-    report("Your browser cannot save cookie choices. Analytics stays off until you accept on this page.", error);
+    report(messages.storageUnreadable, error);
     return null;
   }
 }
@@ -92,7 +97,7 @@ function startAnalytics() {
   const script = document.createElement("script");
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-  script.onerror = (error) => report("Analytics could not load. You can still use the entire website.", error);
+  script.onerror = (error) => report(messages.loadFailed, error);
   document.head.append(script);
 }
 
@@ -115,7 +120,7 @@ function choose(status: ConsentStatus) {
   try {
     localStorage.setItem(CONSENT_KEY, JSON.stringify({ version: 1, ...preference }));
   } catch (error) {
-    report("Your choice applies to this page only because browser storage is unavailable.", error);
+    report(messages.storageUnwritable, error);
   }
   scheduleExpiry();
   dialog?.close();
@@ -131,8 +136,8 @@ if (root && dialog && accept) {
   document.querySelectorAll("[data-cookie-settings]").forEach((button) => {
     button.addEventListener("click", () => {
       if (notice) notice.textContent = allowed
-        ? `Analytics is ${active ? "on" : "off"}. You can change your choice below.`
-        : "Analytics is disabled on this address or build. No analytics data is sent.";
+        ? (active ? messages.statusOn : messages.statusOff)
+        : messages.disabled;
       dialog.showModal();
     });
   });

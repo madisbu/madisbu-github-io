@@ -1,23 +1,26 @@
 ---
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects" },
-  { label: "About", href: "/about" },
-  { label: "Resume", href: "/resume" },
-  { label: "Contact", href: "/contact" },
-];
+import { useI18n } from "../i18n/astro";
 
-const { pathname } = Astro.url;
-const isActive = (href: string) => {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(href + "/");
+const { t, path, href } = useI18n(Astro.url);
+
+const navItems = [
+  { label: t.nav.home, path: "/" },
+  { label: t.nav.projects, path: "/projects" },
+  { label: t.nav.about, path: "/about" },
+  { label: t.nav.resume, path: "/resume" },
+  { label: t.nav.contact, path: "/contact" },
+].map((item) => ({ ...item, href: href(item.path) }));
+
+const isActive = (itemPath: string) => {
+  if (itemPath === "/") return path === "/";
+  return path === itemPath || path.startsWith(itemPath + "/");
 };
 ---
 
 <header data-site-header class="border-b border-border bg-body">
   <div class="header-shell relative mx-auto flex w-full max-w-5xl items-center px-4 py-3 sm:py-4">
     <!-- Logo -->
-    <a href="/" class="inline-flex shrink-0 items-center" aria-label="Mabux Home">
+    <a href={href("/")} class="inline-flex shrink-0 items-center" aria-label={t.nav.homeAria}>
       <picture>
         <source srcset="/mabux_logo_transparent.webp" type="image/webp" />
         <img src="/mabux_logo.png" alt="Mabux" width="80" height="80" class="brand-logo h-20 w-auto sm:h-20" loading="eager" decoding="async" />
@@ -25,15 +28,15 @@ const isActive = (href: string) => {
     </a>
 
     <!-- Desktop: centered nav -->
-    <nav aria-label="Main navigation" class="desktop-nav absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-sm font-bold tracking-widest uppercase sm:flex">
+    <nav aria-label={t.nav.mainLabel} class="desktop-nav absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-sm font-bold tracking-widest uppercase sm:flex">
       {
         navItems.map((item) => (
           <a
             href={item.href}
-            aria-current={isActive(item.href) ? "page" : undefined}
+            aria-current={isActive(item.path) ? "page" : undefined}
             class:list={[
               "rounded px-3 py-1.5 transition-colors",
-              isActive(item.href)
+              isActive(item.path)
                 ? "bg-[#EFF93B] text-black"
                 : "text-text-dark hover:text-primary",
             ]}
@@ -51,7 +54,7 @@ const isActive = (href: string) => {
         id="mobile-menu-open"
         type="button"
         class="mobile-menu-toggle min-h-11 min-w-11 p-2 text-text-dark sm:hidden"
-        aria-label="Open menu"
+        aria-label={t.nav.openMenu}
         aria-expanded="false"
         aria-controls="mobile-menu-overlay"
       >
@@ -62,9 +65,9 @@ const isActive = (href: string) => {
     </div>
   </div>
   <noscript>
-    <nav class="mobile-fallback-nav" aria-label="Main navigation">
+    <nav class="mobile-fallback-nav" aria-label={t.nav.mainLabel}>
       {navItems.map((item) => (
-        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>
+        <a href={item.href} aria-current={isActive(item.path) ? "page" : undefined}>{item.label}</a>
       ))}
     </nav>
   </noscript>
@@ -84,22 +87,22 @@ const isActive = (href: string) => {
     id="mobile-menu-close"
     type="button"
     class="absolute right-5 top-5 text-2xl font-light text-text-dark"
-    aria-label="Close menu"
+    aria-label={t.nav.closeMenu}
   >
     ✕
   </button>
 
   <!-- Nav items -->
-  <nav aria-label="Main navigation" class="flex flex-1 flex-col items-center justify-center gap-4">
-    <p id="mobile-menu-title" class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">Menu</p>
+  <nav aria-label={t.nav.mainLabel} class="flex flex-1 flex-col items-center justify-center gap-4">
+    <p id="mobile-menu-title" class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">{t.nav.menu}</p>
     {
       navItems.map((item) => (
         <a
           href={item.href}
-          aria-current={isActive(item.href) ? "page" : undefined}
+          aria-current={isActive(item.path) ? "page" : undefined}
           class:list={[
             "w-64 rounded px-6 py-3 text-center text-sm font-bold tracking-widest uppercase transition-colors",
-            isActive(item.href)
+            isActive(item.path)
               ? "bg-[#EFF93B] text-black"
               : "text-text-dark hover:bg-light",
           ]}

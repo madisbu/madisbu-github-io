@@ -2,6 +2,7 @@
 import BackToTop from "../components/BackToTop.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import { useI18n } from "../i18n/astro";
 import "../styles/global.css";
 
 export interface Props {
@@ -17,10 +18,11 @@ export interface Props {
 
 const siteName = "Mabux";
 const baseUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://www.mabux.me";
+const { locale, t, path } = useI18n(Astro.url);
 
 const {
-  title = "Madis Burmeister - UX & Web Design",
-  description = "The portfolio of Madis Burmeister, a UX engineer and technical project manager based in Estonia.",
+  title = t.site.defaultTitle,
+  description = t.site.defaultDescription,
   ogImage = "/images/hero-1200.webp",
   canonicalUrl,
   wide = false,
@@ -32,7 +34,7 @@ const {
 const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const resolvedCanonicalUrl = canonicalUrl ?? new URL(Astro.url.pathname, baseUrl).toString();
 const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefined;
-const isHomePage = Astro.url.pathname === "/";
+const isHomePage = path === "/";
 const siteUrl = new URL(import.meta.env.BASE_URL, baseUrl);
 const sitemapUrl = new URL("sitemap-index.xml", siteUrl);
 const structuredData = {
@@ -44,7 +46,7 @@ const structuredData = {
       url: siteUrl.href,
       name: siteName,
       alternateName: "Madis Burmeister",
-      inLanguage: "en",
+      inLanguage: locale,
       author: { "@id": `${siteUrl}#person` },
     },
     {
@@ -52,14 +54,14 @@ const structuredData = {
       "@id": `${siteUrl}#person`,
       name: "Madis Burmeister",
       url: siteUrl.href,
-      jobTitle: "Senior Technical Project Manager",
+      jobTitle: t.site.jobTitle,
     },
   ],
 };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={t.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -102,7 +104,7 @@ const structuredData = {
       isHomePage && "home-page overflow-hidden lg:overflow-visible",
     ]}
   >
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{t.site.skipLink}</a>
     <Header />
     <main
       id="main-content"

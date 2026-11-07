@@ -1,5 +1,7 @@
 ---
-// Back to top button component
+import { useI18n } from "../i18n/astro";
+
+const { t } = useI18n(Astro.url);
 ---
 
 <div
@@ -8,7 +10,7 @@
   aria-hidden="true"
   hidden
 >
-  <button class="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top" tabindex="-1">
+  <button class="back-to-top-btn" type="button" aria-label={t.backToTop.label} title={t.backToTop.label} tabindex="-1">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -24,7 +26,7 @@
     </svg>
   </button>
 
-  <span class="back-to-top-label">BACK TO TOP</span>
+  <span class="back-to-top-label">{t.backToTop.caption}</span>
 </div>
 
 <style>
