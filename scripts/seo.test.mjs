@@ -94,6 +94,9 @@ test("every translated page exists in English and Estonian with reciprocal langu
     assert.equal(alternates.et, canonicalOf(et.html));
     assert.equal(alternates["x-default"], alternates.en);
     assert.notEqual(alternates.en, alternates.et);
+    // The language switcher links to the same page in the other language.
+    assert.ok(en.html.includes(`hreflang="et" data-language="et"`));
+    assert.ok(et.html.includes(`hreflang="en" data-language="en"`));
   }
 });
 

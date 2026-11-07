@@ -1,4 +1,5 @@
 ---
+import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { useI18n } from "../i18n/astro";
 
 const { t, path, href } = useI18n(Astro.url);
@@ -49,6 +50,11 @@ const isActive = (itemPath: string) => {
 
     <!-- Right side -->
     <div class="ml-auto flex items-center gap-3">
+      <!-- Language switcher: always visible, set apart from the menu items -->
+      <div class="header-language">
+        <LanguageSwitcher />
+      </div>
+
       <!-- Mobile: hamburger button -->
       <button
         id="mobile-menu-open"
@@ -296,6 +302,20 @@ const isActive = (itemPath: string) => {
 </style>
 
 <script>
+  import { LANGUAGE_KEY, serializeLanguage } from "../utils/language-preference";
+  import type { Locale } from "../i18n";
+
+  // Remember an explicit language choice so the home-page redirect never overrides it.
+  document.querySelectorAll<HTMLAnchorElement>("[data-language]").forEach((link) => {
+    link.addEventListener("click", () => {
+      try {
+        localStorage.setItem(LANGUAGE_KEY, serializeLanguage(link.dataset.language as Locale));
+      } catch {
+        // Storage can be unavailable; the switch itself still works.
+      }
+    });
+  });
+
   const openBtn = document.querySelector<HTMLButtonElement>("#mobile-menu-open");
   const closeBtn = document.querySelector<HTMLButtonElement>("#mobile-menu-close");
   const overlay = document.querySelector<HTMLElement>("#mobile-menu-overlay")!;

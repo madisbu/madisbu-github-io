@@ -20,6 +20,10 @@ export const en = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
   },
+  language: {
+    label: "Language",
+    switchTo: "Switch language to",
+  },
   footer: {
     copyright: (year: number) => `Copyright © Madis Burmeister ${year}`,
     socialLabel: "Social links",

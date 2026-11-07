@@ -23,6 +23,10 @@ export const et: Dictionary = {
     openMenu: "Ava menüü",
     closeMenu: "Sulge menüü",
   },
+  language: {
+    label: "Keel",
+    switchTo: "Vaheta keeleks",
+  },
   footer: {
     copyright: (year: number) => `Autoriõigus © Madis Burmeister ${year}`,
     socialLabel: "Sotsiaalmeedia lingid",
