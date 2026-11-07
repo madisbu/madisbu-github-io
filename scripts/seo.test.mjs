@@ -14,7 +14,7 @@ const pages = await Promise.all(
 );
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
-  assert.equal(pages.length, 16);
+  assert.equal(pages.length, 17);
   const titles = new Set();
   const descriptions = new Set();
   for (const { file, html } of pages) {
@@ -52,7 +52,7 @@ test("sitemap matches all indexable pages and excludes the error page", async ()
   const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
   const canonicals = [];
   for (const { file, html } of pages) {
-    if (file === "404.html") {
+    if (file === "404.html" || file.split(path.sep).join("/") === "et/404/index.html") {
       assert.match(html, /<meta name="robots" content="noindex, follow"/);
       continue;
     }
@@ -135,8 +135,20 @@ test("Estonian pages render translated, non-English interface text", () => {
   assert.match(pageFor("privacy/index.html").html, /mabux\.language\.v1/);
 });
 
+test("the error page is translated and the English one hands /et/ paths to it", () => {
+  const en = pageFor("404.html").html;
+  const et = pageFor("et/404/index.html").html;
+  assert.match(en, /<html lang="en">/);
+  assert.match(et, /<html lang="et">/);
+  assert.match(et, /Näib, et keerasid valesti\./);
+  assert.match(en, /location\.replace\(target\)/);
+  assert.match(en, /const target = "\/et\/404\/"/);
+  assert.doesNotMatch(et, /location\.replace\(target\)/);
+  assert.match(et, /<meta name="robots" content="noindex, follow"/);
+});
+
 test("inline redirect scripts are valid JavaScript", () => {
-  for (const file of ["index.html"]) {
+  for (const file of ["index.html", "404.html"]) {
     const scripts = [...pageFor(file).html.matchAll(/<script>(.*?)<\/script>/gs)].map((match) => match[1]);
     assert.ok(scripts.length > 0, `${file}: expected an inline script`);
     for (const code of scripts) assert.doesNotThrow(() => new Function(code), `${file}: invalid inline script`);

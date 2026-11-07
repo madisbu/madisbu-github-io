@@ -244,6 +244,16 @@ export const en = {
     },
     countryFlags: { Estonia: "/flags/estonia.svg", Spain: "/flags/spain.svg", Australia: "/flags/australia.svg" } as Record<string, string>,
   },
+  notFound: {
+    title: "Page not found",
+    description: "This page could not be found. Explore Madis Burmeister's projects or return to the home page.",
+    code: "404",
+    heading: "Looks like a wrong turn.",
+    message: "This page may have moved, or the address may be incorrect. Let's get you back on track.",
+    navLabel: "Page not found navigation",
+    home: "Back to home",
+    projects: "Explore projects",
+  },
   privacy: {
     title: "Privacy & cookies",
     description:

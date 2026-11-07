@@ -112,6 +112,7 @@ const structuredData = {
         </script>
       )
     }
+    <slot name="head" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {preconnectOrigins.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}

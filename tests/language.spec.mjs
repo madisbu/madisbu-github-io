@@ -191,3 +191,15 @@ test("the language switcher is visible on mobile and clearly separated from the 
   await expect(page).toHaveURL(/\/et\/about\/?$/);
   await context.close();
 });
+
+test("missing pages show a translated 404 under /et/ and an English one elsewhere", async ({ browser }) => {
+  const context = await browser.newContext({ locale: "en-US" });
+  const page = await context.newPage();
+  await page.goto("/et/does-not-exist");
+  await expect(page).toHaveURL(/\/et\/404\/?$/);
+  await expect(page.getByRole("heading", { name: "Näib, et keerasid valesti." })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Tagasi avalehele" })).toHaveAttribute("href", "/et/");
+  await page.goto("/does-not-exist");
+  await expect(page.getByRole("heading", { name: "Looks like a wrong turn." })).toBeVisible();
+  await context.close();
+});

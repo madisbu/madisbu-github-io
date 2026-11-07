@@ -251,6 +251,16 @@ export const et: Dictionary = {
     },
     countryFlags: { Eesti: "/flags/estonia.svg", Hispaania: "/flags/spain.svg", Austraalia: "/flags/australia.svg" },
   },
+  notFound: {
+    title: "Lehte ei leitud",
+    description: "Seda lehte ei leitud. Tutvu Madis Burmeisteri projektidega või naase avalehele.",
+    code: "404",
+    heading: "Näib, et keerasid valesti.",
+    message: "See leht võib olla teisaldatud või aadress on vale. Aitame sind õigele teele tagasi.",
+    navLabel: "Lehe puudumise navigatsioon",
+    home: "Tagasi avalehele",
+    projects: "Uuri projekte",
+  },
   privacy: {
     title: "Privaatsus ja küpsised",
     description:
