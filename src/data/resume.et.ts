@@ -6,7 +6,7 @@ export const resumeEt: ResumeData = {
   title: "IT vanemprojektijuht",
   intro:
     "Ligi 15-aastase kogemusega IT-projektijuht, kes on juhtinud erinevaid projekte iGaming'u ja ringlustehnoloogia valdkonnas ning kelle kirg on UX- ja veebidisain.",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/resume-et.pdf",
   experience: [
     {
       id: "playtech-2025",

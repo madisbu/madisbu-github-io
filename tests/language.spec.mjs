@@ -158,7 +158,7 @@ test("the Estonian resume uses Estonian dates and labels", async ({ browser }) =
   await expect(page.getByRole("heading", { name: "Töökogemus" })).toBeVisible();
   await expect(page.getByText("Jaanuar 2025").first()).toBeVisible();
   await expect(page.getByText("Praegune", { exact: true }).first()).toBeAttached();
-  await expect(page.getByRole("link", { name: /Vaata CV-d/ })).toHaveAttribute("href", "/resume.pdf");
+  await expect(page.getByRole("link", { name: /Vaata CV-d/ })).toHaveAttribute("href", "/resume-et.pdf");
   await context.close();
 });
 

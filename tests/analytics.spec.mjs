@@ -262,6 +262,39 @@ test("privacy styling preserves touch targets, focus, and balanced responsive di
   }
 });
 
+test("Estonian consent dialog keeps the same safe behavior in Estonian", async ({ context, page }) => {
+  const requests = await mockProduction(context);
+  await page.goto(`${production}/et/`);
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Keeldu analüütikast", exact: true })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Nõustu analüütikaga", exact: true })).toBeEnabled();
+  expect(requests).toEqual([]);
+  await page.getByRole("button", { name: "Keeldu analüütikast", exact: true }).click();
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).status, consentKey)).toBe("rejected");
+  await page.getByRole("button", { name: "Küpsised", exact: true }).click();
+  await expect(page.locator("[data-consent-status]")).toHaveText("Analüütika on välja lülitatud. Saad allpool oma valikut muuta.");
+  await expect(page.getByRole("link", { name: "Loe privaatsusteadet" })).toHaveAttribute("href", "/et/privacy/");
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("link", { name: "Privaatsus", exact: true })).toHaveAttribute("href", "/et/privacy/");
+  expect(requests).toEqual([]);
+});
+
+test("the Estonian resume download is recorded with its own file name", async ({ context, page }) => {
+  const requests = await mockProduction(context);
+  await page.goto(`${production}/et/resume/`);
+  await page.getByRole("button", { name: "Nõustu analüütikaga", exact: true }).click();
+  await expect.poll(() => requests.length).toBe(1);
+  await page.evaluate(() => {
+    const link = document.querySelector('a[href="/resume-et.pdf"]');
+    link.addEventListener("click", (event) => event.preventDefault());
+    link.click();
+  });
+  expect((await commands(page)).filter((args) => args[1] === "resume_download")).toEqual([
+    ["event", "resume_download", { file_name: "resume-et.pdf" }],
+  ]);
+});
+
 test("without JavaScript no Analytics loader is included", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
