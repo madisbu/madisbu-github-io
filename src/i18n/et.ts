@@ -3,6 +3,7 @@ import type { Dictionary } from "./en.ts";
 // Estonian copy. Keys mirror `en.ts`; a missing key fails `npm run check`.
 export const et: Dictionary = {
   htmlLang: "et",
+  ogLocale: "et_EE",
   site: {
     defaultTitle: "Madis Burmeister - UX- ja veebidisain",
     defaultDescription:

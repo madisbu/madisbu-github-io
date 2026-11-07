@@ -74,8 +74,11 @@ test("sitemap matches all indexable pages and excludes the error page", async ()
 
 const translated = ["", "about", "contact", "privacy", "projects", "resume"];
 const pageFor = (file) => pages.find((page) => page.file.split(path.sep).join("/") === file);
+const hreflangs = (html) =>
+  Object.fromEntries([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
+const canonicalOf = (html) => html.match(/<link rel="canonical" href="([^"]+)"/)[1];
 
-test("every translated page exists in English and Estonian", () => {
+test("every translated page exists in English and Estonian with reciprocal language alternates", () => {
   for (const name of translated) {
     const en = pageFor(name ? `${name}/index.html` : "index.html");
     const et = pageFor(name ? `et/${name}/index.html` : "et/index.html");
@@ -83,7 +86,22 @@ test("every translated page exists in English and Estonian", () => {
     assert.ok(et, `missing Estonian page: ${name || "home"}`);
     assert.match(en.html, /<html lang="en">/);
     assert.match(et.html, /<html lang="et">/);
-    assert.match(et.html, /<link rel="canonical" href="https:\/\/www\.mabux\.me\/et\//);
+    assert.match(en.html, /<meta property="og:locale" content="en_US">/);
+    assert.match(et.html, /<meta property="og:locale" content="et_EE">/);
+    const alternates = hreflangs(en.html);
+    assert.deepEqual(alternates, hreflangs(et.html));
+    assert.equal(alternates.en, canonicalOf(en.html));
+    assert.equal(alternates.et, canonicalOf(et.html));
+    assert.equal(alternates["x-default"], alternates.en);
+    assert.notEqual(alternates.en, alternates.et);
+  }
+});
+
+test("English-only pages do not advertise a language alternate", () => {
+  for (const file of ["404.html", "projects/car-rental-app-redesign/index.html"]) {
+    const { html } = pageFor(file);
+    assert.doesNotMatch(html, /hreflang="et" href=/, file);
+    assert.match(html, /<html lang="en">/, file);
   }
 });
 

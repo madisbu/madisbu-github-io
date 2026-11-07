@@ -1,6 +1,7 @@
 // English is the primary language. `et.ts` must provide every key defined here.
 export const en = {
   htmlLang: "en",
+  ogLocale: "en_US",
   site: {
     defaultTitle: "Madis Burmeister - UX & Web Design",
     defaultDescription: "The portfolio of Madis Burmeister, a UX engineer and technical project manager based in Estonia.",
