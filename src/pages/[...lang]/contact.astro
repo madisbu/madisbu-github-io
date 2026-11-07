@@ -1,6 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
+import { formatTemplate, localeStaticPaths } from "../../i18n";
+import { useI18n } from "../../i18n/astro";
 
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t } = useI18n(Astro.url);
+const c = t.contact;
 const email = "madis.burmeister@mabux.me";
 const encodedEmail = encodeURIComponent(email);
 const webmailLinks = [
@@ -9,18 +17,14 @@ const webmailLinks = [
 ];
 ---
 
-<Layout
-  title="Contact"
-  description="Have a project in mind? Let's make something happen. Email Madis Burmeister in Estonia to talk about your next web project or collaboration."
-  wide
->
+<Layout title={c.title} description={c.description} wide>
   <div class="contact">
     <section class="invitation" aria-labelledby="contact-heading">
       <div class="invitation-copy">
-        <p class="eyebrow"><span aria-hidden="true"></span> A NEW PROJECT? A ROUGH IDEA?</p>
-        <h1 id="contact-heading">Good things start with a <span class="hand-underline">conversation.</span></h1>
+        <p class="eyebrow"><span aria-hidden="true"></span> {c.eyebrow}</p>
+        <h1 id="contact-heading">{c.headingBefore}<span class="hand-underline">{c.headingHighlight}</span></h1>
         <div class="email-invitation">
-          <p class="email-label">No forms. No hoops. Just say hello.</p>
+          <p class="email-label">{c.emailLabel}</p>
           <a class="email-link" href={`mailto:${email}`}>
             <span>madis.burmeister<wbr />@mabux.me</span>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -28,9 +32,9 @@ const webmailLinks = [
             </svg>
           </a>
           <div class="email-options">
-            <span class="email-options-label">No mail app?</span>
+            <span class="email-options-label">{c.noMailApp}</span>
             <button type="button" class="email-option" data-copy-email={email} data-contact-method="copy">
-              Copy address
+              {c.copyAddress}
             </button>
             {webmailLinks.map((link) => (
               <a
@@ -40,18 +44,25 @@ const webmailLinks = [
                 rel="noopener noreferrer"
                 data-contact-method={link.method}
               >
-                Open in {link.label}<span class="sr-only"> (opens in a new tab)</span>
+                {formatTemplate(c.openIn, { name: link.label })}<span class="sr-only">{c.newTab}</span>
               </a>
             ))}
-            <span class="email-copy-status" role="status" aria-live="polite" data-copy-status></span>
+            <span
+              class="email-copy-status"
+              role="status"
+              aria-live="polite"
+              data-copy-status
+              data-copied-message={c.copied}
+              data-failed-message={c.copyFailed}
+            ></span>
           </div>
-          <p class="email-note">Your idea doesn't need to be polished. That's what working together is for.</p>
+          <p class="email-note">{c.note}</p>
         </div>
       </div>
 
       <aside class="conversation-card" aria-labelledby="conversation-heading">
         <div class="card-top">
-          <span>FROM YOUR FIRST HELLO</span>
+          <span>{c.cardTop}</span>
           <svg class="spark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
             <path d="m20 2 1 13L33 7 25 19l13 1-13 2 8 11-12-8-1 13-2-13-11 8 8-12-13-1 13-2L7 7l12 8Z" />
           </svg>
@@ -67,31 +78,31 @@ const webmailLinks = [
             <path class="art-envelope" d="m49 110 95 69 120-52-12 91-211-19Z" />
             <path class="art-ink" d="m42 198 81-55m129 74-70-69M27 55l-13-8m19-7-4-15m244 54 19-7m-20 21 14 3" />
           </svg>
-          <span class="letter-note">big ideas start small</span>
+          <span class="letter-note">{c.letterNote}</span>
         </div>
-        <h2 id="conversation-heading">Let's make<br />something happen.</h2>
-        <p>You bring the idea.<br />We'll figure out the next step together.</p>
-        <div class="card-bottom"><span>LESS OVERTHINKING, MORE HELLO.</span><span aria-hidden="true">&darr;</span></div>
+        <h2 id="conversation-heading">{c.cardHeading.map((line, index) => <>{index > 0 && <br />}{line}</>)}</h2>
+        <p>{c.cardText[0]}<br />{c.cardText[1]}</p>
+        <div class="card-bottom"><span>{c.cardBottom}</span><span aria-hidden="true">&darr;</span></div>
       </aside>
     </section>
 
     <section class="good-to-know" aria-labelledby="details-heading">
-      <h2 id="details-heading">A little good to know</h2>
+      <h2 id="details-heading">{c.goodToKnow}</h2>
       <dl class="contact-details">
         <div class="reply-detail">
-          <dt>WHEN TO REACH OUT</dt>
-          <dd>Drop me a message anytime.</dd>
-          <dd class="detail-note">I usually reply within 1&ndash;2 days.</dd>
+          <dt>{c.reachOut.label}</dt>
+          <dd>{c.reachOut.value}</dd>
+          <dd class="detail-note">{c.reachOut.note}</dd>
         </div>
         <div>
-          <dt>BASED IN</dt>
-          <dd>Estonia (EET/EEST)</dd>
-          <dd class="detail-note">A small country. A wide world of ideas.</dd>
+          <dt>{c.basedIn.label}</dt>
+          <dd>{c.basedIn.value}</dd>
+          <dd class="detail-note">{c.basedIn.note}</dd>
         </div>
         <div>
-          <dt>LET'S TALK IN</dt>
-          <dd>English or Estonian</dd>
-          <dd class="detail-note">Plain language, not technical jargon.</dd>
+          <dt>{c.talkIn.label}</dt>
+          <dd>{c.talkIn.value}</dd>
+          <dd class="detail-note">{c.talkIn.note}</dd>
         </div>
       </dl>
     </section>
@@ -100,6 +111,9 @@ const webmailLinks = [
 
 <script>
   const status = document.querySelector<HTMLElement>("[data-copy-status]");
+  // Messages arrive pre-translated from the page; {email} is filled in here.
+  const copiedMessage = status?.dataset.copiedMessage ?? "";
+  const failedMessage = status?.dataset.failedMessage ?? "";
   let resetTimer: number | undefined;
 
   function announce(message: string) {
@@ -132,7 +146,7 @@ const webmailLinks = [
       } catch {
         copied = legacyCopy(email);
       }
-      announce(copied ? `Copied ${email} to your clipboard.` : `Couldn't copy automatically. The address is ${email}.`);
+      announce((copied ? copiedMessage : failedMessage).replace("{email}", email));
     });
   });
 </script>

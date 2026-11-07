@@ -1,13 +1,17 @@
 ---
-import HeroSentence from "../components/HeroSentence.astro";
-import Layout from "../layouts/Layout.astro";
+import HeroSentence from "../../components/HeroSentence.astro";
+import Layout from "../../layouts/Layout.astro";
+import { localeStaticPaths } from "../../i18n";
+import { useI18n } from "../../i18n/astro";
 
-const pageDescription =
-  "Explore Madis Burmeister's UX and web design portfolio: fast, focused web products and clean interfaces, backed by technical project management experience in Estonia.";
-const heroAlt = "Portrait of Madis";
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t, href } = useI18n(Astro.url);
 ---
 
-<Layout description={pageDescription}>
+<Layout description={t.home.description}>
   <section class="hero-section relative flex h-full min-h-0 flex-col">
     <div class="hero-copy pt-4 sm:pt-6 lg:pt-2">
       <HeroSentence />
@@ -15,16 +19,16 @@ const heroAlt = "Portrait of Madis";
 
     <div class="hero-cta-mobile mt-auto grid -translate-y-2 grid-cols-2 gap-3 portrait:max-lg:hidden sm:gap-4 lg:hidden">
       <a
-        href="/projects"
+        href={href("/projects")}
         class="inline-flex min-h-11 items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:px-5 sm:text-sm"
       >
-        VIEW PROJECTS
+        {t.home.viewProjects}
       </a>
       <a
-        href="/contact"
+        href={href("/contact")}
         class="inline-flex min-h-11 items-center justify-center rounded-md border border-text-dark bg-body px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:px-5 sm:text-sm"
       >
-        LET&apos;S TALK
+        {t.home.letsTalk}
       </a>
     </div>
 
@@ -82,7 +86,7 @@ const heroAlt = "Portrait of Madis";
           sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, (min-width: 2560px) 86rem, (min-width: 1920px) 72rem, 64rem"
           width="1200"
           height="670"
-          alt={heroAlt}
+          alt={t.home.heroAlt}
           loading="eager"
           fetchpriority="high"
           decoding="async"
@@ -92,16 +96,16 @@ const heroAlt = "Portrait of Madis";
 
       <div class="hero-cta-overlay pointer-events-none absolute inset-x-2 bottom-23 hidden justify-between gap-2 sm:inset-x-4 sm:bottom-4 md:bottom-6 lg:flex lg:inset-x-0 lg:top-[58%] lg:bottom-auto lg:-translate-y-1/2 lg:px-2">
         <a
-          href="/projects"
+          href={href("/projects")}
           class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-44 items-center justify-center rounded-md bg-[#EFF93B] px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-black shadow-sm transition-colors hover:bg-[#dbe52f] sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
-          VIEW PROJECTS
+          {t.home.viewProjects}
         </a>
         <a
-          href="/contact"
+          href={href("/contact")}
           class="hero-cta-button pointer-events-auto inline-flex min-h-11 w-[48%] max-w-44 items-center justify-center rounded-md border border-text-dark bg-body/90 px-3 py-3 text-center text-[0.7rem] font-bold tracking-wide text-text-dark shadow-sm backdrop-blur-sm transition-colors hover:bg-text-dark hover:text-body sm:min-h-12 sm:w-[44%] sm:px-5 sm:text-sm"
         >
-          LET&apos;S TALK
+          {t.home.letsTalk}
         </a>
       </div>
     </div>
