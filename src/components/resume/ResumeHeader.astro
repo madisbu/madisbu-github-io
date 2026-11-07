@@ -1,13 +1,15 @@
 ---
+import { useI18n } from "../../i18n/astro";
 import type { ResumeData } from "../../types/resume";
 
 type Props = Pick<ResumeData, "name" | "title" | "intro" | "resumeUrl">;
 
 const { name, title, intro, resumeUrl } = Astro.props;
+const { t } = useI18n(Astro.url);
 ---
 
 <header class="resume-header">
-  <p class="eyebrow">Resume</p>
+  <p class="eyebrow">{t.resume.eyebrow}</p>
   <h1>{name}</h1>
   <p class="title">{title}</p>
   <p class="intro">{intro}</p>
@@ -22,8 +24,8 @@ const { name, title, intro, resumeUrl } = Astro.props;
         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
         </svg>
-        View Resume
-        <span class="sr-only">(opens in a new tab)</span>
+        {t.resume.viewResume}
+        <span class="sr-only">{t.resume.newTab}</span>
       </a>
     )
   }

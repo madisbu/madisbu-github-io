@@ -19,3 +19,18 @@ test("initials use the first two words", () => {
   assert.equal(initials("acme"), "A");
   assert.equal(initials("Big Blue Machines Inc"), "BB");
 });
+
+test("formats dates and durations with translated labels", () => {
+  const labels = {
+    monthNames: ["jaan", "veebr", "märts", "apr", "mai", "juuni", "juuli", "aug", "sept", "okt", "nov", "dets"],
+    present: "Praegu",
+    year: "aasta",
+    years: "aastat",
+    month: "kuu",
+    months: "kuud",
+  };
+  assert.equal(formatYearMonth("2022-03", labels), "märts 2022");
+  assert.equal(formatYearMonth(null, labels), "Praegu");
+  assert.equal(formatDuration("2019-01", "2022-02", new Date(), labels), "3 aastat 2 kuud");
+  assert.equal(formatDuration("2020-01", "2020-12", new Date(), labels), "1 aasta");
+});
