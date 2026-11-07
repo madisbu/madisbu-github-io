@@ -249,7 +249,7 @@ export const en = {
     description:
       "Learn how this website uses analytics with your consent, saves your cookie choice, and handles privacy requests.",
     heading: "Privacy & cookies",
-    updated: "Last updated: 18 October 2026",
+    updated: "Last updated: 7 November 2026",
     // Trusted static HTML (links and emphasis); rendered with set:html.
     sections: [
       {
@@ -281,6 +281,7 @@ export const en = {
             ul: [
               "<strong>mabux.analytics-consent.v1:</strong> saves your choice in this device’s local storage for 180 days. It only remembers whether you accepted or rejected analytics; it doesn’t track your visits.",
               "<strong>_ga and _ga_*:</strong> optional first-party Google Analytics cookies that identify your browser and keep session information. They’re set to expire after 60 days and aren’t extended on each visit. Your browser may remove them sooner.",
+              "<strong>mabux.language.v1:</strong> saves your language choice (English or Estonian) in this device’s local storage when you use the language switcher. On the home page, the website also checks your browser’s language setting to open the Estonian version if your browser prefers Estonian. This check happens in your browser; nothing is sent anywhere, and it isn’t used for analytics.",
             ],
           },
           {

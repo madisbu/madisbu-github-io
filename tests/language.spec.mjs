@@ -6,6 +6,93 @@ async function estonianBrowser(browser, options = {}) {
   return browser.newContext({ locale: "et-EE", ...options });
 }
 
+test("an Estonian browser opening the home page lands on the Estonian version", async ({ browser }) => {
+  const context = await estonianBrowser(browser);
+  const page = await context.newPage();
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/et\/$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "et");
+  await expect(page.locator("h1")).toContainText("mina olen Madis!");
+  await context.close();
+});
+
+test("an English browser stays on the English home page", async ({ browser }) => {
+  const context = await browser.newContext({ locale: "en-US" });
+  const page = await context.newPage();
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page).not.toHaveURL(/\/et\//);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await context.close();
+});
+
+test("only the first browser language decides", async ({ browser }) => {
+  const context = await browser.newContext({ locale: "en-US" });
+  const page = await context.newPage();
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "languages", { get: () => ["en-US", "et"] });
+  });
+  await page.goto("/");
+  await expect(page).not.toHaveURL(/\/et\//);
+  await context.close();
+});
+
+test("deep English links are never redirected", async ({ browser }) => {
+  const context = await estonianBrowser(browser);
+  const page = await context.newPage();
+  for (const path of ["/about", "/contact", "/projects", "/projects/multistep-order-form"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    expect(new URL(page.url()).pathname.replace(/\/$/, "")).toBe(path);
+  }
+  await context.close();
+});
+
+test("a saved English choice beats an Estonian browser", async ({ browser }) => {
+  const context = await estonianBrowser(browser);
+  const page = await context.newPage();
+  await page.addInitScript(
+    ([key]) => localStorage.setItem(key, JSON.stringify({ version: 1, language: "en" })),
+    [languageKey],
+  );
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page).not.toHaveURL(/\/et\//);
+  await context.close();
+});
+
+test("a saved Estonian choice opens the Estonian home page", async ({ browser }) => {
+  const context = await browser.newContext({ locale: "en-US" });
+  const page = await context.newPage();
+  await page.addInitScript(
+    ([key]) => localStorage.setItem(key, JSON.stringify({ version: 1, language: "et" })),
+    [languageKey],
+  );
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/et\/$/);
+  await context.close();
+});
+
+test("invalid saved values and blocked storage fall back to the browser language", async ({ browser }) => {
+  const context = await estonianBrowser(browser);
+  const page = await context.newPage();
+  await page.addInitScript(([key]) => localStorage.setItem(key, "not json"), [languageKey]);
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/et\/$/);
+  await context.close();
+
+  for (const [locale, expected] of [["et-EE", "et"], ["en-US", "en"]]) {
+    const blocked = await browser.newContext({ locale });
+    const blockedPage = await blocked.newPage();
+    await blockedPage.addInitScript(() => {
+      Storage.prototype.getItem = () => { throw new DOMException("Blocked", "SecurityError"); };
+    });
+    await blockedPage.goto("/");
+    await expect(blockedPage.locator("html")).toHaveAttribute("lang", expected);
+    await blocked.close();
+  }
+});
+
 test("the language switcher moves between matching pages and remembers the choice", async ({ browser }) => {
   const context = await estonianBrowser(browser);
   const page = await context.newPage();
@@ -72,6 +159,23 @@ test("the Estonian resume uses Estonian dates and labels", async ({ browser }) =
   await expect(page.getByText("Jaanuar 2025").first()).toBeVisible();
   await expect(page.getByText("Praegune", { exact: true }).first()).toBeAttached();
   await expect(page.getByRole("link", { name: /Vaata CV-d/ })).toHaveAttribute("href", "/resume.pdf");
+  await context.close();
+});
+
+test("switching to English from the Estonian home page sticks even when storage is blocked", async ({ browser }) => {
+  const context = await estonianBrowser(browser);
+  const page = await context.newPage();
+  await page.goto("/et/");
+  await page.addInitScript(() => {
+    Storage.prototype.getItem = () => { throw new DOMException("Blocked", "SecurityError"); };
+    Storage.prototype.setItem = () => { throw new DOMException("Blocked", "SecurityError"); };
+  });
+  await page.getByRole("group", { name: "Keel" }).getByRole("link", { name: "English" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  // In-site navigation, e.g. the logo, stays English too.
+  await page.getByRole("link", { name: "Mabux Home" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await context.close();
 });
 

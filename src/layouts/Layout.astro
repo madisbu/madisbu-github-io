@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { dictionaries, hasTranslation, locales, localizedPath, type Locale } from "../i18n";
 import { useI18n } from "../i18n/astro";
+import { LANGUAGE_KEY } from "../utils/language-preference";
 import "../styles/global.css";
 
 export interface Props {
@@ -37,6 +38,8 @@ const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const resolvedCanonicalUrl = canonicalUrl ?? new URL(Astro.url.pathname, baseUrl).toString();
 const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefined;
 const isHomePage = path === "/";
+// Only the English home page auto-selects a language; deep links always open as shared.
+const redirectsByLanguage = isHomePage && locale === "en";
 const siteUrl = new URL(import.meta.env.BASE_URL, baseUrl);
 const sitemapUrl = new URL("sitemap-index.xml", siteUrl);
 const withTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
@@ -75,6 +78,40 @@ const structuredData = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    {
+      redirectsByLanguage && (
+        <script
+          is:inline
+          define:vars={{ key: LANGUAGE_KEY, target: localizedPath("et", "/", base) }}
+        >
+          // Estonian browsers (or a saved Estonian choice) opening the home page get the Estonian version. The page is hidden
+          // first so no English content flashes before the redirect.
+          (function () {
+            // Moving around the site (for example using the language switch) never triggers the redirect.
+            try {
+              if (document.referrer && new URL(document.referrer).origin === location.origin) return;
+            } catch (error) {}
+            var saved = null;
+            try {
+              var parsed = JSON.parse(localStorage.getItem(key));
+              if (parsed && parsed.version === 1 && (parsed.language === "en" || parsed.language === "et")) {
+                saved = parsed.language;
+              }
+            } catch (error) {
+              // Blocked storage or an invalid value counts as no saved choice.
+            }
+            var first = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+            var language = saved || (first.toLowerCase().split("-")[0] === "et" ? "et" : "en");
+            if (language !== "et") return;
+            var root = document.documentElement;
+            root.style.visibility = "hidden";
+            // Never leave the page blank if the navigation is blocked.
+            setTimeout(function () { root.style.visibility = ""; }, 3000);
+            location.replace(target);
+          })();
+        </script>
+      )
+    }
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {preconnectOrigins.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}

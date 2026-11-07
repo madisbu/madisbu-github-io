@@ -108,6 +108,14 @@ test("English-only pages do not advertise a language alternate", () => {
   }
 });
 
+test("only the English home page redirects by browser language", () => {
+  const redirect = /localStorage\.getItem\(key\)/;
+  assert.match(pageFor("index.html").html, redirect);
+  for (const { file, html } of pages) {
+    if (file !== "index.html") assert.doesNotMatch(html, redirect, `${file}: unexpected language redirect`);
+  }
+});
+
 test("Estonian pages render translated, non-English interface text", () => {
   const home = pageFor("et/index.html").html;
   assert.match(home, /VAATA PROJEKTE/);
@@ -123,4 +131,14 @@ test("Estonian pages render translated, non-English interface text", () => {
     }
   }
   assert.match(pageFor("et/resume/index.html").html, /Töökogemus/);
+  assert.match(pageFor("et/privacy/index.html").html, /mabux\.language\.v1/);
+  assert.match(pageFor("privacy/index.html").html, /mabux\.language\.v1/);
+});
+
+test("inline redirect scripts are valid JavaScript", () => {
+  for (const file of ["index.html"]) {
+    const scripts = [...pageFor(file).html.matchAll(/<script>(.*?)<\/script>/gs)].map((match) => match[1]);
+    assert.ok(scripts.length > 0, `${file}: expected an inline script`);
+    for (const code of scripts) assert.doesNotThrow(() => new Function(code), `${file}: invalid inline script`);
+  }
 });

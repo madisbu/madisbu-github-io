@@ -256,7 +256,7 @@ export const et: Dictionary = {
     description:
       "Loe, kuidas see veebileht kasutab sinu nõusolekul analüütikat, salvestab sinu küpsisevalikut ja käsitleb privaatsustaotlusi.",
     heading: "Privaatsus ja küpsised",
-    updated: "Viimati uuendatud: 18. oktoober 2026",
+    updated: "Viimati uuendatud: 7. november 2026",
     sections: [
       {
         heading: "Kes vastutab",
@@ -287,6 +287,7 @@ export const et: Dictionary = {
             ul: [
               "<strong>mabux.analytics-consent.v1:</strong> salvestab sinu valiku selle seadme kohalikku salvestusruumi (local storage) 180 päevaks. See jätab meelde ainult seda, kas nõustusid analüütikaga või keeldusid; see ei jälgi sinu külastusi.",
               "<strong>_ga ja _ga_*:</strong> valikulised esimese osapoole Google Analyticsi küpsised, mis tuvastavad sinu brauseri ja hoiavad seansi teavet. Need aeguvad 60 päeva pärast ega pikene iga külastusega. Sinu brauser võib need ka varem eemaldada.",
+              "<strong>mabux.language.v1:</strong> salvestab sinu keelevaliku (inglise või eesti keel) selle seadme kohalikku salvestusruumi, kui kasutad keelevahetajat. Avalehel kontrollib veebileht ka sinu brauseri keeleseadet, et avada eestikeelne versioon, kui su brauser eelistab eesti keelt. See kontroll toimub sinu brauseris; midagi ei saadeta kuhugi ning seda ei kasutata analüütikaks.",
             ],
           },
           {
