@@ -60,7 +60,7 @@ export const resume: ResumeData = {
       role: "Cross Product Technical Project Manager",
       location: "Estonia",
       industry: "Online Gambling & iGaming",
-      start: "2021-08",
+      start: "2021-04",
       end: "2022-07",
       highlights: [
         "Led medium to large iGaming projects",
