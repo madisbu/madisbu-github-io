@@ -9,7 +9,6 @@ const { t } = useI18n(Astro.url);
 ---
 
 <header class="resume-header">
-  <p class="eyebrow">{t.resume.eyebrow}</p>
   <h1>{name}</h1>
   <p class="title">{title}</p>
   <p class="intro">{intro}</p>
@@ -36,15 +35,6 @@ const { t } = useI18n(Astro.url);
     max-width: 42rem;
     margin: 0 auto 4rem;
     text-align: center;
-  }
-
-  .eyebrow {
-    margin: 0 0 0.5rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-text-light);
   }
 
   h1 {

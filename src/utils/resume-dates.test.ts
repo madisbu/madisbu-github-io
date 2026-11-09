@@ -3,7 +3,7 @@ import test from "node:test";
 import { formatDuration, formatYearMonth, initials } from "./resume-dates.ts";
 
 test("formats year-month and ongoing roles", () => {
-  assert.equal(formatYearMonth("2022-03"), "Mar 2022");
+  assert.equal(formatYearMonth("2022-03"), "March 2022");
   assert.equal(formatYearMonth(null), "Present");
 });
 

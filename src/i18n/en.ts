@@ -76,7 +76,7 @@ export const en = {
       "Meet Madis Burmeister, a Senior Technical Project Manager with a passion for UX and web design, and discover his goals and daily motivation.",
     portraitAlt: "Madis Burmeister",
     heading: "Who am I?",
-    bio: "Hi, I'm Madis, a father of two and a Senior Technical Project Manager. I've spent most of my career delivering IT projects, and I have a passion for UX and Web Design. I bring together creativity, technical expertise, and a user-centered mindset to create digital products that make people's lives easier.",
+    bio: "I'm Madis, a husband and father of two. Professionally, I'm a Technical Project Manager. I've spent most of my career delivering IT projects, and I'm also interested in UX and web design. I combine creativity, technical skills, and a user-centered mindset to create digital products that make people's lives easier.",
     tabsLabel: "About Madis",
     tabs: ["General", "Goals", "Frustrations"],
     general: {
@@ -101,11 +101,13 @@ export const en = {
       "Constant firefighting that leaves little room for focused, thoughtful work.",
     ],
     outro:
-      "When I'm not working, I love traveling, especially taking road trips that create long-lasting memories. Check out my full motivation package below…",
+      "When I'm not working, I love traveling. My family especially enjoys road trips that create lasting memories. Check out my full motivation package below…",
     motivation: { lead: "Madis's", highlight: "motivation", tail: "package" },
     // Parts marked `mark` are highlighted.
     instruction: [
-      { text: "Tap or hover", mark: true },
+      { text: "Tap", mark: true },
+      { text: " or ", mark: false },
+      { text: "hover", mark: true },
       { text: " over each image to discover what gives me energy every day.", mark: false },
     ],
     interests: [
@@ -130,13 +132,13 @@ export const en = {
       {
         id: "bbq",
         label: "BBQ",
-        description: "Something on the grill and a cold beer in hand. That's my kind of evening.",
+        description: "Nice Picanha on the BBQ and cold Corona in my hand. That's my type of summer evening.",
         alt: "BBQ - Image by Fábio Alves",
       },
       {
         id: "gaming",
         label: "Gaming",
-        description: "Gaming is my way to unwind. I lose track of time playing The Last of Us or Red Dead Redemption 2.",
+        description: "Video games are my way to unwind. I lose track of time when I play games like The Last of Us or GTA VI.",
         alt: "PlayStation - Image by Igor Karimov",
       },
     ],
@@ -159,11 +161,9 @@ export const en = {
     copyAddress: "Copy address",
     openIn: "Open in {name}",
     newTab: " (opens in a new tab)",
-    note: "Your idea doesn't need to be polished. That's what working together is for.",
-    cardTop: "FROM YOUR FIRST HELLO",
-    letterNote: "big ideas start small",
+    letterNote: "big work starts with a small idea",
     cardHeading: ["Let's make", "something happen."],
-    cardText: ["You bring the idea.", "We'll figure out the next step together."],
+    cardText: ["You bring the idea or the problem.", "We'll figure out the next step together."],
     cardBottom: "LESS OVERTHINKING, MORE HELLO.",
     goodToKnow: "A little good to know",
     reachOut: {
@@ -217,7 +217,6 @@ export const en = {
     title: "Madis Burmeister's CV",
     description: (name: string) =>
       `CV of ${name}, IT Project Manager with over a decade of experience: work history, education, skills, and tools.`,
-    eyebrow: "CV",
     viewResume: "View CV",
     newTab: "(opens in a new tab)",
     experience: "Experience",
@@ -235,7 +234,7 @@ export const en = {
     languages: "Languages",
     tools: "Tools",
     dates: {
-      monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       present: "Present",
       year: "yr",
       years: "yrs",

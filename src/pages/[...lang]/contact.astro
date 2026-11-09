@@ -56,13 +56,11 @@ const webmailLinks = [
               data-failed-message={c.copyFailed}
             ></span>
           </div>
-          <p class="email-note">{c.note}</p>
         </div>
       </div>
 
       <aside class="conversation-card" aria-labelledby="conversation-heading">
         <div class="card-top">
-          <span>{c.cardTop}</span>
           <svg class="spark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
             <path d="m20 2 1 13L33 7 25 19l13 1-13 2 8 11-12-8-1 13-2-13-11 8 8-12-13-1 13-2L7 7l12 8Z" />
           </svg>
@@ -193,14 +191,13 @@ const webmailLinks = [
   @media (prefers-reduced-motion: reduce) {
     .hand-underline::after { animation: none; background-size: 100% 100%; }
   }
-  .email-invitation { margin-top: 4rem; }
+  .email-invitation { margin-top: 5.5rem; }
   .email-label { margin: 0 0 0.5rem; letter-spacing: 0.015em; font-size: 0.8rem; }
   .email-link { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; padding: 0.4rem 0 0.65rem; border-bottom: 2px solid currentColor; color: var(--color-text-dark); font-size: clamp(1.1rem, 2.2vw, 1.65rem); font-weight: 600; }
   .email-link > span { min-width: 0; overflow-wrap: anywhere; }
   .email-link > svg { width: 1.6rem; height: 1.6rem; flex-shrink: 0; stroke: currentColor; stroke-width: 1.8; }
   .email-link:hover { color: var(--color-text); background: var(--contact-lime); }
   .email-link:focus-visible { outline: 3px solid var(--color-text-dark); outline-offset: 6px; background: var(--contact-lime); }
-  .email-note { max-width: 27rem; margin: 0.8rem 0 0; color: var(--color-text); font-size: 0.8rem; line-height: 1.7; }
   .email-options { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.6rem; margin-top: 0.9rem; font-size: 0.8rem; }
   .email-options-label { color: var(--color-text); }
   .email-option { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0.3rem 0.8rem; border: 1.5px solid var(--color-text-dark); border-radius: 0.375rem; background: transparent; color: var(--color-text-dark); font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; }
@@ -210,7 +207,7 @@ const webmailLinks = [
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
   .conversation-card { position: relative; min-width: 0; padding: 1.5rem 1.75rem; border: 1.5px solid var(--color-text-dark); border-radius: 3px; background: var(--contact-lime); box-shadow: 7px 7px 0 var(--color-text-dark); transform: rotate(2deg); }
-  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .card-top { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
   .spark { width: 2rem; height: 2rem; flex-shrink: 0; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
   .letter-art { position: relative; max-width: 21rem; margin: 0 auto 1.5rem; }
   .letter-art > svg { display: block; width: 100%; height: auto; }
@@ -218,7 +215,7 @@ const webmailLinks = [
   .art-paper { fill: var(--color-body); stroke: var(--color-text-dark); stroke-width: 2; stroke-linejoin: round; }
   .art-envelope { fill: var(--contact-lime); stroke: var(--color-text-dark); stroke-width: 2; stroke-linejoin: round; }
   .art-ink { stroke: var(--color-text-dark); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .letter-note { position: absolute; right: 0; bottom: -0.7rem; font-family: "Architects Daughter", cursive; font-size: 1rem; transform: rotate(-7deg); }
+  .letter-note { display: block; margin-top: 0.75rem; font-family: "Architects Daughter", cursive; font-size: 1rem; text-align: center; transform: rotate(-4deg); }
   .conversation-card h2 { font-size: clamp(2rem, 3vw, 2.6rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.025em; }
   .conversation-card > p { margin: 1rem 0 1.75rem; font-size: 0.9rem; line-height: 1.7; }
   .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 0.85rem; border-top: 1px solid currentColor; font-size: 0.6rem; }
@@ -227,7 +224,7 @@ const webmailLinks = [
   .good-to-know { margin-top: 5rem; padding-top: 1.75rem; border-top: 1px solid var(--color-border); }
   .good-to-know h2 { margin-bottom: 1.5rem; font-family: "Architects Daughter", cursive; font-size: 1.1rem; font-weight: 400; }
   .contact-details { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 2rem; margin: 0; }
-  dt { margin-bottom: 0.65rem; color: var(--color-text); font-size: 0.65rem; }
+  dt { margin-bottom: 1.1rem; color: var(--color-text); font-size: 0.65rem; }
   dd { margin: 0; font-size: 0.95rem; font-weight: 600; }
   dd.detail-note { margin-top: 0.25rem; color: var(--color-text); font-size: 0.8rem; font-weight: 400; }
 

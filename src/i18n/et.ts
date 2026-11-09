@@ -67,9 +67,9 @@ export const et: Dictionary = {
       "Tutvu Madis Burmeisteri UX- ja veebidisaini portfooliooga: kiired ja läbimõeldud veebitooted ning puhtad kasutajaliidesed, mille taustal on tehnilise projektijuhtimise kogemus Eestis.",
     heroAlt: "Madise portree",
     viewProjects: "VAATA PROJEKTE",
-    letsTalk: "KIRJUTA",
+    letsTalk: "KIRJUTA MULLE",
     greetings: ["Tere...", "Hello...", "你好...", "नमस्ते...", "Hola...", "مرحبا...", "Bonjour...", "নমস্কার...", "Olá..."],
-    name: "mina olen Madis!",
+    name: "olen Madis !",
     role: "UX insener",
     roleRest: "Eestist",
   },
@@ -79,7 +79,7 @@ export const et: Dictionary = {
       "Tutvu Madis Burmeisteriga, tehnilise valdkonna vanemprojektijuhi ning UX- ja veebidisaini entusiastiga, ning uuri tema eesmärke ja igapäevast motivatsiooni.",
     portraitAlt: "Madis Burmeister",
     heading: "Kes ma olen?",
-    bio: "Olen Madis. Kahe lapse isa. Ametialaselt IT projektijuht. Suurema osa oma profesionaalsest karjäärist olen ellu viinud erinevaid IT-alaseid projekte. Selle kõrvalt huvitab mind ka UX ja veebidisain. Ühendan loovuse, tehnilise oskusteabe ja kasutajakeskse mõtteviisi, et luua digitooteid, mis teevad inimeste elu lihtsamaks.",
+    bio: "Olen Madis. Abikaasa ja kahe lapse isa. Ametialaselt tehniline projektijuht. Suurema osa oma profesionaalsest karjäärist olen ellu viinud erinevaid IT-alaseid projekte. Selle kõrvalt huvitab mind ka UX ja veebidisain. Ühendan loovuse, tehnilised oskused ja kasutajakeskse mõtteviisi, et luua digitooteid, mis teevad inimeste elu lihtsamaks.",
     tabsLabel: "Madisest",
     tabs: ["Üldine", "Eesmärgid", "Frustratsioonid"],
     general: {
@@ -87,14 +87,14 @@ export const et: Dictionary = {
       location: "Asukoht:",
       locationValue: "Eesti",
       occupation: "Praegune amet:",
-      occupationValue: "IT Projektijuht",
+      occupationValue: "IT vanemprojektijuht",
       certification: "Sertifikaat:",
       certificationValue: "EQF 5. taseme UX-disain",
     },
     goals: [
       "Arendada oma tehnilisi, juhtimis- ja disainioskusi.",
       "Luua digitooteid, mis lahendavad inimeste jaoks päris probleeme.",
-      "Uurida, kuidas tehisintellekt (AI) saab muuta tooted ja projektide elluviimise nutikamaks.",
+      "Uurida, kuidas tehisintellekt (AI) aitab muuta tooteid ja projektide elluviimist nutikamaks.",
       "Olla eeskujuks oma lastele ja innustada neid olema uudishimulikud.",
     ],
     frustrations: [
@@ -104,14 +104,14 @@ export const et: Dictionary = {
       "Pidev tulekahjude kustutamine, mis jätab vähe ruumi keskendunud ja läbimõeldud tööle.",
     ],
     outro:
-      "Kui ma parajasti ei tööta, armastan reisida. Eriti meeldib mulle ja mu perele autoreisid, mis loovad püsivaid mälestusi. Vaata allpool minu täielikku motivatsioonipaketti…",
+      "Kui ma parajasti ei tööta, armastan reisida. Eriti meeldivad mu perele autoreisid, mis loovad püsivaid mälestusi. Vaata allpool minu täielikku motivatsioonipaketti…",
     motivation: { lead: "Madise", highlight: "motivatsiooni", tail: "pakett" },
     // Parts marked `mark` are highlighted.
     instruction: [
       { text: "Puuduta", mark: true },
       { text: " või ", mark: false },
-      { text: "liigu kursoriga", mark: true },
-      { text: " iga pildi kohale, et avastada, mis annab mulle igapäevase energia.", mark: false },
+      { text: "liigu", mark: true },
+      { text: " kursoriga pildi kohale, et avastada, mis annab mulle mu igapäevase energia.", mark: false },
     ],
     interests: [
       {
@@ -135,13 +135,13 @@ export const et: Dictionary = {
       {
         id: "bbq",
         label: "Grill",
-        description: "Midagi grillil ja külm õlu käes. See on minu õhtu.",
+        description: "Picanha grillil ja külm Corona käes. Just selline on minu tüüpi suvine õhtu.",
         alt: "Grill – pilt: Fábio Alves",
       },
       {
         id: "gaming",
         label: "Mängimine",
-        description: "Mängimine on minu viis lõõgastuda. Kaotan ajataju, kui mängin „The Last of Us“ või „Red Dead Redemption 2“.",
+        description: "Videomängud on minu lõõgastumisviis. Kaotan ajataju, kui mängin mänge nagu „The Last of Us“ või „GTA VI“.",
         alt: "PlayStation – pilt: Igor Karimov",
       },
     ],
@@ -149,7 +149,7 @@ export const et: Dictionary = {
       before: "Kas sul on mõttes ühine projekt või tekkis ",
       highlight: "küsimus",
       after: "?",
-      cta: "Kirjuta",
+      cta: "Kirjuta mulle",
     },
   },
   contact: {
@@ -164,11 +164,9 @@ export const et: Dictionary = {
     copyAddress: "Kopeeri aadress",
     openIn: "Ava {name}",
     newTab: " (avaneb uuel vahekaardil)",
-    note: "Sinu idee ei pea olema lihvitud. Just selleks ongi koostöö.",
-    cardTop: "ESIMESEST TERVITUSEST ALATES",
-    letterNote: "suur algab väikesest",
+    letterNote: "suur töö algab väikesest ideest",
     cardHeading: ["Teeme ära."],
-    cardText: ["Sina tood idee.", "Järgmise sammu mõtleme koos välja."],
+    cardText: ["Sina tood idee või probleemi.", "Järgmise sammu mõtleme koos välja."],
     cardBottom: "VÄHEM ÜLEMÕTLEMIST, ROHKEM TERVITUSI.",
     goodToKnow: "Hea teada",
     reachOut: {
@@ -224,7 +222,6 @@ export const et: Dictionary = {
     title: "Madis Burmeisteri CV",
     description: (name: string) =>
       `${name} CV: üle kümne aasta kogemusega IT-projektijuht. Töökogemus, haridus, oskused ja tööriistad.`,
-    eyebrow: "CV",
     viewResume: "Vaata CV-d",
     newTab: "(avaneb uuel vahekaardil)",
     experience: "Töökogemus",

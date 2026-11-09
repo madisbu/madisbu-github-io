@@ -10,7 +10,7 @@ export interface DateLabels {
 }
 
 const ENGLISH_LABELS: DateLabels = {
-  monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
   present: "Present",
   year: "yr",
   years: "yrs",

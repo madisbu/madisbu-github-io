@@ -69,7 +69,7 @@ const interestSizes: Record<string, number> = { travelling: 480, football: 720, 
 
     <section class="motivation" aria-labelledby="motivation-heading">
       <div class="motivation-intro">
-        <h2 id="motivation-heading">{a.motivation.lead}<br /><span>{a.motivation.highlight}</span><br />{a.motivation.tail}</h2>
+        <h2 id="motivation-heading">{a.motivation.lead}<span>{a.motivation.highlight}</span>{a.motivation.tail}</h2>
         <p id="interest-instruction">{a.instruction.map((part) => (part.mark ? <mark>{part.text}</mark> : part.text))}</p>
       </div>
       <div class="interests" aria-describedby="interest-instruction">
@@ -276,7 +276,8 @@ const interestSizes: Record<string, number> = { travelling: 480, football: 720, 
   }
   .motivation-intro { padding-top: 155px; text-align: center; }
   .motivation h2 { font-size: 65px; line-height: 1.1; }
-  .motivation h2 span { text-decoration: underline var(--about-lime) 5px; text-underline-offset: 8px; }
+  /* Centre the highlighted word on the column even when it is wider than the column. */
+  .motivation h2 span { display: block; width: max-content; margin-left: 50%; transform: translateX(-50%); text-decoration: underline var(--about-lime) 5px; text-underline-offset: 8px; }
   .motivation-intro > p { margin: 90px 25px 0; font-size: 24px; line-height: 1.45; }
   mark { background: var(--about-lime); color: #000; }
   .interests { position: relative; min-height: 1000px; }
