@@ -21,6 +21,12 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false }
   },
 
+  // The CV page used to live at /resume.
+  redirects: {
+    '/resume': '/cv',
+    '/et/resume': '/et/cv'
+  },
+
   devToolbar: {
     enabled: false
   },
@@ -30,7 +36,7 @@ export default defineConfig({
   },
 
   integrations: [sitemap({
-    filter: (page) => !/\/404\/?$/.test(new URL(page).pathname),
+    filter: (page) => !/\/(404|resume)\/?$/.test(new URL(page).pathname),
     i18n: {
       defaultLocale: 'en',
       locales: { en: 'en-US', et: 'et-EE' }

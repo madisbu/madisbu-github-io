@@ -1,11 +1,11 @@
-// Builds public/resume-et.pdf, the Estonian translation of public/resume.pdf.
+// Builds public/cv-et.pdf, the Estonian translation of public/cv.pdf.
 // Usage: npm run resume:et   (needs Chrome and network access for Google Fonts)
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 
 const photo = `data:image/jpeg;base64,${(await readFile(new URL("./resume-et/photo.jpg", import.meta.url))).toString("base64")}`;
-const output = fileURLToPath(new URL("../public/resume-et.pdf", import.meta.url));
+const output = fileURLToPath(new URL("../public/cv-et.pdf", import.meta.url));
 
 const links = {
   itil: "https://drive.google.com/file/d/1BAis0Eho3n3aYb5G-94VBHanZFBV5hBk/view?usp=sharing",

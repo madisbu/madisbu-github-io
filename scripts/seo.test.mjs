@@ -6,12 +6,23 @@ import test from "node:test";
 const output = new URL("../dist/", import.meta.url);
 const files = await readdir(output, { recursive: true });
 const htmlFiles = files.filter((file) => file.endsWith(".html"));
-const pages = await Promise.all(
+const allPages = await Promise.all(
   htmlFiles.map(async (file) => ({
     file,
     html: await readFile(new URL(file.split(path.sep).join("/"), output), "utf8"),
   })),
 );
+// Redirect stubs (e.g. the old /resume URLs) are not content pages.
+const pages = allPages.filter(({ html }) => !html.includes('http-equiv="refresh"'));
+
+test("the old resume URLs redirect to the CV pages", () => {
+  const redirects = Object.fromEntries(
+    allPages
+      .filter(({ html }) => html.includes('http-equiv="refresh"'))
+      .map(({ file, html }) => [file.split(path.sep).join("/"), html.match(/url=([^"]+)"/)?.[1]]),
+  );
+  assert.deepEqual(redirects, { "resume/index.html": "/cv", "et/resume/index.html": "/et/cv" });
+});
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
   assert.equal(pages.length, 17);
@@ -72,7 +83,7 @@ test("sitemap matches all indexable pages and excludes the error page", async ()
   assert.match(robots, /User-agent: \*\nAllow: \//);
 });
 
-const translated = ["", "about", "contact", "privacy", "projects", "resume"];
+const translated = ["", "about", "contact", "privacy", "projects", "cv"];
 const pageFor = (file) => pages.find((page) => page.file.split(path.sep).join("/") === file);
 const hreflangs = (html) =>
   Object.fromEntries([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
@@ -130,7 +141,7 @@ test("Estonian pages render translated, non-English interface text", () => {
       assert.equal(new URL(href).searchParams.get("hl"), language, `${file}: ${href} language`);
     }
   }
-  assert.match(pageFor("et/resume/index.html").html, /Töökogemus/);
+  assert.match(pageFor("et/cv/index.html").html, /Töökogemus/);
   assert.match(pageFor("et/privacy/index.html").html, /mabux\.language\.v1/);
   assert.match(pageFor("privacy/index.html").html, /mabux\.language\.v1/);
 });

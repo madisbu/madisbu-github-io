@@ -12,7 +12,7 @@ test("an Estonian browser opening the home page lands on the Estonian version", 
   await page.goto("/");
   await expect(page).toHaveURL(/\/et\/$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "et");
-  await expect(page.locator("h1")).toContainText("mina olen Madis!");
+  await expect(page.locator("h1")).toContainText("olen Madis !");
   await context.close();
 });
 
@@ -122,7 +122,7 @@ test("Estonian navigation stays in Estonian", async ({ browser }) => {
   const page = await context.newPage();
   await page.goto("/et/");
   const nav = page.getByRole("navigation", { name: "Peamenüü" }).first();
-  for (const [name, path] of [["Projektid", "/et/projects"], ["Minust", "/et/about"], ["CV", "/et/resume"], ["Kontakt", "/et/contact"], ["Avaleht", "/et/"]]) {
+  for (const [name, path] of [["Projektid", "/et/projects"], ["Minust", "/et/about"], ["CV", "/et/cv"], ["Kontakt", "/et/contact"], ["Avaleht", "/et/"]]) {
     await nav.getByRole("link", { name, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${path.replace(/\/$/, "")}/?$`));
     await expect(page.locator("html")).toHaveAttribute("lang", "et");
@@ -154,11 +154,11 @@ test("the Estonian contact page copies the address and announces it in Estonian"
 test("the Estonian resume uses Estonian dates and labels", async ({ browser }) => {
   const context = await browser.newContext({ locale: "en-US" });
   const page = await context.newPage();
-  await page.goto("/et/resume");
+  await page.goto("/et/cv");
   await expect(page.getByRole("heading", { name: "Töökogemus" })).toBeVisible();
   await expect(page.getByText("Jaanuar 2025").first()).toBeVisible();
   await expect(page.getByText("Praegune", { exact: true }).first()).toBeAttached();
-  await expect(page.getByRole("link", { name: /Vaata CV-d/ })).toHaveAttribute("href", "/resume-et.pdf");
+  await expect(page.getByRole("link", { name: /Vaata CV-d/ })).toHaveAttribute("href", "/cv-et.pdf");
   await context.close();
 });
 

@@ -185,7 +185,7 @@ and choices apply only to the current page; subsequent pages default to off.
 The tag disables advertising consent, Google signals, and ad personalization.
 It sends one explicit `page_view` per full-page navigation, strips query strings
 and fragments from page and referrer URLs, and records `contact_click` with only
-`contact_method: email` and `resume_download` with only `file_name: resume.pdf`.
+`contact_method: email` and `resume_download` with only `file_name: cv.pdf`.
 Email addresses and message contents are not event parameters. It does not add
 custom outbound-click tracking.
 

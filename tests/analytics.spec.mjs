@@ -88,19 +88,19 @@ test("accept once, sanitize URLs, record safe intent events, and withdraw", asyn
   expect(queue.filter((args) => args[1] === "contact_click")).toEqual([
     ["event", "contact_click", { contact_method: "email" }],
   ]);
-  await page.goto(`${production}/resume/`);
+  await page.goto(`${production}/cv/`);
   await expect.poll(() => requests.length).toBe(2);
   await expect(page.getByRole("dialog")).not.toBeVisible();
   expect((await commands(page)).filter((args) => args[1] === "page_view")).toHaveLength(1);
   await page.evaluate(() => {
-    const link = document.querySelector('a[href="/resume.pdf"]');
+    const link = document.querySelector('a[href="/cv.pdf"]');
     link.addEventListener("click", (event) => event.preventDefault());
     link.click();
     document.cookie = "_ga=test; Path=/; Secure";
     document.cookie = "_ga_WN68N9308Y=test; Domain=.mabux.me; Path=/; Secure";
   });
   expect((await commands(page)).filter((args) => args[1] === "resume_download")).toEqual([
-    ["event", "resume_download", { file_name: "resume.pdf" }],
+    ["event", "resume_download", { file_name: "cv.pdf" }],
   ]);
   await page.getByRole("button", { name: "Cookies", exact: true }).click();
   await Promise.all([
@@ -282,16 +282,16 @@ test("Estonian consent dialog keeps the same safe behavior in Estonian", async (
 
 test("the Estonian resume download is recorded with its own file name", async ({ context, page }) => {
   const requests = await mockProduction(context);
-  await page.goto(`${production}/et/resume/`);
+  await page.goto(`${production}/et/cv/`);
   await page.getByRole("button", { name: "Nõustu analüütikaga", exact: true }).click();
   await expect.poll(() => requests.length).toBe(1);
   await page.evaluate(() => {
-    const link = document.querySelector('a[href="/resume-et.pdf"]');
+    const link = document.querySelector('a[href="/cv-et.pdf"]');
     link.addEventListener("click", (event) => event.preventDefault());
     link.click();
   });
   expect((await commands(page)).filter((args) => args[1] === "resume_download")).toEqual([
-    ["event", "resume_download", { file_name: "resume-et.pdf" }],
+    ["event", "resume_download", { file_name: "cv-et.pdf" }],
   ]);
 });
 

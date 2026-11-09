@@ -8,7 +8,7 @@ export const defaultLocale: Locale = "en";
 export const dictionaries: Record<Locale, Dictionary> = { en, et };
 
 // Pages that exist in every locale. Anything else is English-only and is linked unprefixed.
-const translatedPaths = new Set(["/", "/projects", "/about", "/resume", "/contact", "/privacy"]);
+const translatedPaths = new Set(["/", "/projects", "/about", "/cv", "/contact", "/privacy"]);
 
 export function hasTranslation(path: string): boolean {
   return translatedPaths.has(path);

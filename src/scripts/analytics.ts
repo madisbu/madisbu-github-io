@@ -167,7 +167,7 @@ if (root && dialog && accept) {
     const url = new URL(link.href);
     if (url.protocol === "mailto:") {
       window.gtag?.("event", "contact_click", { contact_method: "email" });
-    } else if (url.origin === location.origin && (url.pathname === "/resume.pdf" || url.pathname === "/resume-et.pdf")) {
+    } else if (url.origin === location.origin && (url.pathname === "/cv.pdf" || url.pathname === "/cv-et.pdf")) {
       window.gtag?.("event", "resume_download", { file_name: url.pathname.slice(1) });
     }
   });
