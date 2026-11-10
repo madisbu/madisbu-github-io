@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
+import sharp from "sharp";
 
 const output = new URL("../dist/", import.meta.url);
 const files = await readdir(output, { recursive: true });
@@ -25,7 +26,7 @@ test("the old resume URLs redirect to the CV pages", () => {
 });
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
-  assert.equal(pages.length, 17);
+  assert.equal(pages.length, 18);
   const titles = new Set();
   const descriptions = new Set();
   for (const { file, html } of pages) {
@@ -83,7 +84,7 @@ test("sitemap matches all indexable pages and excludes the error page", async ()
   assert.match(robots, /User-agent: \*\nAllow: \//);
 });
 
-const translated = ["", "about", "contact", "privacy", "projects", "cv"];
+const translated = ["", "about", "contact", "privacy", "projects", "projects/car-rental-app-redesign", "cv"];
 const pageFor = (file) => pages.find((page) => page.file.split(path.sep).join("/") === file);
 const hreflangs = (html) =>
   Object.fromEntries([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
@@ -112,11 +113,116 @@ test("every translated page exists in English and Estonian with reciprocal langu
 });
 
 test("English-only pages do not advertise a language alternate", () => {
-  for (const file of ["404.html", "projects/car-rental-app-redesign/index.html"]) {
+  for (const file of ["404.html", "projects/multistep-order-form/index.html"]) {
     const { html } = pageFor(file);
     assert.doesNotMatch(html, /hreflang="et" href=/, file);
     assert.match(html, /<html lang="en">/, file);
   }
+});
+
+test("the car rental case study keeps localized images and enlargement sources separate", async () => {
+  const en = pageFor("projects/car-rental-app-redesign/index.html").html;
+  const et = pageFor("et/projects/car-rental-app-redesign/index.html").html;
+  const imageBase = "/images/projects/car-rental-app-redesign/";
+  const images = [
+    ["research/benchmarking.webp", "research/benchmarking.et.png"],
+    ["research/survey.png", "research/survey.et.png"],
+    ["sketches/sketches.png", "sketches/sketches.et.png", "sketches/sketches-full.png", "sketches/sketches-full.et.png"],
+    ...["main", "search", "details", "extras", "payment"].map((name) => [
+      `design/${name}_visual_comparison.png`,
+      `design/${name}_visual_comparison.et.png`,
+    ]),
+  ];
+
+  assert.ok(en.includes("This solo project explored how a car rental app could make booking more approachable."));
+  assert.ok(et.includes("Selles iseseisvas projektis uurisin, kuidas muuta mobiilirakenduse kaudu rendi auto broneerimine lihtsamaks. Aitasin klientidel sõidukeid võrrelda ja kuludest paremini aru saada. Samuti soovisin auto broneerimist saavutada väiksema arvu ja selgemate sammudega."));
+  assert.match(et, /class="case-study-discipline"[^>]*>UX\/UI uuring<\/p>/);
+  assert.match(et, /<p[^>]*>See projekt tuletas mulle meelde, et sujuv broneerimiskogemus eeldab selgust igal sammul, eriti hindade ja võõraste terminite puhul\. Ideede testimine kasutajatega aitas mul oma eeldustes kahelda ning muuta nende kõhklused lihtsamaks ja kindlamaks kasutuskogemuseks\.<\/p>/);
+  assert.ok(en.includes("Tap to see the pain point &amp; the fix"));
+  assert.ok(!en.includes("Tap to see the pain point &amp;amp; the fix"));
+  assert.ok(et.includes("Vaata probleemi ja lahendust"));
+  assert.match(et, /<span class="journey-card-title"[^>]*>Kaitse<\/span>/);
+  assert.match(et, /<span class="journey-card-title"[^>]*>Tellimus<\/span>/);
+
+  for (const [englishImage, estonianImage, englishZoom = englishImage, estonianZoom = estonianImage] of images) {
+    const englishSrc = `${imageBase}${englishImage}`;
+    const estonianSrc = `${imageBase}${estonianImage}`;
+    for (const [html, expected, other] of [
+      [en, englishSrc, estonianSrc],
+      [et, estonianSrc, englishSrc],
+    ]) {
+      assert.ok(html.includes(` src="${expected}"`), `missing image ${expected}`);
+      assert.ok(!html.includes(` src="${other}"`), `unexpected image ${other}`);
+      if (englishImage.startsWith("design/") || englishImage.startsWith("sketches/")) {
+        const triggers = [...html.matchAll(/<button\b[^>]*data-case-study-media-trigger[^>]*>[\s\S]*?<\/button>/g)];
+        assert.ok(
+          triggers.some(([trigger]) =>
+            trigger.includes(`data-zoom-src="${imageBase}${html === en ? englishZoom : estonianZoom}"`)
+            && trigger.includes(` src="${expected}"`)),
+          `missing matching enlargement source for ${expected}`,
+        );
+      }
+    }
+
+    const [englishData, estonianData] = await Promise.all([
+      readFile(new URL(englishSrc.slice(1), output)),
+      readFile(new URL(estonianSrc.slice(1), output)),
+    ]);
+    assert.ok(!englishData.equals(estonianData), `${englishImage} must have a separate Estonian version`);
+    const [englishSize, estonianSize] = await Promise.all([
+      sharp(englishData).metadata(),
+      sharp(estonianData).metadata(),
+    ]);
+    assert.deepEqual(
+      [estonianSize.width, estonianSize.height],
+      [englishSize.width, englishSize.height],
+      `${estonianImage} dimensions must match the original`,
+    );
+  }
+
+  const priceRegion = { left: 945, top: 392, width: 42, height: 69 };
+  const detailsImage = async (suffix) => sharp(await readFile(new URL(`${imageBase.slice(1)}design/details_visual_comparison${suffix}.png`, output)))
+    .extract(priceRegion)
+    .ensureAlpha()
+    .raw()
+    .toBuffer();
+  const [englishPrices, estonianPrices] = await Promise.all([detailsImage(""), detailsImage(".et")]);
+  assert.ok(englishPrices.equals(estonianPrices), "the original vehicle detail prices must remain visible");
+
+  for (const [name, corners] of [
+    ["extras", [[1019, 496], [1052, 496], [1019, 513], [1052, 513]]],
+    ["payment", [[1018, 500], [1052, 500], [1018, 517], [1052, 517]]],
+  ]) {
+    const buttonPixel = async (suffix, [left, top]) => sharp(
+      await readFile(new URL(`${imageBase.slice(1)}design/${name}_visual_comparison${suffix}.png`, output)),
+    ).extract({ left, top, width: 1, height: 1 }).raw().toBuffer();
+    for (const point of corners) {
+      const [englishPixel, estonianPixel] = await Promise.all([
+        buttonPixel("", point),
+        buttonPixel(".et", point),
+      ]);
+      assert.ok(englishPixel.equals(estonianPixel), `${name} button corner ${point.join(",")} must remain intact`);
+    }
+  }
+
+  const [englishSketchZoom, estonianSketchZoom] = await Promise.all([
+    readFile(new URL("images/projects/car-rental-app-redesign/sketches/sketches-full.png", output)),
+    readFile(new URL("images/projects/car-rental-app-redesign/sketches/sketches-full.et.png", output)),
+  ]);
+  assert.ok(!englishSketchZoom.equals(estonianSketchZoom), "the enlarged sketches image must have a separate Estonian version");
+  const [englishZoomSize, estonianZoomSize] = await Promise.all([
+    sharp(englishSketchZoom).metadata(),
+    sharp(estonianSketchZoom).metadata(),
+  ]);
+  assert.deepEqual(
+    [estonianZoomSize.width, estonianZoomSize.height],
+    [englishZoomSize.width, englishZoomSize.height],
+  );
+});
+
+test("English case-study website links retain their accessibility labels", () => {
+  const html = pageFor("projects/waste-disposal-website/index.html").html;
+  assert.ok(html.includes('aria-label="Prahiveod website, opens in a new tab"'));
 });
 
 test("only the English home page redirects by browser language", () => {
@@ -151,7 +257,7 @@ test("the error page is translated and the English one hands /et/ paths to it", 
   const et = pageFor("et/404/index.html").html;
   assert.match(en, /<html lang="en">/);
   assert.match(et, /<html lang="et">/);
-  assert.match(et, /Näib, et keerasid valesti\./);
+  assert.match(et, /Näib, et oled eksinud\./);
   assert.match(en, /location\.replace\(target\)/);
   assert.match(en, /const target = "\/et\/404\/"/);
   assert.doesNotMatch(et, /location\.replace\(target\)/);

@@ -3,11 +3,13 @@ import type { CaseStudyJourney } from "../types/case-study";
 
 export interface Props {
   journey: CaseStudyJourney;
+  locale?: "en" | "et";
 }
 
-const { journey } = Astro.props;
+const { journey, locale = "en" } = Astro.props;
 const startLabel = journey.startLabel ?? "Start";
 const finishLabel = journey.finishLabel ?? "Finish";
+const isEstonian = locale === "et";
 ---
 
 <div class="journey-map" data-journey-map>
@@ -100,19 +102,19 @@ const finishLabel = journey.finishLabel ?? "Finish";
                 )}
 
                 {node.sketch && node.final && (
-                  <span class="journey-view-toggle" data-journey-view-toggle role="group" aria-label={`${node.title} preview mode`}>
+                  <span class="journey-view-toggle" data-journey-view-toggle role="group" aria-label={`${node.title} ${isEstonian ? "eelvaate režiim" : "preview mode"}`}>
                     <button type="button" data-journey-view-btn="sketch" aria-pressed="true">
-                      Sketch
+                      {isEstonian ? "Visand" : "Sketch"}
                     </button>
                     <button type="button" data-journey-view-btn="final" aria-pressed="false">
-                      Final
+                      {isEstonian ? "Lõplik" : "Final"}
                     </button>
                   </span>
                 )}
 
                 {(node.painPoint || node.solution) && (
                   <span class="journey-card-hint" aria-hidden="true">
-                    Tap to see the pain point &amp; the fix
+                    {isEstonian ? "Vaata probleemi ja lahendust" : "Tap to see the pain point & the fix"}
                   </span>
                 )}
               </div>

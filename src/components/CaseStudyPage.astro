@@ -4,12 +4,15 @@ import JourneyMap from "./JourneyMap.astro";
 import SitemapTree from "./SitemapTree.astro";
 import CaseStudyMediaTabs from "./CaseStudyMediaTabs.astro";
 import type { ProjectCaseStudy, ProjectDiscipline } from "../types/case-study";
+import { useI18n } from "../i18n/astro";
 
 export interface Props {
   project: ProjectCaseStudy;
 }
 
 const { project } = Astro.props;
+const { locale, href } = useI18n(Astro.url);
+const isEstonian = locale === "et";
 
 const disciplineDetails: Record<
   ProjectDiscipline,
@@ -30,6 +33,58 @@ const disciplineDetails: Record<
 };
 
 const discipline = disciplineDetails[project.discipline];
+const disciplineLabel = isEstonian
+  ? {
+      "ux-ui": "UX/UI uuring",
+      "web-design": "Veebidisaini juhtumiuuring",
+      "product-development": "Tootearenduse juhtumiuuring",
+    }[project.discipline]
+  : discipline.caseStudyLabel;
+const labels = isEstonian
+  ? {
+      allProjects: "Kõik projektid",
+      nextProject: "Järgmine projekt",
+      sections: "Juhtumiuuringu jaotised",
+      projectJourney: "Projekti teekond",
+      progress: "Juhtumiuuringu edenemine",
+      showFirstReview: "Näita esimest arvustust",
+      customerFeedback: "Klientide tagasiside",
+      stars: (rating: number) => `${rating} tärni viiest`,
+      enlargeImage: "Suurenda pilti:",
+      start: "Algus",
+      now: "Praegu",
+      showTasks: (title: string) => `Näita ülesandeid: ${title}`,
+      viewTasks: "Vaata ülesandeid",
+      explorePrototype: "Tutvu interaktiivse prototüübi täieliku broneerimisteekonnaga.",
+      openPrototype: "Ava interaktiivne prototüüp",
+      moreProjects: "Veel projekte",
+      previousProject: "Eelmine projekt",
+      enlargedImage: "Suurendatud juhtumiuuringu pilt",
+      closeImage: "Sulge suurendatud pilt",
+      websiteOpensNewTab: "veebileht, avaneb uuel vahelehel",
+    }
+  : {
+      allProjects: "All projects",
+      nextProject: "Next project",
+      sections: "Case study sections",
+      projectJourney: "Project journey",
+      progress: "Case study progress",
+      showFirstReview: "Show first review",
+      customerFeedback: "Customer feedback",
+      stars: (rating: number) => `${rating} out of 5 stars`,
+      enlargeImage: "Enlarge image:",
+      start: "Start",
+      now: "Now",
+      showTasks: (title: string) => `Show tasks for ${title}`,
+      viewTasks: "View tasks",
+      explorePrototype: "Explore the complete booking flow in the interactive prototype.",
+      openPrototype: "Open interactive prototype",
+      moreProjects: "More projects",
+      previousProject: "Previous project",
+      enlargedImage: "Enlarged case study image",
+      closeImage: "Close enlarged image",
+      websiteOpensNewTab: "website, opens in a new tab",
+    };
 const embedOrigins = [
   ...new Set(
     project.sections
@@ -100,20 +155,21 @@ const splitLinkedText = (
   <article
     class="case-study"
     data-discipline={project.discipline}
+    data-locale={locale}
     style={`--case-study-accent: ${discipline.accent}`}
   >
     <header class="case-study-hero" data-case-study-hero>
       <div class="case-study-hero-shell">
         <div class="case-study-hero-topbar">
-          <a href="/projects" class="case-study-back">
+          <a href={href("/projects")} class="case-study-back">
             <svg viewBox="0 0 16 16" aria-hidden="true">
               <path d="M13 8H3m4-4L3 8l4 4"></path>
             </svg>
-            All projects
+            {labels.allProjects}
           </a>
 
           <a href={project.nextProject.href} class="case-study-next">
-            <span>Next project</span>
+            <span>{labels.nextProject}</span>
             <strong>{project.nextProject.label}</strong>
             <svg viewBox="0 0 16 16" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4"></path>
@@ -124,7 +180,7 @@ const splitLinkedText = (
         <div class="case-study-hero-grid">
           <div class="case-study-heading">
             <h1>{project.title}</h1>
-            <p class="case-study-discipline">{discipline.caseStudyLabel}</p>
+            <p class="case-study-discipline">{disciplineLabel}</p>
           </div>
 
           <figure class="case-study-cover">
@@ -160,18 +216,18 @@ const splitLinkedText = (
       <aside class="case-study-nav-wrap">
         <nav
           class="case-study-nav"
-          aria-label="Case study sections"
+          aria-label={labels.sections}
           style={`--case-study-progress: ${1 / project.sections.length}`}
         >
           <div class="case-study-nav-heading">
-            <span>Project journey</span>
+            <span>{labels.projectJourney}</span>
             <output data-case-study-progress-output>{Math.round(100 / project.sections.length)}%</output>
           </div>
           <div class="case-study-nav-body">
             <div
               class="case-study-progress"
               role="progressbar"
-              aria-label="Case study progress"
+              aria-label={labels.progress}
               aria-valuemin="0"
               aria-valuemax="100"
               aria-valuenow={Math.round(100 / project.sections.length)}
@@ -231,7 +287,7 @@ const splitLinkedText = (
                                 href={linkedPart.link.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label={`${linkedPart.text} website, opens in a new tab`}
+                                aria-label={`${linkedPart.text} ${labels.websiteOpensNewTab}`}
                               >
                                 {linkedPart.text}
                                 <span class="case-study-inline-link-arrow" aria-hidden="true">↗</span>
@@ -300,7 +356,7 @@ const splitLinkedText = (
                   data-feedback-next
                   hidden
                 >
-                  <span data-feedback-next-label>Show first review</span>
+                  <span data-feedback-next-label>{labels.showFirstReview}</span>
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 4v15m-6-6 6 6 6-6"></path>
                   </svg>
@@ -308,7 +364,7 @@ const splitLinkedText = (
                 <div
                   id={`${section.id}-feedback`}
                   class="case-study-feedback"
-                  aria-label="Customer feedback"
+                  aria-label={labels.customerFeedback}
                   aria-live="polite"
                   data-feedback
                 >
@@ -340,7 +396,7 @@ const splitLinkedText = (
                           <div
                             class="case-study-review-rating"
                             role="img"
-                            aria-label={`${review.rating} out of 5 stars`}
+                            aria-label={labels.stars(review.rating)}
                           >
                             {Array.from({ length: 5 }).map((_, index) => (
                               <svg
@@ -401,7 +457,7 @@ const splitLinkedText = (
                         class="case-study-media-trigger"
                         data-case-study-media-trigger
                         data-zoom-src={section.media.zoomSrc ?? section.media.src}
-                        aria-label={`Enlarge image: ${section.media.alt}`}
+                        aria-label={`${labels.enlargeImage} ${section.media.alt}`}
                       >
                         <img
                           class:list={{ "is-transparent": section.media.transparentBackground }}
@@ -451,7 +507,7 @@ const splitLinkedText = (
 
               {section.closing && <p class="case-study-section-closing">{section.closing}</p>}
 
-              {section.journey && <JourneyMap journey={section.journey} />}
+              {section.journey && <JourneyMap journey={section.journey} locale={locale} />}
 
               {section.id === "process" && section.steps && section.steps.length > 0 && (
                 <>
@@ -459,8 +515,8 @@ const splitLinkedText = (
                     A multi-phase, highly iterative web development workflow continuously refined across project lifecycles through close collaboration with clients and myself.
                   </p>
                   <div class="case-study-journey-wrap">
-                    <span class="case-study-journey-label case-study-journey-label--start" aria-hidden="true">Start</span>
-                    <span class="case-study-journey-label case-study-journey-label--end" aria-hidden="true">Now</span>
+                    <span class="case-study-journey-label case-study-journey-label--start" aria-hidden="true">{labels.start}</span>
+                    <span class="case-study-journey-label case-study-journey-label--end" aria-hidden="true">{labels.now}</span>
                     <ol class="case-study-journey" style={`--journey-steps: ${section.steps.length}`}>
                     {section.steps.map((step, stepIndex) => (
                       <li class="case-study-journey-item" style={`--journey-col: ${stepIndex + 1}`}>
@@ -469,7 +525,7 @@ const splitLinkedText = (
                           <button
                             class="case-study-journey-number"
                             type="button"
-                            aria-label={`Show tasks for ${step.title}`}
+                            aria-label={labels.showTasks(step.title)}
                             aria-controls={`${section.id}-step-${stepIndex + 1}-tasks`}
                             aria-expanded="false"
                             data-journey-node
@@ -491,7 +547,7 @@ const splitLinkedText = (
                               data-journey-tasks
                             >
                               <summary>
-                                <span>View tasks</span>
+                                <span>{labels.viewTasks}</span>
                                 <svg viewBox="0 0 16 16" aria-hidden="true">
                                   <path d="M4 6l4 4 4-4"></path>
                                 </svg>
@@ -621,7 +677,7 @@ const splitLinkedText = (
                     class="case-study-media-trigger"
                     data-case-study-media-trigger
                     data-zoom-src={section.media.zoomSrc ?? section.media.src}
-                    aria-label={`Enlarge image: ${section.media.alt}`}
+                    aria-label={`${labels.enlargeImage} ${section.media.alt}`}
                   >
                     <img
                       class:list={{ "is-transparent": section.media.transparentBackground }}
@@ -652,7 +708,7 @@ const splitLinkedText = (
                         class="case-study-media-trigger"
                         data-case-study-media-trigger
                         data-zoom-src={media.zoomSrc ?? media.src}
-                        aria-label={`Enlarge image: ${media.alt}`}
+                        aria-label={`${labels.enlargeImage} ${media.alt}`}
                       >
                         <img
                           class:list={{ "is-transparent": media.transparentBackground }}
@@ -685,13 +741,13 @@ const splitLinkedText = (
                         decoding="async"
                       />
                     )}
-                    <p>Explore the complete booking flow in the interactive prototype.</p>
+                    <p>{labels.explorePrototype}</p>
                     <a
                       href={section.embed.src}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Open interactive prototype
+                      {labels.openPrototype}
                       <svg viewBox="0 0 16 16" aria-hidden="true">
                         <path d="M6 3h7v7M13 3 5 11M3 6v7h7"></path>
                       </svg>
@@ -724,7 +780,7 @@ const splitLinkedText = (
     </div>
 
     <footer class="case-study-footer">
-      <nav class="case-study-project-nav" aria-label="More projects">
+      <nav class="case-study-project-nav" aria-label={labels.moreProjects}>
         <a
           class="case-study-project-link case-study-project-link--previous"
           href={project.previousProject.href}
@@ -733,7 +789,7 @@ const splitLinkedText = (
             <path d="M13 8H3m4-4L3 8l4 4"></path>
           </svg>
           <span>
-            <small>Previous project</small>
+            <small>{labels.previousProject}</small>
             <strong>{project.previousProject.label}</strong>
           </span>
         </a>
@@ -742,7 +798,7 @@ const splitLinkedText = (
           href={project.nextProject.href}
         >
           <span>
-            <small>Next project</small>
+            <small>{labels.nextProject}</small>
             <strong>{project.nextProject.label}</strong>
           </span>
           <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -758,7 +814,7 @@ const splitLinkedText = (
     data-case-study-lightbox
     role="dialog"
     aria-modal="true"
-    aria-label="Enlarged case study image"
+    aria-label={labels.enlargedImage}
     tabindex="-1"
     hidden
   >
@@ -766,7 +822,7 @@ const splitLinkedText = (
       type="button"
       class="case-study-lightbox-close"
       data-case-study-lightbox-close
-      aria-label="Close enlarged image"
+      aria-label={labels.closeImage}
     >
       <svg viewBox="0 0 16 16" aria-hidden="true">
         <path d="M3 3l10 10M13 3L3 13"></path>
@@ -3430,6 +3486,7 @@ const splitLinkedText = (
     const reviews = feedback.querySelector<HTMLElement>(".case-study-reviews");
     const steps = Array.from(feedback.querySelectorAll<HTMLElement>("[data-feedback-step]"));
     const label = button.querySelector<HTMLElement>("[data-feedback-next-label]");
+    const isEstonian = document.querySelector<HTMLElement>("[data-locale]")?.dataset.locale === "et";
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (steps.length === 0) return;
@@ -3460,7 +3517,7 @@ const splitLinkedText = (
       if (currentStep === steps.length) {
         button.hidden = true;
       } else if (label) {
-        label.textContent = "Show next review";
+        label.textContent = isEstonian ? "Näita järgmist arvustust" : "Show next review";
       }
 
       step.scrollIntoView({
