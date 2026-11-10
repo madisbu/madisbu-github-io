@@ -35,8 +35,8 @@ const disciplineDetails: Record<
 const discipline = disciplineDetails[project.discipline];
 const disciplineLabel = isEstonian
   ? {
-      "ux-ui": "UX/UI uuring",
-      "web-design": "Veebidisaini juhtumiuuring",
+      "ux-ui": "UX/UI",
+      "web-design": "Veebidisain",
       "product-development": "Tootearenduse juhtumiuuring",
     }[project.discipline]
   : discipline.caseStudyLabel;
@@ -512,7 +512,9 @@ const splitLinkedText = (
               {section.id === "process" && section.steps && section.steps.length > 0 && (
                 <>
                   <p class="case-study-journey-intro">
-                    A multi-phase, highly iterative web development workflow continuously refined across project lifecycles through close collaboration with clients and myself.
+                    {isEstonian
+                      ? "Veebiarenduse mitmeetapiline töövoog arenes projekti jooksul pidevalt edasi tihedas koostöös kliendiga."
+                      : "A multi-phase, highly iterative web development workflow continuously refined across project lifecycles through close collaboration with clients and myself."}
                   </p>
                   <div class="case-study-journey-wrap">
                     <span class="case-study-journey-label case-study-journey-label--start" aria-hidden="true">{labels.start}</span>

@@ -26,7 +26,7 @@ test("the old resume URLs redirect to the CV pages", () => {
 });
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
-  assert.equal(pages.length, 18);
+  assert.equal(pages.length, 19);
   const titles = new Set();
   const descriptions = new Set();
   for (const { file, html } of pages) {
@@ -136,7 +136,7 @@ test("the car rental case study keeps localized images and enlargement sources s
 
   assert.ok(en.includes("This solo project explored how a car rental app could make booking more approachable."));
   assert.ok(et.includes("Selles iseseisvas projektis uurisin, kuidas muuta mobiilirakenduse kaudu rendi auto broneerimine lihtsamaks. Aitasin klientidel sõidukeid võrrelda ja kuludest paremini aru saada. Samuti soovisin auto broneerimist saavutada väiksema arvu ja selgemate sammudega."));
-  assert.match(et, /class="case-study-discipline"[^>]*>UX\/UI uuring<\/p>/);
+  assert.match(et, /class="case-study-discipline"[^>]*>UX\/UI<\/p>/);
   assert.match(et, /<p[^>]*>See projekt tuletas mulle meelde, et sujuv broneerimiskogemus eeldab selgust igal sammul, eriti hindade ja võõraste terminite puhul\. Ideede testimine kasutajatega aitas mul oma eeldustes kahelda ning muuta nende kõhklused lihtsamaks ja kindlamaks kasutuskogemuseks\.<\/p>/);
   assert.ok(en.includes("Tap to see the pain point &amp; the fix"));
   assert.ok(!en.includes("Tap to see the pain point &amp;amp; the fix"));
@@ -225,6 +225,64 @@ test("English case-study website links retain their accessibility labels", () =>
   assert.ok(html.includes('aria-label="Prahiveod website, opens in a new tab"'));
 });
 
+test("the waste disposal case study is translated with localized images while English keeps its originals", async () => {
+  const en = pageFor("projects/waste-disposal-website/index.html").html;
+  const et = pageFor("et/projects/waste-disposal-website/index.html").html;
+  const imageBase = "/images/projects/waste-disposal-website/";
+  const images = [
+    "cover",
+    "focus-areas-waste",
+    "sketch-home",
+    "sketch-services",
+    "sketch-contact",
+    "waste-visuals-transparent",
+    "waste-visuals",
+  ];
+
+  assert.ok(en.includes("A clear service website and custom order form designed to simplify waste collection requests."));
+  assert.ok(et.includes("Jäätmekäitluse veebileht"));
+  assert.ok(et.includes("Selge teenuseveeb ja kohandatud tellimisvorm, mis lihtsustavad jäätmeveo tellimist."));
+  assert.ok(et.includes("Veebidisainer ja -arendaja"));
+  assert.ok(et.includes("Selge sõnastus ja läbimõeldud visuaalne hierarhia"));
+  assert.match(et, /class="case-study-discipline"[^>]*>Veebidisain<\/p>/);
+  assert.ok(et.includes("Veebidisain · Wix migratsioon"));
+  assert.ok(et.includes("nagu näiteks jäätmete liik, kogus, asukoht, aeg ning nende ligipääs."));
+  assert.ok(et.includes("Projekti peamine eesmärk oli luua seni puudunud veebileht ja muuta jäätmeveo tellimine tõhusamaks."));
+  assert.ok(et.includes("vähestel klientidel puudusid teadmised teenusepakkujast."));
+  for (const label of ["Erilahendus • 1. etapp", "Migratsioon • 3. etapp", "Projekti skoop", "Materjalide loomine", "Tellimusvormi disain", "Wix migreerimine", "Tellimusvormi ümberseadistamine", "Lammutus"]) {
+    assert.ok(et.includes(label), `missing ${label}`);
+  }
+  assert.match(et, /<h3[^>]*>Lähteülesanne<\/h3>/);
+  assert.match(et, /<p[^>]*>„<a class="case-study-inline-link"/);
+  assert.doesNotMatch(et, /Kohandatud lahendus|Ületoomine|Lähteülesanne ja disain|Ettevõtte „/);
+  assert.ok(et.includes("Juhendatud jäätmeveo tellimus"));
+  assert.ok(et.includes("Tellimusvormi disain"));
+  assert.ok(et.includes("Veebiarenduse mitmeetapiline töövoog"));
+  assert.ok(!et.includes("A multi-phase, highly iterative web development workflow"));
+  assert.ok(et.includes('href="https://prahiveod.ee"'));
+  assert.ok(et.includes("suurendas teenuste tellimusi ja vähendas samal ajal sissetulevaid tugikõnesid ligikaudu 15%"));
+  assert.doesNotMatch(et, /<h[12][^>]*>(Overview|Problem|Workflow|Sitemap|Sketches|Visuals|Reflections)<\/h[12]>/);
+
+  for (const name of images) {
+    const englishSrc = `${imageBase}${name}.webp`;
+    const estonianSrc = `${imageBase}${name}.et.webp`;
+    if (name !== "waste-visuals") {
+      assert.ok(en.includes(` src="${englishSrc}"`) && !en.includes(estonianSrc), `English route must keep ${englishSrc}`);
+      assert.ok(et.includes(` src="${estonianSrc}"`) && !et.includes(` src="${englishSrc}"`), `Estonian route must use ${estonianSrc}`);
+    }
+    const [englishData, estonianData] = await Promise.all([
+      readFile(new URL(englishSrc.slice(1), output)),
+      readFile(new URL(estonianSrc.slice(1), output)),
+    ]);
+    assert.ok(!englishData.equals(estonianData), `${name} must have a separate Estonian version`);
+    const [englishSize, estonianSize] = await Promise.all([sharp(englishData).metadata(), sharp(estonianData).metadata()]);
+    assert.deepEqual([estonianSize.width, estonianSize.height], [englishSize.width, englishSize.height], `${name} dimensions`);
+  }
+
+  assert.ok(en.includes(`data-zoom-src="${imageBase}waste-visuals.webp"`));
+  assert.ok(et.includes(`data-zoom-src="${imageBase}waste-visuals.et.webp"`));
+  assert.ok(!et.includes(`data-zoom-src="${imageBase}waste-visuals.webp"`));
+});
 test("only the English home page redirects by browser language", () => {
   const redirect = /localStorage\.getItem\(key\)/;
   assert.match(pageFor("index.html").html, redirect);

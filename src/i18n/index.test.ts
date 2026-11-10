@@ -17,6 +17,7 @@ test("localized paths keep English unprefixed and fall back for untranslated pag
   assert.equal(localizedPath("et", "/"), "/et/");
   assert.equal(localizedPath("et", "/about"), "/et/about");
   assert.equal(localizedPath("et", "/projects/car-rental-app-redesign"), "/et/projects/car-rental-app-redesign");
+  assert.equal(localizedPath("et", "/projects/waste-disposal-website"), "/et/projects/waste-disposal-website");
   assert.equal(localizedPath("et", "/projects/multistep-order-form"), "/projects/multistep-order-form");
   assert.equal(localizedPath("et", "/about", "/site/"), "/site/et/about");
 });
@@ -28,6 +29,8 @@ test("the language switcher links to the closest translated page", () => {
   assert.equal(alternatePath("et", "/projects/multistep-order-form/"), "/et/projects");
   assert.equal(alternatePath("et", "/projects/car-rental-app-redesign/"), "/et/projects/car-rental-app-redesign");
   assert.equal(alternatePath("en", "/et/projects/car-rental-app-redesign/"), "/projects/car-rental-app-redesign");
+  assert.equal(alternatePath("et", "/projects/waste-disposal-website/"), "/et/projects/waste-disposal-website");
+  assert.equal(alternatePath("en", "/et/projects/waste-disposal-website/"), "/projects/waste-disposal-website");
   assert.equal(alternatePath("et", "/404/"), "/et/");
 });
 
