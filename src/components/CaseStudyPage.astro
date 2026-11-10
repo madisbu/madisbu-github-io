@@ -35,9 +35,9 @@ const disciplineDetails: Record<
 const discipline = disciplineDetails[project.discipline];
 const disciplineLabel = isEstonian
   ? {
-      "ux-ui": "UX/UI",
+      "ux-ui": "UX/UI disain",
       "web-design": "Veebidisain",
-      "product-development": "Tootearenduse juhtumiuuring",
+      "product-development": "Tootearendus",
     }[project.discipline]
   : discipline.caseStudyLabel;
 const labels = isEstonian
@@ -55,12 +55,14 @@ const labels = isEstonian
       now: "Praegu",
       showTasks: (title: string) => `Näita ülesandeid: ${title}`,
       viewTasks: "Vaata ülesandeid",
-      explorePrototype: "Tutvu interaktiivse prototüübi täieliku broneerimisteekonnaga.",
+      explorePrototype: "Testi interaktiivset prototüüpi",
       openPrototype: "Ava interaktiivne prototüüp",
       moreProjects: "Veel projekte",
       previousProject: "Eelmine projekt",
       enlargedImage: "Suurendatud juhtumiuuringu pilt",
       closeImage: "Sulge suurendatud pilt",
+      previousImage: "Eelmine pilt",
+      nextImage: "Järgmine pilt",
       websiteOpensNewTab: "veebileht, avaneb uuel vahelehel",
     }
   : {
@@ -83,6 +85,8 @@ const labels = isEstonian
       previousProject: "Previous project",
       enlargedImage: "Enlarged case study image",
       closeImage: "Close enlarged image",
+      previousImage: "Previous image",
+      nextImage: "Next image",
       websiteOpensNewTab: "website, opens in a new tab",
     };
 const embedOrigins = [
@@ -168,7 +172,7 @@ const splitLinkedText = (
             {labels.allProjects}
           </a>
 
-          <a href={project.nextProject.href} class="case-study-next">
+          <a href={href(project.nextProject.href)} class="case-study-next">
             <span>{labels.nextProject}</span>
             <strong>{project.nextProject.label}</strong>
             <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -785,7 +789,7 @@ const splitLinkedText = (
       <nav class="case-study-project-nav" aria-label={labels.moreProjects}>
         <a
           class="case-study-project-link case-study-project-link--previous"
-          href={project.previousProject.href}
+          href={href(project.previousProject.href)}
         >
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path d="M13 8H3m4-4L3 8l4 4"></path>
@@ -797,7 +801,7 @@ const splitLinkedText = (
         </a>
         <a
           class="case-study-project-link case-study-project-link--next"
-          href={project.nextProject.href}
+          href={href(project.nextProject.href)}
         >
           <span>
             <small>{labels.nextProject}</small>
@@ -828,6 +832,28 @@ const splitLinkedText = (
     >
       <svg viewBox="0 0 16 16" aria-hidden="true">
         <path d="M3 3l10 10M13 3L3 13"></path>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="case-study-lightbox-nav case-study-lightbox-prev"
+      data-case-study-lightbox-prev
+      aria-label={labels.previousImage}
+      hidden
+    >
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M10 3L5 8l5 5"></path>
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="case-study-lightbox-nav case-study-lightbox-next"
+      data-case-study-lightbox-next
+      aria-label={labels.nextImage}
+      hidden
+    >
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M6 3l5 5-5 5"></path>
       </svg>
     </button>
     <img data-case-study-lightbox-image src="" alt="" />
@@ -3264,13 +3290,81 @@ const splitLinkedText = (
     outline-offset: 0.15rem;
   }
 
-  .case-study-lightbox-close svg {
+  .case-study-lightbox-close svg,
+  .case-study-lightbox-nav svg {
     width: 1rem;
     height: 1rem;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.6;
     stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .case-study-lightbox-nav {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-top: -1.375rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 12%);
+    color: #fff;
+    cursor: pointer;
+    transition: background 150ms ease-out;
+  }
+
+  .case-study-lightbox-nav[hidden] {
+    display: none;
+  }
+
+  .case-study-lightbox-prev {
+    left: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .case-study-lightbox-next {
+    right: clamp(0.5rem, 2vw, 1.5rem);
+  }
+
+  .case-study-lightbox-nav:hover,
+  .case-study-lightbox-nav:focus-visible {
+    background: rgb(255 255 255 / 24%);
+  }
+
+  .case-study-lightbox-nav:focus-visible {
+    outline: 0.15rem solid #fff;
+    outline-offset: 0.15rem;
+  }
+
+  /* On narrow portrait screens the side arrows would sit on top of the image, so dock them below it. */
+  @media (max-width: 40rem) and (orientation: portrait) {
+    .case-study-lightbox {
+      padding-top: 4rem;
+      padding-bottom: 7.5rem;
+    }
+
+    .case-study-lightbox-nav {
+      top: auto;
+      bottom: calc(2.75rem + env(safe-area-inset-bottom, 0px));
+      margin-top: 0;
+      width: 3rem;
+      height: 3rem;
+      background: rgb(255 255 255 / 24%);
+    }
+
+    .case-study-lightbox-prev {
+      left: calc(50% - 3.5rem);
+    }
+
+    .case-study-lightbox-next {
+      right: auto;
+      left: calc(50% + 0.5rem);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -3605,27 +3699,57 @@ const splitLinkedText = (
     const closeButton = lightbox?.querySelector<HTMLButtonElement>(
       "[data-case-study-lightbox-close]",
     );
+    const prevButton = lightbox?.querySelector<HTMLButtonElement>(
+      "[data-case-study-lightbox-prev]",
+    );
+    const nextButton = lightbox?.querySelector<HTMLButtonElement>(
+      "[data-case-study-lightbox-next]",
+    );
     const triggers = Array.from(
       document.querySelectorAll<HTMLButtonElement>("[data-case-study-media-trigger]"),
     );
-    if (!lightbox || !lightboxImage || !closeButton || triggers.length === 0) return;
+    if (!lightbox || !lightboxImage || !closeButton || !prevButton || !nextButton || triggers.length === 0) return;
 
     let lastTrigger: HTMLButtonElement | null = null;
     let previousBodyOverflow = "";
     let backgroundElements: { element: HTMLElement; wasInert: boolean }[] = [];
+    let group: HTMLButtonElement[] = [];
 
-    const openLightbox = (trigger: HTMLButtonElement) => {
+    // Arrows move between the enlargeable images of the section the clicked image belongs to.
+    const getGroup = (trigger: HTMLButtonElement) => {
+      const section = trigger.closest(".case-study-section");
+      return section
+        ? triggers.filter((candidate) => candidate.closest(".case-study-section") === section)
+        : [trigger];
+    };
+
+    const showTrigger = (trigger: HTMLButtonElement) => {
       const image = trigger.querySelector("img");
       if (!image) return;
 
       lastTrigger = trigger;
+      lightboxImage.src = trigger.dataset.zoomSrc || image.currentSrc || image.src;
+      lightboxImage.alt = image.alt;
+    };
+
+    const stepLightbox = (direction: number) => {
+      if (group.length < 2 || !lastTrigger) return;
+
+      const index = group.indexOf(lastTrigger);
+      showTrigger(group[(index + direction + group.length) % group.length]);
+    };
+
+    const openLightbox = (trigger: HTMLButtonElement) => {
+      if (!trigger.querySelector("img")) return;
+
       previousBodyOverflow = document.body.style.overflow;
       backgroundElements = Array.from(document.querySelectorAll<HTMLElement>(
         "[data-site-header], .case-study, [data-site-footer], #back-to-top, .skip-link",
       )).map((element) => ({ element, wasInert: element.inert }));
       backgroundElements.forEach(({ element }) => { element.inert = true; });
-      lightboxImage.src = trigger.dataset.zoomSrc || image.currentSrc || image.src;
-      lightboxImage.alt = image.alt;
+      group = getGroup(trigger);
+      prevButton.hidden = nextButton.hidden = group.length < 2;
+      showTrigger(trigger);
       lightbox.hidden = false;
       // Force layout before adding the class so the fade/scale transition runs.
       lightbox.getBoundingClientRect();
@@ -3663,20 +3787,33 @@ const splitLinkedText = (
         return;
       }
 
+      if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepLightbox(event.key === "ArrowRight" ? 1 : -1);
+        return;
+      }
+
       if (event.key !== "Tab") return;
 
       event.preventDefault();
       closeButton.focus();
     };
 
+    const handlePrevClick = () => stepLightbox(-1);
+    const handleNextClick = () => stepLightbox(1);
+
     triggers.forEach((trigger) => trigger.addEventListener("click", handleTriggerClick));
     closeButton.addEventListener("click", closeLightbox);
+    prevButton.addEventListener("click", handlePrevClick);
+    nextButton.addEventListener("click", handleNextClick);
     lightbox.addEventListener("click", handleBackdropClick);
     document.addEventListener("keydown", handleKeydown);
 
     cleanupCaseStudyLightbox = () => {
       triggers.forEach((trigger) => trigger.removeEventListener("click", handleTriggerClick));
       closeButton.removeEventListener("click", closeLightbox);
+      prevButton.removeEventListener("click", handlePrevClick);
+      nextButton.removeEventListener("click", handleNextClick);
       lightbox.removeEventListener("click", handleBackdropClick);
       document.removeEventListener("keydown", handleKeydown);
       closeLightbox();
