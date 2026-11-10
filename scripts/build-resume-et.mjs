@@ -15,12 +15,13 @@ const links = {
 
 const jobs = {
   playtech2025: {
-    title: "Tehnilise valdkonna vanemprojektijuht",
+    title: "IT-vanemprojektijuht",
     company: "Playtech, Eesti, Tartu (Online-hasartmängud ja iGaming)",
     dates: "jaanuar 2025 – praegu",
     bullets: [
-      "Juhtisin Playtechi kasiinode majutuskeskkondade suuremahulist taristu moderniseerimist, viies need 1,5 aasta jooksul üle Nomad VM arhitektuurilt Kubernetesele.",
-      "Korraldasin Kubernetese kasutuselevõtu algusest lõpuni 19 online-mängukeskkonnas, optimeerides süsteemi skaleeritavust, tööaega ja juurutuste tõhusust.",
+      "1,5-aastane programm, mille eesmärk on migreerida Playtech Open Platform (POP) taristu üle VM (Virtual Machine) põhiselt arhitektuurilt, Kubernetesele arhitektuurile.",
+      "Aitasin kasutusele võtta uue arhitektuuri 13 uues ja 6 eksisteerivas keskkonnas.",
+      "Parandasin keskkonna skaleeritavust ja operatsioonide tööaega.",
     ],
   },
   foxway: {
@@ -39,7 +40,7 @@ const jobs = {
     bullets: ["Aasta töölt eemal enesearenduse ja õppimise eesmärgil."],
   },
   playtech2021: {
-    title: "Mitut toodet hõlmav tehniline projektijuht",
+    title: "Tehniline projektijuht",
     company: "Playtech, Eesti, Tartu (Online-hasartmängud ja iGaming)",
     dates: "august 2021 – juuli 2022",
     bullets: [
@@ -66,7 +67,7 @@ const jobs = {
     ],
   },
   playtech2017: {
-    title: "Mitut toodet hõlmav tehniline projektijuht",
+    title: "Tehniline projektijuht",
     company: "Playtech, Eesti, Tartu (Online-hasartmängud ja iGaming)",
     dates: "jaanuar 2017 – september 2019",
     bullets: [
@@ -75,7 +76,7 @@ const jobs = {
     ],
   },
   playtech2013: {
-    title: "Mitut toodet hõlmav integratsioonijuht",
+    title: "Integratsioonide projektijuht",
     company: "Playtech, Eesti, Tartu (Online-hasartmängud ja iGaming)",
     dates: "oktoober 2013 – detsember 2016",
     bullets: [
