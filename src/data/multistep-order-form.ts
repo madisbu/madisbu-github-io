@@ -1,0 +1,192 @@
+import type { ProjectCaseStudy } from "../types/case-study";
+
+export const project = {
+  title: "Multistep Order Form",
+  description:
+    "An MVP web application that turns a detailed order into a manageable sequence of decisions.",
+  discipline: "product-development",
+  previousProject: {
+    label: "Waste Disposal Website",
+    href: "/projects/waste-disposal-website",
+  },
+  nextProject: {
+    label: "Car Rental App Redesign",
+    href: "/projects/car-rental-app-redesign",
+  },
+  cover: {
+    src: "/images/projects/multistep-order-form/cover.webp",
+    alt: "Order form location and date step with an address, date fields, a pinned map, and a continue action",
+    width: 1200,
+    height: 900,
+    caption: "Step 2 captures the delivery address and dates, with a map pin to confirm the exact drop-off location.",
+  },
+  metadata: [
+    { label: "My Role", value: "Product Owner & Developer" },
+    { label: "Platform", value: "Web Application" },
+    {
+      label: "Deliverables",
+      value: "Full-Stack Web Development",
+    },
+    {
+      label: "Tools",
+      value: "Vue.js · Node.js · Firebase · Google Maps APIs · Nodemailer · Google Cloud",
+    },
+  ],
+  sections: [
+    {
+      id: "overview",
+      title: "Overview",
+      eyebrow: "Product context",
+      summary: "Turn a long, error-prone order into a guided product experience.",
+      paragraphs: [
+        "The multistep order form is a responsive web application that helps customers submit detailed service orders online. It guides them through three steps: choosing a service and size, confirming the location and dates, and adding contact details before submitting the order.",
+        "I designed and developed the application as a minimum viable product (MVP) to make complex orders easier to complete and give the business the structured information needed for fulfilment. This first release focuses on the core ordering journey and provides a foundation for future validation and product development.",
+      ],
+      metrics: [
+        { value: "MVP", label: "Focused first release" },
+        { value: "3 steps", label: "Progressive order journey" },
+        { value: "Web app", label: "Responsive product interface" },
+        { value: "1 goal", label: "Complete a valid order" },
+      ],
+    },
+    {
+      id: "opportunity",
+      title: "Problem",
+      eyebrow: "Discover",
+      summary: "An ordinary contact form left the most important delivery detail unclear: the exact location where the container or big-bag should be placed.",
+      paragraphs: [
+        "The business owner identified a bottleneck in the existing contact form: addresses did not specify exactly where a container or big bag should be placed. Follow-up emails delayed fulfilment, while calls added staff workload and friction for customers.",
+        "Customers had to repeat information, and dispatchers had to clarify the location before passing it to drivers. Capturing the drop-off point upfront could reduce this coordination and the risk of misplaced deliveries.",
+      ],
+      media: {
+        src: "/images/projects/multistep-order-form/order-confusion.svg",
+        alt: "Customer, dispatcher, and driver passing unclear delivery details between them",
+        width: 1200,
+        height: 260,
+        transparentBackground: true,
+      },
+      callout: {
+        label: "Improvement opportunity",
+        text: "Replace the standard contact form with a guided, multistep order flow that lets customers confirm the exact drop-off point on a map. Include those coordinates with the submitted order so the dispatcher and driver have a clear location, reducing the need for follow-up calls.",
+      },
+      closing:
+        "Capturing the drop-off point during ordering offered a practical way to reduce manual coordination for the waste-disposal company.",
+    },
+    {
+      id: "approach",
+      title: "Product Approach",
+      eyebrow: "Define and prioritize",
+      summary: "Keep the existing process, but capture the missing location detail at the source.",
+      paragraphs: [
+        "The approach retained the existing three-step process and email communication, replacing repeated location clarification with a precise map selection during ordering.",
+      ],
+      steps: [
+        {
+          title: "Make location the core feature",
+          description: "Give the map fields prominence in Step 2. A draggable Google Maps pin captures the exact drop-off coordinates for customer and administrator emails, ready to share through the existing dispatch workflow.",
+        },
+        {
+          title: "Fit the existing workflow",
+          description: "Support Estonian and English, with a mobile-friendly form and clickable coordinates in emails so drivers can open the location on their phones.",
+        },
+        {
+          title: "Keep the MVP focused",
+          description: "Deliver the three-step order form and coordinate emails first. Leave cost calculation out of the initial scope.",
+        },
+      ],
+    },
+    {
+      id: "flow",
+      mediaTabs: true,
+      title: "Multistep Order Form Flow",
+      eyebrow: "Experience",
+      summary: "Keep the mental model stable while the form progressively reveals detail.",
+      steps: [
+        {
+          title: "Complete the order form",
+          description: "Choose a service, drag the Google Maps pin to the exact drop-off point, set the dates, and add contact details.",
+        },
+        {
+          title: "Receive confirmation",
+          description: "A success screen confirms that the order was received and displays a reference number.",
+        },
+        {
+          title: "Share the delivery details",
+          description: "Customer and administrator emails bring together the order and exact drop-off coordinates, ready to share with the driver.",
+        },
+      ],
+      media: {
+        src: "/images/projects/multistep-order-form/flow-overview.webp",
+        alt: "Three order form screens showing service and quantity selection, location and dates, and customer contact details",
+        width: 1200,
+        height: 720,
+        caption: "A guided three-step journey, from choosing a service to submitting contact details.",
+      },
+      callout: {
+        label: "One precise location, shared by everyone",
+        text: "An address gets the driver to the property; a draggable map pin identifies the actual drop-off point. Customer and administrator emails include the coordinates as a clickable Google Maps link, giving dispatchers a precise location to share with the driver.",
+      },
+      mediaGallery: [
+        {
+          src: "/images/projects/multistep-order-form/order-success.webp",
+          alt: "Successful order screen with a green checkmark, order number T-000001, and a countdown before the form resets",
+          width: 1200,
+          height: 800,
+          caption: "Order received. A clear success state and reference number confirm that submission is complete.",
+        },
+        {
+          src: "/images/projects/multistep-order-form/order-email.webp",
+          alt: "Example confirmation email in an inbox, with order details, delivery dates, coordinates, and a schematic map marking the drop-off point",
+          width: 1200,
+          height: 1100,
+          caption: "The location travels with the order. The email brings together service details, dates, and the confirmed drop-off coordinates. Recreated with fictional customer data and a schematic map.",
+        },
+      ],
+    },
+    {
+      id: "delivery",
+      title: "Technical Delivery",
+      eyebrow: "Build",
+      summary: "From a draggable map pin to a saved order and a shared location link.",
+      paragraphs: [
+        "The core data flow is simple: select the drop-off point, save its coordinates with the order, and email a location link that can be opened on a phone.",
+      ],
+      steps: [
+        {
+          title: "Frontend and location capture",
+          description: "Vue 3, Vite, Vue Router, and Pinia manage the three-step form and retain order details between steps. Vue-i18n supports Estonian and English. Google Maps address search positions the map; dragging the marker updates the stored coordinates, with reverse geocoding to resolve the address.",
+        },
+        {
+          title: "Validated order storage",
+          description: "A Node.js and Express API uses Firebase anonymous authentication to associate orders with a user session. Server-side checks cover contact details, coordinates, service options, quantities, delivery dates, and terms acceptance. Firestore stores the order with a server-assigned sequential reference.",
+        },
+        {
+          title: "Email and driver handoff",
+          description: "Nodemailer builds an Estonian summary from the saved order and sends it to the customer and configured administrator. It includes a Google Maps Static API preview and clickable coordinates that open Google Maps. Dispatchers can share this location with drivers; a separate driver email recipient is not configured.",
+        },
+        {
+          title: "Recoverable submission",
+          description: "If saving succeeds but email delivery fails, the interface offers an email retry using the original order reference rather than creating another order. Delivery status prevents concurrent sends and repeat sends after recorded success. An interrupted send with an uncertain outcome requires an operator to check delivery before retrying.",
+        },
+        {
+          title: "Deployment and observability",
+          description: "GitHub Actions deploys the frontend to Firebase Hosting and the containerized backend to Google Cloud Run. Hosting routes API requests to Cloud Run. Firebase token verification and rate limits protect requests, email content is HTML-escaped, and Winston sends redacted production logs to Google Cloud Logging.",
+        },
+        {
+          title: "Testing",
+          description: "Repository tests cover order validation, date handling, map coordinates and previews, autocomplete request races, email safety, terms acceptance, and runtime protections. Firestore rules tests use the Firebase emulator. These checks do not replace real-device usability testing or production delivery monitoring.",
+        },
+      ],
+    },
+    {
+      id: "outcome",
+      title: "Outcome & Reflections",
+      eyebrow: "Measure and learn",
+      summary: "Separate what has been built from what still needs to be validated.",
+      paragraphs: [
+        "The MVP retained the existing three-step ordering process while adding precise drop-off selection and emailed location links. Support for Estonian and English, a mobile-friendly form, and clickable coordinates addressed the core workflow requirements.",
+        "The key lesson was to improve the information captured at the start rather than add more coordination afterward. Next, I would validate the flow with customers and drivers, track how often orders still need clarification, and use those findings to guide further development.",
+      ],
+    },
+  ],
+} satisfies ProjectCaseStudy;
