@@ -17,6 +17,7 @@ const translatedPaths = new Set([
   "/privacy",
   "/projects/car-rental-app-redesign",
   "/projects/waste-disposal-website",
+  "/projects/multistep-order-form",
 ]);
 
 export function hasTranslation(path: string): boolean {
