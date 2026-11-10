@@ -26,7 +26,7 @@ Run from the repository root:
 | `npm ci` | Install the exact versions in `package-lock.json` |
 | `npm run dev` | Start the local development server |
 | `npm run check` | Check Astro files and TypeScript types |
-| `node --test src/utils/profile-age.test.ts src/utils/resume-dates.test.ts` | Run unit tests |
+| `node --test src/utils/*.test.ts src/i18n/*.test.ts` | Run utility and locale-routing unit tests |
 | `npm run build` | Build the static site into `dist/` |
 | `npm run test:seo` | Build and validate generated SEO metadata and crawler files |
 | `npm run test:analytics` | Build and test consent flows in Chrome with Google endpoints mocked |
@@ -45,10 +45,11 @@ are checked in and used by the home page.
 ├── .github/workflows/  # GitHub Pages build and deployment
 ├── .vscode/            # VS Code laptop debugging and optional Android setup
 ├── public/             # Static images, resume PDF, favicon, and CNAME
-├── scripts/            # Hero-image generation
+├── scripts/            # Image/resume generation and regression tests
 └── src/
     ├── components/     # Shared UI and case-study/resume components
-    ├── data/           # Resume content
+    ├── data/           # Resume and shared case-study content
+    ├── i18n/           # English/Estonian dictionaries and locale routing
     ├── layouts/        # Shared page layout and metadata
     ├── pages/          # Home, about, contact, projects, and resume routes
     ├── styles/         # Global styles and design tokens
@@ -56,9 +57,13 @@ are checked in and used by the home page.
     └── utils/           # Date/age helpers and unit tests
 ```
 
-Pages are Astro file-based routes. Project case-study copy and media are defined
-in `src/pages/projects/`; resume entries are maintained in `src/data/resume.ts`.
-The branded `404.html` is generated from `src/pages/404.astro`.
+Pages are Astro file-based routes. The car-rental case study shares its English
+data in `src/data/car-rental-app-redesign.ts`, with Estonian translations in
+`src/data/car-rental-app-redesign.et.ts`. Its English URL remains unprefixed;
+the Estonian page lives at `/et/projects/car-rental-app-redesign`.
+Other case-study copy and media remain in `src/pages/projects/`; resume entries
+are maintained in `src/data/resume.ts`. The branded `404.html` is generated from
+`src/pages/404.astro`.
 
 ### Laptop run and debug (no ADB)
 
@@ -198,7 +203,7 @@ custom outbound-click tracking.
    to use enhanced download/click tracking.
 2. Leave Google signals and advertising personalization off. Set **Data
    retention** to **2 months**, with reset on new activity off. Review the
-   [privacy notice](src/pages/privacy.astro) for accuracy before publishing;
+   [privacy notice](src/pages/[...lang]/privacy.astro) for accuracy before publishing;
    the website cannot enforce account-level retention settings.
 3. Do not install an additional Google tag or Tag Manager container.
 4. After deployment, verify a single page view per navigation in Realtime.
