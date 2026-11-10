@@ -37,9 +37,9 @@ export const en = {
     eyebrow: "OPTIONAL ANALYTICS",
     title: "Your privacy, your choice.",
     description:
-      "May I use Google Analytics to understand visits, engagement, CV downloads, and email-link clicks? No Analytics requests or cookies are sent until you accept. The site works the same if you reject.",
+      "May I use Google Analytics to analyse site traffic, user engagement, CV downloads, and email-link clicks? Without your consent, no data is sent to Google Analytics and no cookies are stored on your device. The website works exactly the same if you decline.",
     details:
-      "Your choice is saved for 180 days. Change your mind or withdraw consent anytime using Cookies.",
+      "Your choice is saved for 180 days. You can change your preference or withdraw your consent at any time using the “Cookies” button.",
     readNotice: "Read the privacy notice",
     reject: "Reject analytics",
     accept: "Accept analytics",
@@ -253,18 +253,18 @@ export const en = {
     projects: "Explore projects",
   },
   privacy: {
-    title: "Privacy & cookies",
+    title: "Privacy policy & cookies",
     description:
       "Learn how this website uses analytics with your consent, saves your cookie choice, and handles privacy requests.",
-    heading: "Privacy & cookies",
-    updated: "Last updated: 7 November 2026",
+    heading: "Privacy policy & cookies",
+    updated: "Last updated: 10 November 2026",
     // Trusted static HTML (links and emphasis); rendered with set:html.
     sections: [
       {
-        heading: "Who is responsible",
+        heading: "Data controller",
         blocks: [
           {
-            p: `I’m Madis Burmeister, based in Estonia, and I’m responsible for this website’s analytics. For privacy questions or requests, email <a href="mailto:madis.burmeister@mabux.me">madis.burmeister@mabux.me</a>.`,
+            p: `I, Madis Burmeister (based in Estonia), am the data controller responsible for the data processing on this website. For privacy questions or data subject requests, email me at <a href="mailto:madis.burmeister@mabux.me">madis.burmeister@mabux.me</a>.`,
           },
         ],
       },
@@ -272,39 +272,39 @@ export const en = {
         heading: "Optional website analytics",
         blocks: [
           {
-            p: "With your permission, this website uses Google Analytics 4 (GA4), a service from Google Ireland Limited. It helps me understand how people use the site, including which pages they visit, how they engage, and when they download my CV or click an email link. An email-link click shows an attempt to contact me; it doesn’t mean an enquiry was completed. I don’t use analytics for advertising.",
+            p: "With your consent, this website uses Google Analytics 4 (GA4), a service provided by Google Ireland Limited. It helps me analyse how visitors use the site – which pages they view, how they interact with it, and when they download my CV or click an email link. An email-link click is recorded as an intention to get in touch, but it doesn’t necessarily mean a message was sent. I don’t use analytics for advertising purposes.",
           },
           {
-            p: "Google receives technical details such as your device and browser, your approximate location based on your IP address, visit times, and cookie identifiers. Google says GA4 does not log or store individual IP addresses. This website’s page-view events don’t include URL query strings or fragments. Email addresses and message contents aren’t included when you click an email link.",
+            p: "Google collects technical data, such as information about your device and web browser, your approximate location based on your IP address, visit times, and cookie identifiers. Google states that GA4 does not log or store individual IP addresses. This website’s page-view events don’t send URL parameters (query strings) or fragments. Clicking an email link doesn’t send your email address or message contents.",
           },
           {
-            p: "Google Analytics doesn’t load, set cookies, or send requests until you choose “Accept analytics.” I use your consent as the legal basis for this optional data processing. You can reject analytics and still use the whole website.",
+            p: "Google Analytics doesn’t start, set cookies, or send requests until you choose “Accept analytics.” The legal basis for this optional data processing is your consent. You have the right to decline analytics, and the website will work just as well.",
           },
         ],
       },
       {
-        heading: "Cookies and saved choices",
+        heading: "Cookies and saved preferences",
         blocks: [
           {
             ul: [
-              "<strong>mabux.analytics-consent.v1:</strong> saves your choice in this device’s local storage for 180 days. It only remembers whether you accepted or rejected analytics; it doesn’t track your visits.",
-              "<strong>_ga and _ga_*:</strong> optional first-party Google Analytics cookies that identify your browser and keep session information. They’re set to expire after 60 days and aren’t extended on each visit. Your browser may remove them sooner.",
-              "<strong>mabux.language.v1:</strong> saves your language choice (English or Estonian) in this device’s local storage when you use the language switcher. On the home page, the website also checks your browser’s language setting to open the Estonian version if your browser prefers Estonian. This check happens in your browser; nothing is sent anywhere, and it isn’t used for analytics.",
+              "<strong>mabux.analytics-consent.v1:</strong> saves your analytics preference in this device’s local storage for 180 days. It only remembers whether you accepted or declined analytics; it doesn’t track your visits.",
+              "<strong>_ga and _ga_*:</strong> optional first-party Google Analytics cookies that identify your browser and keep session information. They expire after 60 days, and their lifetime isn’t extended with each new visit. You can also delete them from your browser sooner if you wish.",
+              "<strong>mabux.language.v1:</strong> saves your language preference (English or Estonian) in this device’s local storage when you use the language switcher. On the home page, the website also checks your browser’s language setting to show the Estonian version if your preferred language is Estonian. This check happens locally in your browser; no data is sent anywhere, and it isn’t used for analytics.",
             ],
           },
           {
-            p: `Use <button type="button" data-cookie-settings>Cookies</button> to change your choice. If you reject after accepting, the website stops future tracking, removes the first-party Analytics cookies it can access, and reloads to stop Analytics. This doesn’t undo earlier data processing. Clearing your browser storage removes your saved choice.`,
+            p: `To change your preferences, use the “<button type="button" data-cookie-settings>Cookies</button>” button. If you decide to withdraw an earlier consent, the website stops further tracking, deletes the first-party Analytics cookies it can access, and refreshes the page to stop Analytics. This doesn’t undo earlier data processing. Clearing your browser’s cache/storage also removes your saved preferences.`,
           },
         ],
       },
       {
-        heading: "Google processing and retention",
+        heading: "Google data processing and retention",
         blocks: [
           {
-            p: `Google processes analytics data for me. It may process it outside the European Economic Area, including in the United States, under applicable contractual and international data-transfer safeguards. Read <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google’s privacy policy<span class="sr-only"> (opens in a new tab)</span></a> and learn <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">how Google uses data from sites that use its services<span class="sr-only"> (opens in a new tab)</span></a>.`,
+            p: `Google processes analytics data on my behalf. This data may also be processed outside the European Economic Area (for example in the United States), subject to applicable contractual and international data-transfer safeguards. Read <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google’s privacy policy<span class="sr-only"> (opens in a new tab)</span></a> and learn <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">how Google uses data from sites that use its services<span class="sr-only"> (opens in a new tab)</span></a>.`,
           },
           {
-            p: "GA4 keeps user- and event-level data for two months. It may keep combined reports for longer. This data-retention period is separate from the cookie lifetime above. This website’s Google tag doesn’t enable Google signals or advertising personalization.",
+            p: "GA4 keeps user- and event-level data for two months. Aggregated reports may be kept for longer. This data-retention period is separate from the cookie lifetime mentioned above. The Google tag installed on this website doesn’t use Google Signals or enable advertising personalization.",
           },
         ],
       },
@@ -312,10 +312,10 @@ export const en = {
         heading: "Hosting, fonts, embedded content and contacting me",
         blocks: [
           {
-            p: "GitHub Pages hosts this website and may process technical details, such as IP addresses, to deliver and protect it. Google Fonts receives your IP address and browser request details when fonts load, whether or not you accept analytics. Some project pages include third-party embeds that also receive technical details when loaded. Rejecting analytics doesn’t block fonts or embeds.",
+            p: "This website is hosted by GitHub Pages, which may process technical data, such as IP addresses, to display and secure the site. Google Fonts receives your IP address and browser request details when fonts load, whether or not you accept analytics. Some project pages include third-party embedded content (embeds) that also receives technical data when loaded. Declining analytics doesn’t block fonts or embedded content.",
           },
           {
-            p: "External websites have their own privacy practices. If you email me, I receive the information you choose to send and use it to reply and manage our correspondence. I keep correspondence only as long as needed to handle your enquiry, maintain our working relationship, or meet legal obligations.",
+            p: "External websites have their own privacy policies. If you email me, I receive the information you choose to send me and use it to reply and manage our correspondence. I keep correspondence only as long as necessary to resolve your enquiry, maintain our working relationship, or meet legal obligations.",
           },
         ],
       },

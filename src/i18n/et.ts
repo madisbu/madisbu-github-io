@@ -40,9 +40,9 @@ export const et: Dictionary = {
     eyebrow: "VALIKULINE ANALÜÜTIKA",
     title: "Sinu privaatsus, sinu valik.",
     description:
-      "Kas tohin kasutada Google Analyticsit, et mõista külastusi, kaasatust, CV allalaadimisi ja e-posti linkide klikke? Enne sinu nõusolekut ei saadeta ühtegi Analyticsi päringut ega määrata küpsiseid. Veebileht töötab täpselt samamoodi ka siis, kui keeldud.",
+      "Kas tohin kasutada Google Analyticsit, et analüüsida lehe külastatavust, kasutajate kaasatust, CV allalaadimisi ja e-posti linkidele klikkimist? Ilma sinu nõusolekuta ei edastata Google Analyticsile andmeid ega salvestata sinu seadmesse küpsiseid. Veebileht töötab täpselt samamoodi ka siis, kui sa keeldud.",
     details:
-      "Sinu valik salvestatakse 180 päevaks. Saad meelt muuta või nõusoleku igal ajal tagasi võtta, kasutades nuppu Küpsised.",
+      "Sinu valik salvestatakse 180 päevaks. Saad oma eelistust igal ajal muuta või nõusoleku tagasi võtta, kasutades nuppu „Küpsised“.",
     readNotice: "Loe privaatsusteadet",
     reject: "Keeldu analüütikast",
     accept: "Nõustu analüütikaga",
@@ -258,68 +258,68 @@ export const et: Dictionary = {
     projects: "Uuri projekte",
   },
   privacy: {
-    title: "Privaatsus ja küpsised",
+    title: "Privaatsustingimused ja küpsised",
     description:
       "Loe, kuidas see veebileht kasutab sinu nõusolekul analüütikat, salvestab sinu küpsisevalikut ja käsitleb privaatsustaotlusi.",
-    heading: "Privaatsus ja küpsised",
-    updated: "Viimati uuendatud: 7. november 2026",
+    heading: "Privaatsustingimused ja küpsised",
+    updated: "Viimati uuendatud: 10. november 2026",
     sections: [
       {
-        heading: "Kes vastutab",
+        heading: "Vastutav töötleja",
         blocks: [
           {
-            p: `Mina olen Madis Burmeister, elan Eestis ja vastutan selle veebilehe analüütika eest. Privaatsusküsimuste või -taotluste korral kirjuta aadressile <a href="mailto:madis.burmeister@mabux.me">madis.burmeister@mabux.me</a>.`,
+            p: `Mina, Madis Burmeister (asukoht Eesti), olen selle veebilehe andmetöötluse eest vastutav töötleja. Privaatsusküsimuste või andmesubjekti taotluste korral kirjuta mulle aadressil <a href="mailto:madis.burmeister@mabux.me">madis.burmeister@mabux.me</a>.`,
           },
         ],
       },
       {
-        heading: "Valikuline veebilehe analüütika",
+        heading: "Vabatahtlik veebianalüütika",
         blocks: [
           {
-            p: "Sinu loal kasutab see veebileht Google Analytics 4 (GA4) teenust, mida pakub Google Ireland Limited. See aitab mul mõista, kuidas inimesed saiti kasutavad, sealhulgas milliseid lehti nad külastavad, kuidas nad lehega suhtlevad ning millal nad mu CV alla laadivad või e-posti lingil klõpsavad. E-posti lingi klõps näitab katset minuga ühendust võtta; see ei tähenda, et päring oleks lõpule viidud. Ma ei kasuta analüütikat reklaamiks.",
+            p: "Sinu nõusolekul kasutab see veebileht Google Ireland Limitedi pakutavat teenust Google Analytics 4 (GA4). See aitab mul analüüsida, kuidas külastajad lehte kasutavad – milliseid alamlehti nad vaatavad, kuidas lehega suhtlevad ning millal nad laadivad alla minu CV või klikivad e-posti lingil. E-posti lingile klikkimine registreeritakse kui kontaktivõtu soov, kuid see ei tähenda otseselt kirja ärasaatmist. Ma ei kasuta analüütikat reklaamieesmärkidel.",
           },
           {
-            p: "Google saab tehnilisi andmeid, näiteks sinu seade ja brauser, sinu ligikaudne asukoht IP-aadressi põhjal, külastusajad ja küpsiste identifikaatorid. Google'i sõnul GA4 ei logi ega salvesta üksikuid IP-aadresse. Selle veebilehe lehevaatamise sündmused ei sisalda URL-i päringustringe ega fragmente. E-posti aadresse ja sõnumite sisu ei kaasata, kui klõpsad e-posti lingil.",
+            p: "Google kogub tehnilisi andmeid, näiteks infot sinu seadme ja veebilehitseja (brauseri) kohta, ligikaudset asukohta IP-aadressi põhjal, külastusaegu ja küpsiste identifikaatoreid. Google'i kinnitusel GA4 üksikuid IP-aadresse ei logi ega salvesta. Selle veebilehe lehevaatamiste (pageview) sündmused ei edasta URL-i parameetreid (query strings) ega fragmente. E-posti lingile klikkimisel ei edastata sinu e-posti aadressi ega sõnumi sisu.",
           },
           {
-            p: "Google Analytics ei laadi, ei määra küpsiseid ega saada päringuid enne, kui valid „Nõustu analüütikaga“. Selle valikulise andmetöötluse õiguslik alus on sinu nõusolek. Saad analüütikast keelduda ja kasutada kogu veebilehte ikkagi.",
+            p: "Google Analytics ei käivitu, ei salvesta küpsiseid ega saada päringuid enne, kui oled valinud „Nõustu analüütikaga“. Selle valikulise andmetöötluse õiguslikuks aluseks on sinu nõusolek. Sul on õigus analüütikast keelduda ja veebileht töötab sellegipoolest tõrgeteta.",
           },
         ],
       },
       {
-        heading: "Küpsised ja salvestatud valikud",
+        heading: "Küpsised ja salvestatud eelistused",
         blocks: [
           {
             ul: [
-              "<strong>mabux.analytics-consent.v1:</strong> salvestab sinu valiku selle seadme kohalikku salvestusruumi (local storage) 180 päevaks. See jätab meelde ainult seda, kas nõustusid analüütikaga või keeldusid; see ei jälgi sinu külastusi.",
-              "<strong>_ga ja _ga_*:</strong> valikulised esimese osapoole Google Analyticsi küpsised, mis tuvastavad sinu brauseri ja hoiavad seansi teavet. Need aeguvad 60 päeva pärast ega pikene iga külastusega. Sinu brauser võib need ka varem eemaldada.",
-              "<strong>mabux.language.v1:</strong> salvestab sinu keelevaliku (inglise või eesti keel) selle seadme kohalikku salvestusruumi, kui kasutad keelevahetajat. Avalehel kontrollib veebileht ka sinu brauseri keeleseadet, et avada eestikeelne versioon, kui su brauser eelistab eesti keelt. See kontroll toimub sinu brauseris; midagi ei saadeta kuhugi ning seda ei kasutata analüütikaks.",
+              "<strong>mabux.analytics-consent.v1:</strong> salvestab sinu analüütikaeelistuse seadme kohalikku andmehoidlasse (local storage) 180 päevaks. See jätab meelde vaid selle, kas nõustusid analüütikaga või keeldusid sellest; see ei jälgi sinu külastusi.",
+              "<strong>_ga ja _ga_*:</strong> esimese osapoole valikulised Google Analyticsi küpsised, mis tuvastavad sinu brauseri ja hoiavad seansiinfot. Need aeguvad 60 päeva pärast ning nende kehtivusaeg ei pikene iga uue külastusega. Soovi korral saad need oma brauserist ka varem kustutada.",
+              "<strong>mabux.language.v1:</strong> salvestab seadme kohalikku andmehoidlasse sinu keele-eelistuse (inglise või eesti keel), kui kasutad keelevaliku nuppu. Avalehel kontrollib veebileht ka sinu brauseri keeleseadistust, et kuvada eestikeelne versioon, kui sinu eelistatud keel on eesti keel. See kontroll toimub lokaalselt sinu brauseris; andmeid ei edastata kuhugi ning neid ei kasutata analüütikaks.",
             ],
           },
           {
-            p: `Kasuta nuppu <button type="button" data-cookie-settings>Küpsised</button>, et oma valikut muuta. Kui keeldud pärast nõustumist, lõpetab veebileht edasise jälgimise, eemaldab esimese osapoole Analyticsi küpsised, millele tal on ligipääs, ning laeb lehe uuesti, et Analytics peatada. See ei tühista varasemat andmetöötlust. Brauseri salvestusruumi tühjendamine eemaldab sinu salvestatud valiku.`,
+            p: `Oma eelistuste muutmiseks kasuta nuppu „<button type="button" data-cookie-settings>Küpsised</button>“. Kui otsustad varasema nõusoleku tagasi võtta, lõpetab veebileht edasise jälgimise, kustutab talle ligipääsetavad esimese osapoole Analyticsi küpsised ning värskendab Analyticsi peatamiseks lehte. See ei tühista varasemat andmetöötlust. Brauseri andmehoidla (cache/storage) tühjendamine eemaldab ka sinu salvestatud eelistused.`,
           },
         ],
       },
       {
-        heading: "Google'i andmetöötlus ja säilitamine",
+        heading: "Google'i andmetöötlus ja -säilitamine",
         blocks: [
           {
-            p: `Google töötleb analüütikaandmeid minu nimel. Ta võib neid töödelda väljaspool Euroopa Majanduspiirkonda, sealhulgas Ameerika Ühendriikides, kohaldatavate lepinguliste ja rahvusvaheliste andmeedastuse kaitsemeetmete alusel. Loe <a href="https://policies.google.com/privacy?hl=et" target="_blank" rel="noopener noreferrer">Google'i privaatsuspoliitikat<span class="sr-only"> (avaneb uuel vahekaardil)</span></a> ja uuri, <a href="https://policies.google.com/technologies/partner-sites?hl=et" target="_blank" rel="noopener noreferrer">kuidas Google kasutab andmeid saitidelt, mis kasutavad tema teenuseid<span class="sr-only"> (avaneb uuel vahekaardil)</span></a>.`,
+            p: `Google töötleb analüütikaandmeid minu nimel. Neid andmeid võidakse töödelda ka väljaspool Euroopa Majanduspiirkonda (näiteks Ameerika Ühendriikides), järgides kohaldatavaid lepingulisi ja rahvusvahelisi andmeedastuse kaitsemeetmeid. Loe lisaks <a href="https://policies.google.com/privacy?hl=et" target="_blank" rel="noopener noreferrer">Google'i privaatsuspoliitikat<span class="sr-only"> (avaneb uuel vahekaardil)</span></a> ja uuri, <a href="https://policies.google.com/technologies/partner-sites?hl=et" target="_blank" rel="noopener noreferrer">kuidas Google kasutab andmeid saitidelt, mis kasutavad nende teenuseid<span class="sr-only"> (avaneb uuel vahekaardil)</span></a>.`,
           },
           {
-            p: "GA4 säilitab kasutaja- ja sündmustaseme andmeid kaks kuud. Koondaruandeid võib ta säilitada kauem. See andmete säilitamise periood on eraldi ülalmainitud küpsiste elueast. Selle veebilehe Google'i silt ei luba Google'i signaale ega reklaami isikustamist.",
+            p: "GA4 säilitab kasutaja- ja sündmustaseme andmeid kaks kuud. Koondaruandeid võidakse säilitada kauem. See andmete säilitamise periood on eraldiseisev ülalmainitud küpsiste elueast. Sellele veebilehele paigaldatud Google'i märgend (tag) ei kasuta Google'i signaale (Google Signals) ega luba reklaamide isikupärastamist.",
           },
         ],
       },
       {
-        heading: "Majutus, fondid, manustatud sisu ja minuga ühenduse võtmine",
+        heading: "Veebimajutus, fondid, manustatud sisu ja minuga ühenduse võtmine",
         blocks: [
           {
-            p: "GitHub Pages majutab seda veebilehte ning võib selle edastamiseks ja kaitsmiseks töödelda tehnilisi andmeid, näiteks IP-aadresse. Google Fonts saab sinu IP-aadressi ja brauseri päringu andmed fontide laadimisel, olenemata sellest, kas nõustud analüütikaga. Mõned projektilehed sisaldavad kolmandate osapoolte manuseid, mis saavad samuti laadimisel tehnilisi andmeid. Analüütikast keeldumine ei blokeeri fonte ega manuseid.",
+            p: "Seda veebilehte majutab GitHub Pages, mis võib lehe kuvamiseks ja turvalisuse tagamiseks töödelda tehnilisi andmeid, näiteks IP-aadresse. Google Fonts saab fontide laadimisel kätte sinu IP-aadressi ja brauseri päringu info, olenemata sellest, kas sa nõustud analüütikaga või mitte. Mõned projektide lehed sisaldavad kolmandate osapoolte manustatud sisu (embeds), mis saavad laadimisel samuti tehnilisi andmeid. Analüütikast keeldumine ei blokeeri fonte ega manustatud sisu.",
           },
           {
-            p: "Välistel veebilehtedel on oma privaatsustavad. Kui kirjutad mulle e-kirja, saan teabe, mille valid saata, ja kasutan seda vastamiseks ning kirjavahetuse haldamiseks. Hoian kirjavahetust ainult nii kaua, kui on vaja sinu päringu lahendamiseks, meie koostöösuhte hoidmiseks või õiguslike kohustuste täitmiseks.",
+            p: "Välistel veebilehtedel kehtivad nende endi privaatsustingimused. Kui kirjutad mulle e-kirja, saan teabe, mille otsustad mulle edastada, ning kasutan seda vastamiseks ja kirjavahetuse haldamiseks. Säilitan kirjavahetust vaid nii kaua, kui see on vajalik sinu päringu lahendamiseks, meie koostöö hoidmiseks või juriidiliste kohustuste täitmiseks.",
           },
         ],
       },
