@@ -25,7 +25,6 @@ export const et: Dictionary = {
   },
   language: {
     label: "Keel",
-    switchTo: "Vaheta keeleks",
   },
   footer: {
     copyright: (year: number) => `Autoriõigus © Madis Burmeister ${year}`,
@@ -135,7 +134,7 @@ export const et: Dictionary = {
       {
         id: "bbq",
         label: "Grill",
-        description: "Picanha grillil ja külm Corona käes. Just selline on minu tüüpi suvine õhtu.",
+        description: "Picanha grillil ja külm Corona käes. Just selline on minu lemmik suvine õhtu.",
         alt: "Grill – pilt: Fábio Alves",
       },
       {
@@ -201,13 +200,13 @@ export const et: Dictionary = {
       "car-rental-app-redesign": {
         title: "Autorendi rakenduse ümberdisain",
         description:
-          "Kasutajasõbralikum broneerimiskogemus, mis on üles ehitatud selgusele, kindlustundele ja vähematele sammudele.",
+          "Kasutajasõbralikum autorendi broneerimiskogemus, mis on üles ehitatud selgusele ja kindlustundele.",
         category: "UX/UI disain",
       },
       "waste-disposal-website": {
         title: "Jäätmekäitluse veebileht",
         description:
-          "Teenuseleht koos kohandatud tellimusvormiga, mis teeb keerulised päringud lihtsamaks.",
+          "Veebileht koos kohandatud tellimusvormiga, mis teeb keerulised päringud lihtsamaks.",
         category: "Veebidisain",
       },
       "multistep-order-form": {
@@ -252,7 +251,7 @@ export const et: Dictionary = {
     title: "Lehte ei leitud",
     description: "Seda lehte ei leitud. Tutvu Madis Burmeisteri projektidega või naase avalehele.",
     code: "404",
-    heading: "Näib, et keerasid valesti.",
+    heading: "Näib, et oled eksinud.",
     message: "See leht võib olla teisaldatud või aadress on vale. Aitame sind õigele teele tagasi.",
     navLabel: "Lehe puudumise navigatsioon",
     home: "Tagasi avalehele",

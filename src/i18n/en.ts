@@ -22,7 +22,6 @@ export const en = {
   },
   language: {
     label: "Language",
-    switchTo: "Switch language to",
   },
   footer: {
     copyright: (year: number) => `Copyright © Madis Burmeister ${year}`,
@@ -132,7 +131,7 @@ export const en = {
       {
         id: "bbq",
         label: "BBQ",
-        description: "Nice Picanha on the BBQ and cold Corona in my hand. That's my type of summer evening.",
+        description: "Picanha on the BBQ and cold Corona in my hand. That's my type of summer evening.",
         alt: "BBQ - Image by Fábio Alves",
       },
       {

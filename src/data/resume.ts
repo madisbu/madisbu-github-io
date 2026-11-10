@@ -20,12 +20,8 @@ export const resume: ResumeData = {
       end: null,
       highlights: [
         "1.5-year program to migrate Playtech Open Platform (POP) infrastructure from VM-based (Virtual Machine) architecture to Kubernetes architecture.",
-        "Helped roll out the new architecture across 13 new and 6 existing environments.",
+        "Helped to roll out the new architecture across 13 new and 6 existing environments.",
         "Improved environment scalability and operational uptime.",
-        "Applied UI/UX best practices across the portal.",
-        "Led larger iGaming projects with a technical focus.",
-        "Took part in the project from the idea phase to project completion.",
-        "Worked with quality engineers. Was involved in testing processes.",
       ],
       tags: ["Kubernetes", "Nomad", "Migration"],
     },
@@ -157,8 +153,7 @@ export const resume: ResumeData = {
       end: "2013-05",
       highlights: [
         "Installed event and party hire equipment",
-        "Set up marquees, tables and chairs",
-        "Owned equipment transport across Queensland",
+        "Transported rental equipment across Queensland",
       ],
       tags: ["Party Hire", "Logistics", "Working Abroad"],
     },
@@ -208,7 +203,6 @@ export const resume: ResumeData = {
         "Project Management",
         "Program Management",
         "Stakeholder Management",
-        "Presentation Skills",
         "Agile",
         "Scrum",
         "Product Backlog",
@@ -252,8 +246,8 @@ export const resume: ResumeData = {
     },
   ],
   tools: [
-    { title: "Excellent", skills: ["Google Workspace", "Microsoft 365", "TeamGantt", "Miro"] },
-    { title: "Good", skills: ["Jira", "Confluence", "Bitbucket", "GitHub", "Monday", "Trello", "Proto.io"] },
+    { title: "Excellent", skills: ["Google Workspace", "Microsoft 365", "Jira", "Confluence", "Miro"] },
+    { title: "Good", skills: ["TeamGantt", "Bitbucket", "GitHub", "Monday", "Trello", "Proto.io"] },
     {
       title: "Average",
       skills: ["Figma", "Google Analytics", "Visual Studio Code", "GitHub Copilot", "Claude", "OpenAI", "Cursor"],
