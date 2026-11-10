@@ -168,7 +168,7 @@ test("mobile consent and persistent controls fit the viewport", async ({ context
   await page.getByRole("button", { name: "Reject analytics", exact: true }).click();
   await expect(page.getByRole("button", { name: "Cookies", exact: true })).toBeInViewport();
   await page.getByRole("link", { name: "Privacy", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Privacy & cookies" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Privacy policy & cookies" })).toBeVisible();
   await page.getByRole("button", { name: "Cookies", exact: true }).first().click();
   await expect(page.getByRole("dialog")).toBeVisible();
 });

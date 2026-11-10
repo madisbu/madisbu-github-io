@@ -26,7 +26,7 @@ test("the old resume URLs redirect to the CV pages", () => {
 });
 
 test("every generated page has unique search metadata and valid sharing URLs", () => {
-  assert.equal(pages.length, 19);
+  assert.equal(pages.length, 20);
   const titles = new Set();
   const descriptions = new Set();
   for (const { file, html } of pages) {
@@ -84,7 +84,7 @@ test("sitemap matches all indexable pages and excludes the error page", async ()
   assert.match(robots, /User-agent: \*\nAllow: \//);
 });
 
-const translated = ["", "about", "contact", "privacy", "projects", "projects/car-rental-app-redesign", "cv"];
+const translated = ["", "about", "contact", "privacy", "projects", "projects/car-rental-app-redesign", "projects/multistep-order-form", "cv"];
 const pageFor = (file) => pages.find((page) => page.file.split(path.sep).join("/") === file);
 const hreflangs = (html) =>
   Object.fromEntries([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
@@ -113,7 +113,7 @@ test("every translated page exists in English and Estonian with reciprocal langu
 });
 
 test("English-only pages do not advertise a language alternate", () => {
-  for (const file of ["404.html", "projects/multistep-order-form/index.html"]) {
+  for (const file of ["404.html"]) {
     const { html } = pageFor(file);
     assert.doesNotMatch(html, /hreflang="et" href=/, file);
     assert.match(html, /<html lang="en">/, file);
@@ -135,14 +135,14 @@ test("the car rental case study keeps localized images and enlargement sources s
   ];
 
   assert.ok(en.includes("This solo project explored how a car rental app could make booking more approachable."));
-  assert.ok(et.includes("Selles iseseisvas projektis uurisin, kuidas muuta mobiilirakenduse kaudu rendi auto broneerimine lihtsamaks. Aitasin klientidel sõidukeid võrrelda ja kuludest paremini aru saada. Samuti soovisin auto broneerimist saavutada väiksema arvu ja selgemate sammudega."));
-  assert.match(et, /class="case-study-discipline"[^>]*>UX\/UI<\/p>/);
-  assert.match(et, /<p[^>]*>See projekt tuletas mulle meelde, et sujuv broneerimiskogemus eeldab selgust igal sammul, eriti hindade ja võõraste terminite puhul\. Ideede testimine kasutajatega aitas mul oma eeldustes kahelda ning muuta nende kõhklused lihtsamaks ja kindlamaks kasutuskogemuseks\.<\/p>/);
+  assert.ok(et.includes("Selles iseseisvas projektis uurisin, kuidas muuta rendiauto broneerimine mobiilirakenduses lihtsamaks ja intuitiivsemaks."));
+  assert.match(et, /class="case-study-discipline"[^>]*>UX\/UI disain<\/p>/);
+  assert.match(et, /<p[^>]*>See projekt kinnitas, et sujuv broneerimiskogemus toetub täielikule läbipaistvusele igas puutepunktis, eriti kui asi puudutab hinnastamist ja erialatermineid\. Disainilahenduste testimine reaalsete kasutajatega aitas mul enda algseid eeldusi proovile panna ning kujundada kasutajate esmastest kõhklustest sujuv ja enesekindlust sisendav kasutajakogemus\.<\/p>/);
   assert.ok(en.includes("Tap to see the pain point &amp; the fix"));
   assert.ok(!en.includes("Tap to see the pain point &amp;amp; the fix"));
   assert.ok(et.includes("Vaata probleemi ja lahendust"));
-  assert.match(et, /<span class="journey-card-title"[^>]*>Kaitse<\/span>/);
-  assert.match(et, /<span class="journey-card-title"[^>]*>Tellimus<\/span>/);
+  assert.match(et, /<span class="journey-card-title"[^>]*>Kaitsepaketi valik<\/span>/);
+  assert.match(et, /<span class="journey-card-title"[^>]*>Tellimuse kokkuvõte<\/span>/);
 
   for (const [englishImage, estonianImage, englishZoom = englishImage, estonianZoom = estonianImage] of images) {
     const englishSrc = `${imageBase}${englishImage}`;
@@ -243,24 +243,24 @@ test("the waste disposal case study is translated with localized images while En
   assert.ok(et.includes("Jäätmekäitluse veebileht"));
   assert.ok(et.includes("Selge teenuseveeb ja kohandatud tellimisvorm, mis lihtsustavad jäätmeveo tellimist."));
   assert.ok(et.includes("Veebidisainer ja -arendaja"));
-  assert.ok(et.includes("Selge sõnastus ja läbimõeldud visuaalne hierarhia"));
+  assert.ok(et.includes("Tulemuseks on selge inforuumi ja tugeva visuaalse hierarhiaga platvorm"));
   assert.match(et, /class="case-study-discipline"[^>]*>Veebidisain<\/p>/);
-  assert.ok(et.includes("Veebidisain · Wix migratsioon"));
-  assert.ok(et.includes("nagu näiteks jäätmete liik, kogus, asukoht, aeg ning nende ligipääs."));
-  assert.ok(et.includes("Projekti peamine eesmärk oli luua seni puudunud veebileht ja muuta jäätmeveo tellimine tõhusamaks."));
-  assert.ok(et.includes("vähestel klientidel puudusid teadmised teenusepakkujast."));
-  for (const label of ["Erilahendus • 1. etapp", "Migratsioon • 3. etapp", "Projekti skoop", "Materjalide loomine", "Tellimusvormi disain", "Wix migreerimine", "Tellimusvormi ümberseadistamine", "Lammutus"]) {
+  assert.ok(et.includes("Veebidisain · Platvormi vahetus (Wix)"));
+  assert.ok(et.includes("Jäätmeveo tellimisel tuleb hallata paljusid muutujaid"));
+  assert.ok(et.includes("Ettevõttel puudus veebileht, mistõttu toetus kogu tellimisprotsess telefonikõnedele."));
+  assert.ok(et.includes("Nähtamatus veebis:"));
+  for (const label of ["Erilahendus • 1. etapp", "Migratsioon • 3. etapp", "Projekti skoop", "Sisumaterjali loomine", "Tellimusvormi (UI) disain", "Lahenduse migreerimine Wixi platvormile", "Tellimusvormi rekonfigureerimine", "Lammutus"]) {
     assert.ok(et.includes(label), `missing ${label}`);
   }
-  assert.match(et, /<h3[^>]*>Lähteülesanne<\/h3>/);
-  assert.match(et, /<p[^>]*>„<a class="case-study-inline-link"/);
-  assert.doesNotMatch(et, /Kohandatud lahendus|Ületoomine|Lähteülesanne ja disain|Ettevõtte „/);
+  assert.match(et, /<h3[^>]*>Planeerimine<\/h3>/);
+  assert.match(et, /<p[^>]*>Disainiuuenduse tulemusel kasvas „<a class="case-study-inline-link"/);
+  assert.doesNotMatch(et, /Kohandatud lahendus|Ületoomine|Lähteülesanne|Ettevõtte „/);
   assert.ok(et.includes("Juhendatud jäätmeveo tellimus"));
-  assert.ok(et.includes("Tellimusvormi disain"));
+  assert.ok(et.includes("Front-end arendus (Vue.js)"));
   assert.ok(et.includes("Veebiarenduse mitmeetapiline töövoog"));
   assert.ok(!et.includes("A multi-phase, highly iterative web development workflow"));
   assert.ok(et.includes('href="https://prahiveod.ee"'));
-  assert.ok(et.includes("suurendas teenuste tellimusi ja vähendas samal ajal sissetulevaid tugikõnesid ligikaudu 15%"));
+  assert.ok(et.includes("tellimuste arv ning tugikõnede hulk langes 15%"));
   assert.doesNotMatch(et, /<h[12][^>]*>(Overview|Problem|Workflow|Sitemap|Sketches|Visuals|Reflections)<\/h[12]>/);
 
   for (const name of images) {
@@ -283,6 +283,33 @@ test("the waste disposal case study is translated with localized images while En
   assert.ok(et.includes(`data-zoom-src="${imageBase}waste-visuals.et.webp"`));
   assert.ok(!et.includes(`data-zoom-src="${imageBase}waste-visuals.webp"`));
 });
+test("the multistep order form case study is translated with localized images while English keeps its originals", async () => {
+  const en = pageFor("projects/multistep-order-form/index.html").html;
+  const et = pageFor("et/projects/multistep-order-form/index.html").html;
+  const imageBase = "/images/projects/multistep-order-form/";
+  const images = ["cover.webp", "flow-overview.webp", "order-success.webp", "order-email.webp", "order-confusion.svg"];
+
+  assert.ok(et.includes("Mitmeastmeline tellimisvorm"));
+  assert.ok(et.includes("Tulemid"));
+  assert.match(et, /class="case-study-discipline"[^>]*>Tootearendus<\/p>/);
+  assert.doesNotMatch(et, /<h[12][^>]*>(Overview|Problem|Product Approach|Technical Delivery|Outcome & Reflections)<\/h[12]>/);
+
+  for (const name of images) {
+    const estonianName = name.replace(/\.(\w+)$/, ".et.$1");
+    assert.ok(en.includes(`${imageBase}${name}`) && !en.includes(`${imageBase}${estonianName}`), `English route must keep ${name}`);
+    assert.ok(et.includes(`${imageBase}${estonianName}`) && !et.includes(`${imageBase}${name}`), `Estonian route must use ${estonianName}`);
+    const [englishData, estonianData] = await Promise.all([
+      readFile(new URL(`${imageBase.slice(1)}${name}`, output)),
+      readFile(new URL(`${imageBase.slice(1)}${estonianName}`, output)),
+    ]);
+    assert.ok(!englishData.equals(estonianData), `${name} must have a separate Estonian version`);
+    if (name.endsWith(".webp")) {
+      const [englishSize, estonianSize] = await Promise.all([sharp(englishData).metadata(), sharp(estonianData).metadata()]);
+      assert.deepEqual([estonianSize.width, estonianSize.height], [englishSize.width, englishSize.height], `${name} dimensions`);
+    }
+  }
+});
+
 test("only the English home page redirects by browser language", () => {
   const redirect = /localStorage\.getItem\(key\)/;
   assert.match(pageFor("index.html").html, redirect);
