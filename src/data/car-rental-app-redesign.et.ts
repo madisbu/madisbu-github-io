@@ -11,56 +11,56 @@ const translations: Record<string, string> = {
   "End-to-end mobile booking flow from vehicle search to payment.":
     "Täielik mobiilne broneerimisteekond auto otsingust maksmiseni.",
   "My Role": "Minu roll",
-  "UX/UI Designer": "UX/UI- ja interaktsioonidisainer",
+  "UX/UI Designer": "UX/UI disainer",
   "Platform": "Platvorm",
   "Deliverables": "Tulemid",
-  "UX/UI & Interaction Design": "Kasutajaliides (UI), interaktsioonidisain ja prototüüp",
+  "UX/UI Design, Prototyping": "UX/UI disain · Prototüüpimine",
   "Tools": "Töövahendid",
   "Overview": "Ülevaade",
   "Context": "Kontekst",
   "Redesigning a complex rental journey around clarity, trust, and confident decisions.":
     "Keeruka autorendi teekonna ümberkujundamine selguse, usalduse ja kindlate otsuste nimel.",
-  "This solo project explored how a car rental app could make booking more approachable. The work focused on helping customers compare vehicles, understand costs, and reserve a car through fewer, more predictable steps.":
+  "In this independent project, I explored how to make booking a rental car in a mobile app easier and more intuitive. I focused on helping users compare vehicles more conveniently and making the pricing more transparent. I also optimized the booking process so that a reservation can be completed in fewer and more logical steps.":
     "Selles iseseisvas projektis uurisin, kuidas muuta rendiauto broneerimine mobiilirakenduses lihtsamaks ja intuitiivsemaks. Keskendusin sellele, et aidata kasutajatel sõidukeid mugavamalt võrrelda ning muuta hinnakujundus läbipaistvamaks. Samuti optimeerisin broneerimisprotsessi, et tellimus saaks vormistatud vähemate ja loogilisemate sammudega.",
-  "The redesign balances speed with the information people need to make a confident choice, from useful filters and clearer price breakdowns to a less disruptive guest checkout experience.":
+  "The goal of the design is to help users make informed and confident choices. To achieve this, the app now offers relevant filters, a clearer price breakdown, and a smoother booking journey.":
     "Disainiuuenduse eesmärk on aidata kasutajatel teha teadlikke ja kindlaid valikuid. Selle saavutamiseks pakub rakendus nüüd asjakohaseid filtreid, selgemat hinnajaotust ning sujuvamat broneerimisteekonda.",
   "Problem": "Probleem",
   "Define": "Määratlemine",
   "Rental customers need transparent information without a slow or overwhelming booking process.":
     "Autorendi kliendid vajavad läbipaistvat teavet, ilma et broneerimine oleks aeglane või üle jõu käiv.",
-  "Car rental customers often complain that most mobile apps feature non-transparent or even incorrect pricing. Apps include distracting promo banners and login pop-ups, hindering a smooth booking process. Pricing explanations contain confusing acronyms, further eroding trust between end users and rental companies. This poor user experience negatively impacts rental businesses, resulting in fewer orders.":
+  "Car rental users often point out that many mobile apps lack price transparency, or the displayed information is downright misleading. A smooth booking journey is disrupted by intrusive ads and mandatory login screens. Furthermore, confusing abbreviations in the pricing structure create uncertainty, lowering users' trust in the service provider. Ultimately, such a poor user experience damages the rental company's reputation and reduces the number of successful bookings.":
     "Autorenditeenuse kasutajad toovad sageli esile, et paljudes mobiilirakendustes puudub hindade läbipaistvus või on kuvatav info lausa eksitav. Sujuvat broneerimisteekonda lõhuvad pealetükkivad reklaamid ja kohustuslikud sisselogimisaknad. Lisaks tekitavad hinnastruktuuris segadust arusaamatud lühendid, mis langetavad kasutajate usaldust teenusepakkuja vastu. Lõpptulemusena kahjustab selline kehv kasutajakogemus rendiettevõtte mainet ja vähendab edukate broneeringute arvu.",
-  "distracting promo banners": "pealetükkivad reklaamid",
-  "login pop-ups": "kohustuslikud sisselogimisaknad",
-  "confusing acronyms": "arusaamatud lühendid",
+  "intrusive ads": "pealetükkivad reklaamid",
+  "mandatory login screens": "kohustuslikud sisselogimisaknad",
+  "confusing abbreviations": "arusaamatud lühendid",
   "Scenario A": "Stsenaarium A",
-  "Pricing": "Hinnastamise läbipaistmatus",
-  "Total price is unclear": "Varjatud koguhind",
-  "Fees and cover costs appear late or change between search results and checkout.":
+  "Lack of pricing transparency": "Hinnastamise läbipaistmatus",
+  "Hidden total price": "Varjatud koguhind",
+  "Extra fees and insurance package costs often only become apparent in the final step of the booking flow. The displayed price tends to change between the search results and the payment screen.":
     "Lisatasud ja kindlustuspakettide maksumused selguvad sageli alles broneerimisvoo viimases sammus. Kuvatav hind kipub otsingutulemuste ja maksekuva vahel muutuma.",
-  "Customer trust declines": "Usalduse murenemine",
-  "Customers question whether the offer is accurate and pause to compare alternatives.":
+  "Erosion of trust": "Usalduse murenemine",
+  "Unexpected additional costs create uncertainty among users regarding the validity of the offer, causing them to abandon the process and look for alternatives on other platforms.":
     "Ootamatud lisakulud tekitavad kasutajates ebakindlust pakkumise paikapidavuse osas, mistõttu katkestatakse protsess, et minna teistelt platvormidelt alternatiive otsima.",
-  "Bookings move elsewhere": "Konversiooni langus",
-  "More transparent competitors become the safer and easier choice.":
+  "Drop in conversion": "Konversiooni langus",
+  "The booking is completed with competitors whose pricing is more transparent and feels like a safer and simpler choice.":
     "Broneering viiakse lõpule konkurentide juures, kelle hinnastamine on läbipaistvam ning mõjub turvalisema ja lihtsama valikuna.",
   "Scenario B": "Stsenaarium B",
-  "Booking terminology": "Terminite keerukus",
-  "Cover options are difficult to decode": "Kindlustuspakettide arusaamatus",
-  "Terms such as CDW, LDW, and PAI appear without enough plain-language context.":
+  "Complex terminology": "Terminite keerukus",
+  "Confusing insurance packages": "Kindlustuspakettide arusaamatus",
+  "Protection packages are indicated by industry-specific abbreviations (e.g., CDW, LDW, PAI) that lack clear, user-friendly explanations.":
     "Kaitsepakette tähistatakse erialaste lühenditega (nt CDW, LDW, PAI), mille juures puuduvad kasutajale arusaadavad lahtiseletused.",
-  "Decision confidence drops": "Otsustuskindluse puudumine",
-  "Customers cannot tell what they need, what is included, or what are the trade-offs.":
+  "Lack of confidence in decision-making": "Otsustuskindluse puudumine",
+  "Users do not understand what coverage they actually need, what a specific package includes, or what the deductible terms are.":
     "Kasutajad ei mõista, millist katet nad reaalselt vajavad, mida konkreetne pakett sisaldab või millised on omavastutuse tingimused.",
-  "Checkout is abandoned": "Poolelijäänud teekond (Drop-off)",
-  "Uncertainty interrupts the booking flow before customers complete payment.":
+  "Abandoned journey (Drop-off)": "Poolelijäänud teekond (Drop-off)",
+  "The uncertainty stemming from this confusion is significant enough that users abandon the booking before reaching the payment screen.":
     "Segadusest tulenev ebakindlus on piisavalt suur, et kasutaja katkestab broneerimise enne maksekuvale jõudmist.",
   "Key insights": "Peamised tähelepanekud",
-  "of research respondents preferred using a mobile app instead of a desktop site, indicating low mobile adoption for online rental services.":
+  "of respondents preferred the mobile app over the desktop website, which indicates the poor usability of car rental apps.":
     "vastanutest eelistas mobiilirakendust lauaarvuti veebilehele, mis viitab autorendiäppide vähesele kasutatavusele.",
-  "of research participants rated the overall online car rental experience 5 out of 5, the highest possible score.":
+  "of the survey participants rated their previous car rental web experience with the highest rating (5/5).":
     "uuringus osalenutest hindas senist autorendi veebikogemust kõrgeima hindega (5/5).",
-  "The average rating for four major car rental company apps in Google Play Store is 3.65 on a 5-point scale":
+  "The average rating of four major car rental companies' apps in the Google Play Store is 3.65 on a 5-point scale":
     "Nelja suure autorendifirma rakenduse keskmine hinnang Google Play poes on 5-pallisel skaalal 3,65.",
   "5-point scale": "5-pallisel skaalal",
   "Very poor. Searching/booking for cars sometimes works, but can also be 200% more expensive than simultaneous search on website/laptop. You have to check.":
@@ -75,25 +75,25 @@ const translations: Record<string, string> = {
   "Understand": "Mõistmine",
   "Use evidence to separate genuine customer needs from assumptions about the rental process.":
     "Kasuta tõendeid, et eristada klientide tegelikke vajadusi oletustest autorendi kohta.",
-  "Competitive Benchmarking": "Konkurentide analüüs",
+  "Competitor Benchmarking": "Konkurentide analüüs",
   "Compared major car rental products to identify common patterns, trust signals, and recurring friction.":
     "Võrdlesin suuremate autorendifirmade tooteid, et leida levinud mustreid, usaldust loovaid elemente ja korduvaid takistusi.",
-  "Competitive benchmarking let me study how similar rental companies address common booking problems without recruiting participants.":
+  "Mapping out competitors helped to understand how other rental companies in the market solve common booking problems, providing valuable input without the need to recruit separate test users.":
     "Konkurentide kaardistamine aitas mõista, kuidas teised turul tegutsevad rendiettevõtted lahendavad levinud broneerimisprobleeme, pakkudes väärtuslikku sisendit ilma vajaduseta eraldi testkasutajaid värvata.",
-  "Discovery: One company advertised a 15% discount for online payment. Yet 15% off €573.76 is €487.70 not the advertised €500.15.":
+  "Observation on misleading pricing: One competitor advertised a 15% discount for paying in advance online. However, calculating a 15% discount from the initial amount of €573.76, the final price should have been €487.70, rather than the €500.15 displayed to the customer. This is a clear example of hidden fees that erode users' trust.":
     "Tähelepanek eksitava hinnastamise kohta: Üks konkurent reklaamis veebis ettemaksu tegemisel 15% allahindlust. Arvutades aga 15% soodustust algsummalt 573,76 €, pidanuks lõpphind olema 487,70 €, mitte aga kliendile kuvatud 500,15 €. See on ilmekas näide varjatud tasudest, mis murendavad kasutajate usaldust.",
-  "Discovery:": "Tähelepanek eksitava hinnastamise kohta:",
+  "Observation on misleading pricing:": "Tähelepanek eksitava hinnastamise kohta:",
   "Car rental payment screen advertising a 15% online-payment discount, with €500.15 online and €573.76 at-branch prices":
     "Autorendi maksevaade reklaamib veebis maksmisel 15% soodustust: veebihind 500,15 € ja kontorihind 573,76 €",
   "/images/projects/car-rental-app-redesign/research/benchmarking.webp":
     "/images/projects/car-rental-app-redesign/research/benchmarking.et.png",
   "Read Full Review": "Loe täielikku arvustust",
-  "Online Survey": "Veebiküsitlus",
+  "Online survey": "Veebiküsitlus",
   "Gathered customer expectations and preferences around mobile booking, pricing, and rental terminology.":
     "Kogusin klientide ootusi ja eelistusi mobiilse broneerimise, hinnastamise ja autorenditerminite kohta.",
-  "I used an online survey to identify where rental customers struggle and gather both quantitative and qualitative evidence.":
+  "I conducted an online survey to identify the main pain points of car rental service users and to gather both quantitative and qualitative data.":
     "Viisin läbi veebiküsitluse, et tuvastada autorenditeenuse kasutajate peamised valupunktid ning koguda nii kvantitatiivseid kui ka kvalitatiivseid andmeid.",
-  "One question asked, “What would you change about the app you used?” The responses reveal recurring needs for clearer pricing, simpler booking, and fewer advertisements.":
+  "The responses to the open-ended question, “What would you change about the app you last used?”, revealed a clear need for more transparent pricing, a smoother booking process, and a reduction in intrusive ads.":
     "Vastustest avatud küsimusele „Mida muudaksid viimati kasutatud rakenduses?“ joonistus välja selge vajadus läbipaistvama hinnastamise, sujuvama broneerimisprotsessi ja pealetükkivate reklaamide vähendamise järele.",
   "Survey responses about improving rental apps, including clearer pricing and fewer advertisements":
     "Kasutajate vastused autorendirakenduse kohta: soov selgema hinnateabe ja vähema reklaami järele",
@@ -101,7 +101,7 @@ const translations: Record<string, string> = {
     "/images/projects/car-rental-app-redesign/research/survey.et.png",
   "Read Full Survey": "Loe küsitluse vastuseid",
   "Usability Testing": "Kasutatavuse testimine",
-  "Observed customers completing core booking tasks to uncover comprehension issues and points of hesitation.":
+  "I observed users completing real booking tasks to identify friction points, misunderstandings, and moments of hesitation in the user flow.":
     "Jälgisin kasutajaid reaalsete broneerimisülesannete läbimisel, et tuvastada kasutusvoos esinevaid hõõrdepunkte, arusaamatusi ja kõhklushetki.",
   "Helen about Sixt": "Helen Sixti kohta",
   "When using any type of booking sites, I usually do not sign-up places that I do not use occasionally.":
@@ -117,53 +117,53 @@ const translations: Record<string, string> = {
     "Selge järjestus jaotab suure broneerimisülesande hallatavateks otsusteks. Puuduta sammu, et näha sellega seotud probleemi ja UX-lahendust.",
   "Start": "Algus",
   "Finish": "Lõpp",
-  "Main": "Avaleht",
-  "Land on the home screen and start a new search with location and dates.":
+  "Homepage": "Avaleht",
+  "The user opens the app and starts a new search by entering the desired location and rental dates.":
     "Kasutaja avab rakenduse ja alustab uut otsingut, sisestades soovitud asukoha ja rendikuupäevad.",
   "Step 1": "Samm 1:",
   "Pain point": "Valupunkt:",
-  "Distracting promo banners and login pop-ups interrupt customers before they even start searching.":
+  "Intrusive ad banners and unexpected login screens hinder starting the search.":
     "Pealetükkivad reklaambännerid ja ootamatud sisselogimisaknad takistavad otsinguga alustamist.",
   "UX solution": "UX lahendus:",
-  "Start searching with absolutely zero interruptions—no banners or forced sign-in up front.":
+  "A clean and distraction-free homepage. All focus is on the search – without pop-ups and mandatory logins.":
     "Puhas ja segajatevaba avaleht. Kogu fookus on otsingul – ilma hüpikakende ja kohustusliku sisselogimiseta.",
-  "Search": "Otsingutulemused",
-  "Browse results on a map and list, then refine with meaningful filters.":
+  "Search results": "Otsingutulemused",
+  "The user browses available vehicles on a map or in a list and refines the selection using filters.":
     "Kasutaja sirvib saadaolevaid sõidukeid kaardil või loendis ja täpsustab valikut filtrite abil.",
   "Step 2": "Samm 2:",
-  "A broken map view and confusing filtering or sorting options make results hard to trust.":
+  "An inadequate map view and confusing filtering and sorting options make search results unreliable.":
     "Puudulik kaardivaade ning segased filtreerimis- ja sorteerimisvalikud muudavad otsingutulemused ebausaldusväärseks.",
-  "A reliable map and list view with clear filters that actually narrow down results.":
+  "A smoothly functioning map and list view with logical filters that help narrow down the selection effectively and accurately.":
     "Sujuvalt toimiv kaardi- ja loendivaade koos loogiliste filtritega, mis aitavad valikut efektiivselt ja täpselt kitsendada.",
   "Car Details": "Sõiduki detailvaade",
-  "Compare a specific vehicle's specifications, availability, and full pricing.":
+  "The user dives into the technical specifications of the selected vehicle, checks availability, and views the total price.":
     "Kasutaja süveneb valitud sõiduki tehnilistesse andmetesse, kontrollib saadavust ja vaatab koguhinda.",
-  "Confusing pricing logic. Final price not transparent.":
+  "The pricing structure is confusing, and the final cost is not immediately clear.":
     "Hinnastruktuur on segane ja lõplik maksumus pole koheselt arusaadav.",
-  "A complete, transparent price breakdown that's visible before any extra steps.":
+  "A clear and transparent price calculation, where the final price along with all fees is visible immediately, without additional steps.":
     "Selge ja läbipaistev hinnakalkulatsioon, kus lõpphind koos kõigi tasudega on nähtav kohe, ilma lisasammudeta.",
   "Covers": "Kaitsepaketi valik",
-  "Choose a protection plan with contextual explanations of what's included.":
+  "The user reviews the offered protection and insurance options and chooses the most suitable one.":
     "Kasutaja tutvub pakutavate kaitse- ja kindlustusvõimalustega ning valib endale sobivaima.",
   "Step 3": "Samm 3:",
-  "Cover options use acronyms like CDW, LDW, and PAI without enough plain-language context.":
-    "Kindlustusvalikutes visatakse kasutajale ette erialased lühendid (CDW, LDW, PAI), mille reaalne sisu ja katte ulatus jäävad tavainimesele selgitamata.",
-  "Simple plan descriptions with no confusing acronyms or unexplained jargon.":
+  "Users are confronted with industry abbreviations (CDW, LDW, PAI), whose actual content and extent of coverage remain unexplained to the average person.":
+    "Kasutajale visatakse ette erialased lühendid (CDW, LDW, PAI), mille reaalne sisu ja katte ulatus jäävad tavainimesele selgitamata.",
+  "Clear, visually distinct, and plain-language package descriptions that avoid confusing industry jargon.":
     "Selged, visuaalselt eristatud ja inimkeelsed paketikirjeldused, mis väldivad segadust tekitavat tööstusharu slängi.",
   "Extras": "Lisavarustus ja -teenused",
-  "Add optional equipment and services with clear visuals and pricing.":
+  "The user adds necessary extra equipment (e.g., a child seat or GPS) to the booking, relying on clear photos and exact prices.":
     "Kasutaja lisab tellimusele vajaliku lisavarustuse (nt turvatool või GPS), toetudes selgetele fotodele ja täpsetele hindadele.",
-  "Generic icons and unclear pricing make it hard to know what an extra actually includes.":
+  "Standard (generic) icons and unclear pricing do not give the customer a realistic idea of what the offered extra includes or exactly how much it costs.":
     "Standardsed (üldised) ikoonid ja ebaselge hinnastamine ei anna kliendile reaalset ettekujutust, mida pakutav lisa sisaldab või kui palju see täpselt maksab.",
-  "Real photos of every extra with clear, itemized pricing shown up front.":
+  "Each accessory features real product photos and a transparent unit price, helping users make a confident and informed choice before adding the item to their cart.":
     "Iga lisatarviku juures on päris tootefotod ja läbipaistev tükihind, mis aitavad teha kindla ja teadliku valiku juba enne eseme ostukorvi lisamist.",
-  "Summary": "Tellimuse kokkuvõte",
-  "Confirm the complete order, personal details, and final price before payment.":
+  "Order Summary": "Tellimuse kokkuvõte",
+  "The user reviews the booking details, enters personal information, and sees the final total price before paying.":
     "Kasutaja vaatab üle broneeringu detailid, sisestab isikuandmed ja näeb enne maksmist lõplikku koguhinda.",
   "Step 4": "Samm 4:",
-  "Being forced to log in or register mid-flow interrupts customers just before they finish booking.":
+  "Mandatory login or account creation creates a major friction point right before completing the booking and disrupts the user journey.":
     "Kohustuslik sisselogimine või konto loomine tekitab vahetult enne broneeringu lõpetamist suure hõõrdepunkti ja katkestab kasutajateekonna.",
-  "Fast, secure personal-details entry with a final price breakdown and summary before paying.":
+  "A quick guest checkout option. Entering personal information is smooth, and the user is shown a clear and transparent order overview before paying.":
     "Kiire külalisena tellimise võimalus (guest checkout). Isikuandmete sisestamine on sujuv ning kasutajale kuvatakse enne maksmist selge ja läbipaistev tellimuse ülevaade.",
   "Sketches": "Visandid",
   "Create": "Loomine",
@@ -201,9 +201,9 @@ const translations: Record<string, string> = {
   "Preview of the interactive car rental prototype showing the redesigned mobile booking flow":
     "Interaktiivse autorendiprototüübi eelvaade ümberkujundatud mobiilse broneerimisteekonnaga",
   "Reflections": "Kokkuvõte",
-  "This project reminded me that a smooth booking experience depends on clarity at every step, especially around pricing and unfamiliar terminology.":
+  "This project confirmed that a smooth booking experience relies on complete transparency at every touchpoint, especially when it comes to pricing and industry terminology.":
     "See projekt kinnitas, et sujuv broneerimiskogemus toetub täielikule läbipaistvusele igas puutepunktis, eriti kui asi puudutab hinnastamist ja erialatermineid.",
-  "Testing my ideas with users helped me question my assumptions and turn their hesitation into simpler, more confident interactions.":
+  "Testing the design solutions with real users helped me challenge my initial assumptions and transform users' initial hesitations into a smooth and confidence-inspiring user experience.":
     "Disainilahenduste testimine reaalsete kasutajatega aitas mul enda algseid eeldusi proovile panna ning kujundada kasutajate esmastest kõhklustest sujuv ja enesekindlust sisendav kasutajakogemus.",
 };
 

@@ -23,7 +23,7 @@ export const project = {
   metadata: [
     { label: "My Role", value: "UX/UI Designer" },
     { label: "Platform", value: "iOS & Android" },
-    { label: "Deliverables", value: "UX/UI & Interaction Design" },
+    { label: "Deliverables", value: "UX/UI Design, Prototyping" },
     { label: "Tools", value: "Figma · Google Forms · Lookback" },
   ],
   sections: [
@@ -33,8 +33,8 @@ export const project = {
       eyebrow: "Context",
       summary: "Redesigning a complex rental journey around clarity, trust, and confident decisions.",
       paragraphs: [
-        "This solo project explored how a car rental app could make booking more approachable. The work focused on helping customers compare vehicles, understand costs, and reserve a car through fewer, more predictable steps.",
-        "The redesign balances speed with the information people need to make a confident choice, from useful filters and clearer price breakdowns to a less disruptive guest checkout experience.",
+        "In this independent project, I explored how to make booking a rental car in a mobile app easier and more intuitive. I focused on helping users compare vehicles more conveniently and making the pricing more transparent. I also optimized the booking process so that a reservation can be completed in fewer and more logical steps.",
+        "The goal of the design is to help users make informed and confident choices. To achieve this, the app now offers relevant filters, a clearer price breakdown, and a smoother booking journey.",
       ],
     },
     {
@@ -43,43 +43,43 @@ export const project = {
       eyebrow: "Define",
       summary: "Rental customers need transparent information without a slow or overwhelming booking process.",
       paragraphs: [
-        "Car rental customers often complain that most mobile apps feature non-transparent or even incorrect pricing. Apps include distracting promo banners and login pop-ups, hindering a smooth booking process. Pricing explanations contain confusing acronyms, further eroding trust between end users and rental companies. This poor user experience negatively impacts rental businesses, resulting in fewer orders.",
+        "Car rental users often point out that many mobile apps lack price transparency, or the displayed information is downright misleading. A smooth booking journey is disrupted by intrusive ads and mandatory login screens. Furthermore, confusing abbreviations in the pricing structure create uncertainty, lowering users' trust in the service provider. Ultimately, such a poor user experience damages the rental company's reputation and reduces the number of successful bookings.",
       ],
-      paragraphEmphasis: ["distracting promo banners", "login pop-ups", "confusing acronyms"],
+      paragraphEmphasis: ["intrusive ads", "mandatory login screens", "confusing abbreviations"],
       scenarios: [
         {
           label: "Scenario A",
-          title: "Pricing",
+          title: "Lack of pricing transparency",
           steps: [
             {
-              title: "Total price is unclear",
-              description: "Fees and cover costs appear late or change between search results and checkout.",
+              title: "Hidden total price",
+              description: "Extra fees and insurance package costs often only become apparent in the final step of the booking flow. The displayed price tends to change between the search results and the payment screen.",
             },
             {
-              title: "Customer trust declines",
-              description: "Customers question whether the offer is accurate and pause to compare alternatives.",
+              title: "Erosion of trust",
+              description: "Unexpected additional costs create uncertainty among users regarding the validity of the offer, causing them to abandon the process and look for alternatives on other platforms.",
             },
             {
-              title: "Bookings move elsewhere",
-              description: "More transparent competitors become the safer and easier choice.",
+              title: "Drop in conversion",
+              description: "The booking is completed with competitors whose pricing is more transparent and feels like a safer and simpler choice.",
             },
           ],
         },
         {
           label: "Scenario B",
-          title: "Booking terminology",
+          title: "Complex terminology",
           steps: [
             {
-              title: "Cover options are difficult to decode",
-              description: "Terms such as CDW, LDW, and PAI appear without enough plain-language context.",
+              title: "Confusing insurance packages",
+              description: "Protection packages are indicated by industry-specific abbreviations (e.g., CDW, LDW, PAI) that lack clear, user-friendly explanations.",
             },
             {
-              title: "Decision confidence drops",
-              description: "Customers cannot tell what they need, what is included, or what are the trade-offs.",
+              title: "Lack of confidence in decision-making",
+              description: "Users do not understand what coverage they actually need, what a specific package includes, or what the deductible terms are.",
             },
             {
-              title: "Checkout is abandoned",
-              description: "Uncertainty interrupts the booking flow before customers complete payment.",
+              title: "Abandoned journey (Drop-off)",
+              description: "The uncertainty stemming from this confusion is significant enough that users abandon the booking before reaching the payment screen.",
             },
           ],
         },
@@ -89,16 +89,16 @@ export const project = {
         items: [
           {
             value: "27%",
-            text: "of research respondents preferred using a mobile app instead of a desktop site, indicating low mobile adoption for online rental services.",
+            text: "of respondents preferred the mobile app over the desktop website, which indicates the poor usability of car rental apps.",
           },
           {
             value: "18%",
-            text: "of research participants rated the overall online car rental experience 5 out of 5, the highest possible score.",
+            text: "of the survey participants rated their previous car rental web experience with the highest rating (5/5).",
           },
         ],
       },
       feedback: {
-        lead: "The average rating for four major car rental company apps in Google Play Store is 3.65 on a 5-point scale",
+        lead: "The average rating of four major car rental companies' apps in the Google Play Store is 3.65 on a 5-point scale",
         leadEmphasis: ["3.65", "5-point scale"],
         reviews: [
           {
@@ -163,14 +163,14 @@ export const project = {
       summary: "Use evidence to separate genuine customer needs from assumptions about the rental process.",
       steps: [
         {
-          title: "Competitive Benchmarking",
+          title: "Competitor Benchmarking",
           description: "Compared major car rental products to identify common patterns, trust signals, and recurring friction.",
           feature: {
             paragraphs: [
-              "Competitive benchmarking let me study how similar rental companies address common booking problems without recruiting participants.",
-              "Discovery: One company advertised a 15% discount for online payment. Yet 15% off €573.76 is €487.70 not the advertised €500.15.",
+              "Mapping out competitors helped to understand how other rental companies in the market solve common booking problems, providing valuable input without the need to recruit separate test users.",
+              "Observation on misleading pricing: One competitor advertised a 15% discount for paying in advance online. However, calculating a 15% discount from the initial amount of €573.76, the final price should have been €487.70, rather than the €500.15 displayed to the customer. This is a clear example of hidden fees that erode users' trust.",
             ],
-            paragraphEmphasis: ["Discovery:"],
+            paragraphEmphasis: ["Observation on misleading pricing:"],
             media: {
               src: "/images/projects/car-rental-app-redesign/research/benchmarking.webp",
               alt: "Car rental payment screen advertising a 15% online-payment discount, with €500.15 online and €573.76 at-branch prices",
@@ -184,12 +184,12 @@ export const project = {
           },
         },
         {
-          title: "Online Survey",
+          title: "Online survey",
           description: "Gathered customer expectations and preferences around mobile booking, pricing, and rental terminology.",
           feature: {
             paragraphs: [
-              "I used an online survey to identify where rental customers struggle and gather both quantitative and qualitative evidence.",
-              "One question asked, “What would you change about the app you used?” The responses reveal recurring needs for clearer pricing, simpler booking, and fewer advertisements.",
+              "I conducted an online survey to identify the main pain points of car rental service users and to gather both quantitative and qualitative data.",
+              "The responses to the open-ended question, “What would you change about the app you last used?”, revealed a clear need for more transparent pricing, a smoother booking process, and a reduction in intrusive ads.",
             ],
             media: {
               src: "/images/projects/car-rental-app-redesign/research/survey.png",
@@ -207,7 +207,7 @@ export const project = {
         },
         {
           title: "Usability Testing",
-          description: "Observed customers completing core booking tasks to uncover comprehension issues and points of hesitation.",
+          description: "I observed users completing real booking tasks to identify friction points, misunderstandings, and moments of hesitation in the user flow.",
           quotes: [
             {
               attribution: "Helen about Sixt",
@@ -235,81 +235,81 @@ export const project = {
         finishLabel: "Finish",
         nodes: [
           {
-            title: "Main",
-            description: "Land on the home screen and start a new search with location and dates.",
+            title: "Homepage",
+            description: "The user opens the app and starts a new search by entering the desired location and rental dates.",
             stepLabel: "Step 1",
             painPoint: {
               label: "Pain point",
-              text: "Distracting promo banners and login pop-ups interrupt customers before they even start searching.",
+              text: "Intrusive ad banners and unexpected login screens hinder starting the search.",
             },
             solution: {
               label: "UX solution",
-              text: "Start searching with absolutely zero interruptions—no banners or forced sign-in up front.",
+              text: "A clean and distraction-free homepage. All focus is on the search – without pop-ups and mandatory logins.",
             },
           },
           {
-            title: "Search",
-            description: "Browse results on a map and list, then refine with meaningful filters.",
+            title: "Search results",
+            description: "The user browses available vehicles on a map or in a list and refines the selection using filters.",
             stepLabel: "Step 2",
             painPoint: {
               label: "Pain point",
-              text: "A broken map view and confusing filtering or sorting options make results hard to trust.",
+              text: "An inadequate map view and confusing filtering and sorting options make search results unreliable.",
             },
             solution: {
               label: "UX solution",
-              text: "A reliable map and list view with clear filters that actually narrow down results.",
+              text: "A smoothly functioning map and list view with logical filters that help narrow down the selection effectively and accurately.",
             },
           },
           {
             title: "Car Details",
-            description: "Compare a specific vehicle's specifications, availability, and full pricing.",
+            description: "The user dives into the technical specifications of the selected vehicle, checks availability, and views the total price.",
             stepLabel: "Step 2",
             painPoint: {
               label: "Pain point",
-              text: "Confusing pricing logic. Final price not transparent.",
+              text: "The pricing structure is confusing, and the final cost is not immediately clear.",
             },
             solution: {
               label: "UX solution",
-              text: "A complete, transparent price breakdown that's visible before any extra steps.",
+              text: "A clear and transparent price calculation, where the final price along with all fees is visible immediately, without additional steps.",
             },
           },
           {
             title: "Covers",
-            description: "Choose a protection plan with contextual explanations of what's included.",
+            description: "The user reviews the offered protection and insurance options and chooses the most suitable one.",
             stepLabel: "Step 3",
             painPoint: {
               label: "Pain point",
-              text: "Cover options use acronyms like CDW, LDW, and PAI without enough plain-language context.",
+              text: "Users are confronted with industry abbreviations (CDW, LDW, PAI), whose actual content and extent of coverage remain unexplained to the average person.",
             },
             solution: {
               label: "UX solution",
-              text: "Simple plan descriptions with no confusing acronyms or unexplained jargon.",
+              text: "Clear, visually distinct, and plain-language package descriptions that avoid confusing industry jargon.",
             },
           },
           {
             title: "Extras",
-            description: "Add optional equipment and services with clear visuals and pricing.",
+            description: "The user adds necessary extra equipment (e.g., a child seat or GPS) to the booking, relying on clear photos and exact prices.",
             stepLabel: "Step 3",
             painPoint: {
               label: "Pain point",
-              text: "Generic icons and unclear pricing make it hard to know what an extra actually includes.",
+              text: "Standard (generic) icons and unclear pricing do not give the customer a realistic idea of what the offered extra includes or exactly how much it costs.",
             },
             solution: {
               label: "UX solution",
-              text: "Real photos of every extra with clear, itemized pricing shown up front.",
+              text: "Each accessory features real product photos and a transparent unit price, helping users make a confident and informed choice before adding the item to their cart.",
             },
           },
           {
-            title: "Summary",
-            description: "Confirm the complete order, personal details, and final price before payment.",
+            title: "Order Summary",
+            description: "The user reviews the booking details, enters personal information, and sees the final total price before paying.",
             stepLabel: "Step 4",
             painPoint: {
               label: "Pain point",
-              text: "Being forced to log in or register mid-flow interrupts customers just before they finish booking.",
+              text: "Mandatory login or account creation creates a major friction point right before completing the booking and disrupts the user journey.",
             },
             solution: {
               label: "UX solution",
-              text: "Fast, secure personal-details entry with a final price breakdown and summary before paying.",
+              text: "A quick guest checkout option. Entering personal information is smooth, and the user is shown a clear and transparent order overview before paying.",
             },
           },
         ],
@@ -392,8 +392,8 @@ export const project = {
       id: "reflections",
       title: "Reflections",
       paragraphs: [
-        "This project reminded me that a smooth booking experience depends on clarity at every step, especially around pricing and unfamiliar terminology.",
-        "Testing my ideas with users helped me question my assumptions and turn their hesitation into simpler, more confident interactions.",
+        "This project confirmed that a smooth booking experience relies on complete transparency at every touchpoint, especially when it comes to pricing and industry terminology.",
+        "Testing the design solutions with real users helped me challenge my initial assumptions and transform users' initial hesitations into a smooth and confidence-inspiring user experience.",
       ],
     },
   ],
