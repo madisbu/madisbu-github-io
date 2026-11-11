@@ -134,7 +134,7 @@ test("the car rental case study keeps localized images and enlargement sources s
     ]),
   ];
 
-  assert.ok(en.includes("This solo project explored how a car rental app could make booking more approachable."));
+  assert.ok(en.includes("In this independent project, I explored how to make booking a rental car in a mobile app easier and more intuitive."));
   assert.ok(et.includes("Selles iseseisvas projektis uurisin, kuidas muuta rendiauto broneerimine mobiilirakenduses lihtsamaks ja intuitiivsemaks."));
   assert.match(et, /class="case-study-discipline"[^>]*>UX\/UI disain<\/p>/);
   assert.match(et, /<p[^>]*>See projekt kinnitas, et sujuv broneerimiskogemus toetub täielikule läbipaistvusele igas puutepunktis, eriti kui asi puudutab hinnastamist ja erialatermineid\. Disainilahenduste testimine reaalsete kasutajatega aitas mul enda algseid eeldusi proovile panna ning kujundada kasutajate esmastest kõhklustest sujuv ja enesekindlust sisendav kasutajakogemus\.<\/p>/);

@@ -33,8 +33,8 @@ export const project = {
       eyebrow: "Business context",
       summary: "Make a detailed operational service easy to understand and easy to order.",
       paragraphs: [
-        "Waste collection involves details that can quickly overwhelm a customer: material type, volume, location, timing, and access requirements. This project organizes those decisions into a straightforward website and guided order request flow, giving customers a clearer path from exploring the service to submitting the details the business needs.",
-        "Clear language and strong visual hierarchy make the service easier to understand while creating a more reliable alternative to phone-only ordering.",
+        "When ordering waste collection, many variables need to be managed – from the type of waste to location and accessibility. My task was to translate this complexity into a simple web solution and a logical ordering process.",
+                "The result is a platform with a clear information structure and a strong visual hierarchy. It helps the customer make the right choices and offers a seamless and reliable alternative to time-consuming phone calls.",
       ],
       metrics: [
         { value: "2 formats", label: "Desktop and mobile experiences" },
@@ -49,13 +49,13 @@ export const project = {
       eyebrow: "Strategy",
       summary: "Connect customer tasks with the information the business needs to fulfill an order.",
       paragraphs: [
-        "The primary goal was to establish an online presence where none existed before, while making the ordering process more efficient. Previously, customers placed orders by phone, and many were unable to reach a company representative. Without an alternative way to submit a request, potential orders were missed. Four key problem areas emerged from this context:",
+        "The company lacked a website, which meant the entire ordering process relied on phone calls. If the lines were busy or unanswered, orders and customers were simply lost. The following problems needed to be solved:",
       ],
       numberedItems: [
-        { text: "The company had no online presence, so few people in its service area knew it existed." },
-        { text: "The available services and pricing were difficult to discover, leaving customers without clear information before ordering." },
-        { text: "The business lacked a consistent brand identity and social media presence, making it harder to build recognition and trust." },
-        { text: "Orders depended entirely on phone calls, so customers had no alternative way to submit a request when representatives were unavailable." },
+                { text: "Online invisibility: Due to the lack of a website, potential customers could not find the company." },
+                { text: "Inaccessible information: There was no public overview of services and pricing, creating uncertainty for the customer." },
+                { text: "Lack of branding: The absence of a unified identity hindered the growth of brand awareness and customer trust." },
+                { text: "Dependence on the phone: Without a digital order form, customers had no way to submit inquiries when a customer service representative was unavailable." },
       ],
       media: {
         src: "/images/projects/waste-disposal-website/focus-areas-waste.webp",
@@ -200,7 +200,7 @@ export const project = {
       title: "Reflections",
       eyebrow: "Learn",
       paragraphs: [
-        'The redesigned digital ordering platform for "Prahiveod" increased overall service bookings while cutting incoming support calls by ~15%. By optimizing the self-service order flow, the solution successfully scaled sales volume without increasing the team\'s support workload.',
+        'As a result of the redesign, the number of orders for "Prahiveod" increased, and the volume of support calls dropped by 15%. The smooth and intuitive self-service ordering process helped scale sales without increasing the team\'s administrative burden.',
       ],
       paragraphLinks: [{ label: "Prahiveod", href: "https://prahiveod.ee" }],
     },

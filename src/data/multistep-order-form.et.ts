@@ -25,7 +25,7 @@ const translations: Record<string, string> = {
   "Platform": "Platvorm",
   "Web Application": "Veebirakendus",
   "Deliverables": "Tulemid",
-  "Full-Stack Web Development": "Täislahenduse arendus (front-end ja back-end)",
+  "Full-Stack Web Development": "Full-stack veebiarendus",
   "Tools": "Töövahendid",
   "Overview": "Ülevaade",
   "Product context": "Tootetaust",
@@ -58,7 +58,7 @@ const translations: Record<string, string> = {
     "Asendada tavaline kontaktivorm juhendatud mitmeastmelise tellimisvooga, kus klient kinnitab täpse mahalaadimiskoha kaardil. Lisada koordinaadid esitatud tellimusele, et dispetšer ja juht saaksid selge asukoha ning järelkõnede vajadus väheneks.",
   "Capturing the drop-off point during ordering offered a practical way to reduce manual coordination for the waste-disposal company.":
     "Mahalaadimiskoha kogumine tellimise ajal pakkus jäätmekäitlusettevõttele võimaluse vähendada tellimusjärgset koordineerimist.",
-  "Product Approach": "Tootepõhine lähenemine",
+  "Product Approach": "Tootekeskne lähenemine",
   "Define and prioritize": "Määratlemine ja prioritiseerimine",
   "Keep the existing process, but capture the missing location detail at the source.":
     "Säilitada olemasolev protsess, kuid koguda puuduv asukohateave otse allikast.",

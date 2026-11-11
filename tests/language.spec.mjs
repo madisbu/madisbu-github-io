@@ -186,9 +186,17 @@ test("the language switcher is visible on mobile and clearly separated from the 
   const switcher = page.getByRole("group", { name: "Language" });
   await expect(switcher).toBeInViewport();
   const box = await switcher.getByRole("link", { name: "Eesti" }).boundingBox();
-  expect(box.height).toBeGreaterThanOrEqual(44);
+  expect(box).not.toBeNull();
+  expect(box.height).toBeCloseTo(36, 0);
+  expect(box.width).toBeGreaterThanOrEqual(36);
+  const switcherBox = await switcher.boundingBox();
+  const menuBox = await page.locator("#mobile-menu-open").boundingBox();
+  expect(switcherBox).not.toBeNull();
+  expect(menuBox).not.toBeNull();
+  expect(menuBox.x - (switcherBox.x + switcherBox.width)).toBeGreaterThanOrEqual(16);
   await switcher.getByRole("link", { name: "Eesti" }).click();
   await expect(page).toHaveURL(/\/et\/about\/?$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "et");
   await context.close();
 });
 
@@ -197,9 +205,12 @@ test("missing pages show a translated 404 under /et/ and an English one elsewher
   const page = await context.newPage();
   await page.goto("/et/does-not-exist");
   await expect(page).toHaveURL(/\/et\/404\/?$/);
-  await expect(page.getByRole("heading", { name: "Näib, et keerasid valesti." })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("lang", "et");
+  await expect(page.getByRole("heading", { name: "Näib, et oled eksinud.", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Tagasi avalehele" })).toHaveAttribute("href", "/et/");
+  await expect(page.getByRole("link", { name: "Uuri projekte" })).toHaveAttribute("href", "/et/projects");
   await page.goto("/does-not-exist");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("heading", { name: "Looks like a wrong turn." })).toBeVisible();
   await context.close();
 });

@@ -39,6 +39,8 @@ export interface Certification {
 export interface SkillGroup {
   title: string;
   skills: string[];
+  /** Hide the proficiency dots, e.g. for a group that is not a rated level. */
+  unrated?: boolean;
 }
 
 export interface Language {

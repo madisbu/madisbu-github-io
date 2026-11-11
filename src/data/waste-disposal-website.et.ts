@@ -34,9 +34,9 @@ const translations: Record<string, string> = {
   "Business context": "Äriline taust",
   "Make a detailed operational service easy to understand and easy to order.":
     "Muuta üksikasjalik teenus arusaadavaks ja lihtsasti tellitavaks.",
-  "Waste collection involves details that can quickly overwhelm a customer: material type, volume, location, timing, and access requirements. This project organizes those decisions into a straightforward website and guided order request flow, giving customers a clearer path from exploring the service to submitting the details the business needs.":
+  "When ordering waste collection, many variables need to be managed – from the type of waste to location and accessibility. My task was to translate this complexity into a simple web solution and a logical ordering process.":
     "Jäätmeveo tellimisel tuleb hallata paljusid muutujaid – alates jäätmete liigist kuni asukoha ja ligipääsetavuseni. Minu ülesanne oli tõlkida see keerukus lihtsasse veebilahendusse ja loogilisse tellimisteekonda.",
-  "Clear language and strong visual hierarchy make the service easier to understand while creating a more reliable alternative to phone-only ordering.":
+  "The result is a platform with a clear information structure and a strong visual hierarchy. It helps the customer make the right choices and offers a seamless and reliable alternative to time-consuming phone calls.":
     "Tulemuseks on selge inforuumi ja tugeva visuaalse hierarhiaga platvorm. See aitab kliendil teha õigeid valikuid ning pakub aeganõudvatele telefonikõnedele sujuvat ja usaldusväärset alternatiivi.",
   "2 formats": "2 vaadet",
   "Desktop and mobile experiences": "Arvuti- ja mobiilivaade",
@@ -50,15 +50,15 @@ const translations: Record<string, string> = {
   "Strategy": "Strateegia",
   "Connect customer tasks with the information the business needs to fulfill an order.":
     "Siduda kliendi vajadused teabega, mida ettevõte tellimuse täitmiseks vajab.",
-  "The primary goal was to establish an online presence where none existed before, while making the ordering process more efficient. Previously, customers placed orders by phone, and many were unable to reach a company representative. Without an alternative way to submit a request, potential orders were missed. Four key problem areas emerged from this context:":
+  "The company lacked a website, which meant the entire ordering process relied on phone calls. If the lines were busy or unanswered, orders and customers were simply lost. The following problems needed to be solved:":
     "Ettevõttel puudus veebileht, mistõttu toetus kogu tellimisprotsess telefonikõnedele. Kui liinid olid kinni või vastamata, jäid tellimused ja kliendid lihtsalt saamata. Lahendamist vajasid järgmised probleemid:",
-  "The company had no online presence, so few people in its service area knew it existed.":
+  "Online invisibility: Due to the lack of a website, potential customers could not find the company.":
     "Nähtamatus veebis: Puuduva veebilehe tõttu ei leidnud potentsiaalsed kliendid ettevõtet üles.",
-  "The available services and pricing were difficult to discover, leaving customers without clear information before ordering.":
+  "Inaccessible information: There was no public overview of services and pricing, creating uncertainty for the customer.":
     "Info kättesaamatus: Teenuste ja hinnakirja kohta puudus avalik ülevaade, tekitades kliendis ebakindlust.",
-  "The business lacked a consistent brand identity and social media presence, making it harder to build recognition and trust.":
+  "Lack of branding: The absence of a unified identity hindered the growth of brand awareness and customer trust.":
     "Brändi puudumine: Ühtse identiteedi puudumine takistas tuntuse ja kliendiusalduse kasvatamist.",
-  "Orders depended entirely on phone calls, so customers had no alternative way to submit a request when representatives were unavailable.":
+  "Dependence on the phone: Without a digital order form, customers had no way to submit inquiries when a customer service representative was unavailable.":
     "Sõltuvus telefonist: Ilma digitaalse tellimisvormita polnud klientidel võimalust päringuid edastada siis, kui klienditeenindaja polnud hetkel kättesaadav.",
   "Waste disposal website shown on two mobile screens":
     "Jäätmekäitluse veebileht kahel mobiilivaates kuval",
@@ -82,7 +82,7 @@ const translations: Record<string, string> = {
   "Search visibility": "Nähtavus otsingus",
   "SEO": "SEO",
   "Page optimization": "Veebilehe tehniline ja kiiruse optimeerimine",
-  "Order Form": "Arendus",
+  "Order Form": "Tellimusvorm",
   "Custom Vue.js form": "Kohandatud Vue.js vorm",
   "Custom Build • Phase 2": "Erilahendus • 2. etapp",
   "Custom order flow design": "Tellimusvormi (UI) disain",
@@ -131,7 +131,7 @@ const translations: Record<string, string> = {
     "PrahiVeodi jäätmekäitluse veebileht arvuti- ja mobiilivaates",
   "Reflections": "Kokkuvõte",
   "Learn": "Õppetunnid",
-  'The redesigned digital ordering platform for "Prahiveod" increased overall service bookings while cutting incoming support calls by ~15%. By optimizing the self-service order flow, the solution successfully scaled sales volume without increasing the team\'s support workload.':
+  'As a result of the redesign, the number of orders for "Prahiveod" increased, and the volume of support calls dropped by 15%. The smooth and intuitive self-service ordering process helped scale sales without increasing the team\'s administrative burden.':
     "Disainiuuenduse tulemusel kasvas „Prahiveod“ tellimuste arv ning tugikõnede hulk langes 15%. Sujuv ja intuitiivne iseteeninduslik tellimisteekond aitas skaleerida müüki ilma meeskonna halduskoormust kasvatamata.",
 };
 
