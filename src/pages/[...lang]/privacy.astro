@@ -1,0 +1,47 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { localeStaticPaths } from "../../i18n";
+import { useI18n } from "../../i18n/astro";
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t } = useI18n(Astro.url);
+const p = t.privacy;
+---
+
+<Layout title={p.title} description={p.description}>
+  <article class="privacy-notice">
+    <h1>{p.heading}</h1>
+    <p>{p.updated}</p>
+
+    {
+      p.sections.map((section) => (
+        <>
+          <h2>{section.heading}</h2>
+          {section.blocks.map((block) =>
+            block.ul ? (
+              <ul>{block.ul.map((item) => <li set:html={item} />)}</ul>
+            ) : (
+              <p set:html={block.p} />
+            ),
+          )}
+        </>
+      ))
+    }
+  </article>
+</Layout>
+
+<style>
+  .privacy-notice { max-width: 48rem; margin: 0 auto; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); }
+  h2 { margin-top: 2rem; font-size: 1.5rem; }
+  p, ul { margin-top: 1rem; }
+  p { text-align: justify; }
+  ul { list-style: disc; padding-left: 1.5rem; }
+  li + li { margin-top: 0.75rem; }
+  /* Links and the Cookies button live inside set:html content, so they need :global. */
+  .privacy-notice :global(a), .privacy-notice :global(button) { text-decoration: underline; text-underline-offset: 0.2em; }
+  .privacy-notice :global(button) { cursor: pointer; }
+</style>

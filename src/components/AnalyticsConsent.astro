@@ -1,4 +1,8 @@
 ---
+import { useI18n } from "../i18n/astro";
+
+const { t, href } = useI18n(Astro.url);
+const c = t.consent;
 const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim() ?? "";
 if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) {
   throw new Error("PUBLIC_GA_MEASUREMENT_ID must be a GA4 ID starting with G-.");
@@ -9,32 +13,26 @@ if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) {
   data-analytics-consent
   data-measurement-id={measurementId}
   data-production={String(import.meta.env.PROD)}
+  data-messages={JSON.stringify(c.messages)}
 >
-  <div class="privacy-controls" aria-label="Privacy controls">
-    <a href={`${import.meta.env.BASE_URL}privacy/`}>Privacy</a>
+  <div class="privacy-controls" aria-label={c.controlsLabel}>
+    <a href={`${href("/privacy")}/`}>{c.privacy}</a>
     <span class="privacy-separator" aria-hidden="true"></span>
-    <button type="button" data-cookie-settings aria-haspopup="dialog">Cookies</button>
+    <button type="button" data-cookie-settings aria-haspopup="dialog">{c.cookies}</button>
   </div>
   <dialog aria-labelledby="consent-title" aria-describedby="consent-description">
-    <p class="consent-eyebrow"><span aria-hidden="true"></span> OPTIONAL ANALYTICS</p>
-    <h2 id="consent-title">Your privacy, your choice.</h2>
-    <p id="consent-description">
-      May I use Google Analytics to understand visits, engagement, resume downloads,
-      and email-link clicks? No Analytics requests or cookies are sent until you accept.
-      The site works the same if you reject.
-    </p>
-    <p class="consent-details">
-      Your choice is saved for 180 days. Change your mind or withdraw consent anytime
-      using Cookies.
-    </p>
-    <a class="consent-privacy-link" href={`${import.meta.env.BASE_URL}privacy/`}>Read the privacy notice <span aria-hidden="true">&rarr;</span></a>
+    <p class="consent-eyebrow"><span aria-hidden="true"></span> {c.eyebrow}</p>
+    <h2 id="consent-title">{c.title}</h2>
+    <p id="consent-description">{c.description}</p>
+    <p class="consent-details">{c.details}</p>
+    <a class="consent-privacy-link" href={`${href("/privacy")}/`}><span class="consent-privacy-text">{c.readNotice}</span> <span aria-hidden="true">&rarr;</span></a>
     <p data-consent-status role="status" aria-live="polite"></p>
     <div class="consent-actions">
-      <button type="button" data-consent-reject autofocus>Reject analytics</button>
-      <button type="button" data-consent-accept>Accept analytics</button>
+      <button type="button" data-consent-reject autofocus>{c.reject}</button>
+      <button type="button" data-consent-accept>{c.accept}</button>
     </div>
   </dialog>
-  <noscript><p class="no-script">Analytics is off because JavaScript is disabled.</p></noscript>
+  <noscript><p class="no-script">{c.noscript}</p></noscript>
 </div>
 
 <script>
@@ -131,6 +129,10 @@ if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) {
     color: var(--color-text-dark);
     font-size: 0.875rem;
     font-weight: 600;
+    text-decoration: none;
+  }
+  /* Only the words are underlined, not the arrow. */
+  .consent-privacy-text {
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }

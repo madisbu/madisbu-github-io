@@ -1,84 +1,35 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { getProfileAge } from "../utils/profile-age";
+import Layout from "../../layouts/Layout.astro";
+import { localeStaticPaths } from "../../i18n";
+import { useI18n } from "../../i18n/astro";
+import { getProfileAge } from "../../utils/profile-age";
 
-const tabs = ["General", "Goals", "Frustrations"];
-const goals = [
-  "Keep growing my technical, leadership, and design skills.",
-  "Create digital products that solve real problems for people.",
-  "Explore how AI can make products and project delivery smarter.",
-  "Lead by example and inspire my children to stay curious.",
-];
-const frustrations = [
-  "Limited opportunities to learn, grow, or take on meaningful challenges.",
-  "Contributions going unrecognized or feedback being overlooked.",
-  "Poor communication and a lack of trust or shared ownership.",
-  "Constant firefighting that leaves little room for focused, thoughtful work.",
-];
-const interests = [
-  {
-    id: "travelling",
-    label: "Travelling",
-    description: "Japan, Iceland, Morocco, Nepal... my travel wish list keeps growing.",
-    alt: "Image by Jonah Brown",
-    size: 480,
-  },
-  {
-    id: "football",
-    label: "Football",
-    description: "I've played football for over 20 years. It's in my DNA.",
-    alt: "Football",
-    size: 720,
-  },
-  {
-    id: "family",
-    label: "Family",
-    description: "My family means everything to me. It's as simple as that.",
-    alt: "Image by Adam Sherez",
-    size: 400,
-  },
-  {
-    id: "bbq",
-    label: "BBQ",
-    description: "Something on the grill and a cold beer in hand. That's my kind of evening.",
-    alt: "BBQ - Image by Fábio Alves",
-    size: 400,
-  },
-  {
-    id: "gaming",
-    label: "Gaming",
-    description: "Gaming is my way to unwind. I lose track of time playing The Last of Us or Red Dead Redemption 2.",
-    alt: "PlayStation - Image by Igor Karimov",
-    size: 480,
-  },
-];
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t } = useI18n(Astro.url);
+const a = t.about;
+const interestSizes: Record<string, number> = { travelling: 480, football: 720, family: 400, bbq: 400, gaming: 480 };
 ---
 
-<Layout
-  title="About"
-  description="Meet Madis Burmeister, a Senior Technical Project Manager with a passion for UX and web design, and discover his goals and daily motivation."
-  wide
->
+<Layout title={a.title} description={a.description} wide>
   <div class="about">
     <section class="profile" aria-labelledby="about-heading">
       <img
         class="portrait"
         src="/images/about/portrait.webp"
-        alt="Madis Burmeister"
+        alt={a.portraitAlt}
         width="608"
         height="1351"
         fetchpriority="high"
       />
       <div class="profile-copy">
-        <h1 id="about-heading">Who am I?</h1>
-        <p class="bio">
-          Hi, I'm Madis, a father of two and a Senior Technical Project Manager. I've spent most of my career
-          delivering IT projects, and I have a passion for UX and Web Design. I bring together creativity,
-          technical expertise, and a user-centered mindset to create digital products that make people's lives easier.
-        </p>
+        <h1 id="about-heading">{a.heading}</h1>
+        <p class="bio">{a.bio}</p>
         <div class="profile-tabs" data-profile-tabs>
-          <div class="tab-list" role="tablist" aria-label="About Madis">
-            {tabs.map((tab, index) => (
+          <div class="tab-list" role="tablist" aria-label={a.tabsLabel}>
+            {a.tabs.map((tab, index) => (
               <button
                 type="button"
                 role="tab"
@@ -92,13 +43,13 @@ const interests = [
           <div class="tab-panels">
             <div role="tabpanel" id="about-panel-0" aria-labelledby="about-tab-0" aria-hidden="false" tabindex="0">
               <dl>
-                <div><dt>Age:</dt><dd data-profile-age>{getProfileAge()}</dd></div>
-                <div><dt>Location:</dt><dd>Estonia</dd></div>
-                <div><dt>Current occupation:</dt><dd>Senior Technical Project Manager</dd></div>
-                <div><dt>Certification:</dt><dd>EQF Level 5 in UX Design</dd></div>
+                <div><dt>{a.general.age}</dt><dd data-profile-age>{getProfileAge()}</dd></div>
+                <div><dt>{a.general.location}</dt><dd>{a.general.locationValue}</dd></div>
+                <div><dt>{a.general.occupation}</dt><dd>{a.general.occupationValue}</dd></div>
+                <div><dt>{a.general.certification}</dt><dd>{a.general.certificationValue}</dd></div>
               </dl>
             </div>
-            {[goals, frustrations].map((items, index) => (
+            {[a.goals, a.frustrations].map((items, index) => (
               <div
                 role="tabpanel"
                 id={`about-panel-${index + 1}`}
@@ -112,20 +63,17 @@ const interests = [
             ))}
           </div>
         </div>
-        <p class="outro">
-          When I'm not working, I love traveling, especially taking road trips that create long-lasting memories.
-          Check out my full motivation package below…
-        </p>
+        <p class="outro">{a.outro}</p>
       </div>
     </section>
 
     <section class="motivation" aria-labelledby="motivation-heading">
       <div class="motivation-intro">
-        <h2 id="motivation-heading">Madis's<br /><span>motivation</span> package</h2>
-        <p id="interest-instruction"><mark>Tap or hover</mark> over each image to discover what gives me energy every day.</p>
+        <h2 id="motivation-heading">{a.motivation.lead}<span>{a.motivation.highlight}</span>{a.motivation.tail}</h2>
+        <p id="interest-instruction">{a.instruction.map((part) => (part.mark ? <mark>{part.text}</mark> : part.text))}</p>
       </div>
       <div class="interests" aria-describedby="interest-instruction">
-        {interests.map((interest) => (
+        {a.interests.map((interest) => (
           <div class:list={["interest", interest.id]} data-interest>
             <button
               class="interest-toggle"
@@ -137,8 +85,8 @@ const interests = [
               <img
                 src={`/images/about/${interest.id}.webp`}
                 alt={interest.alt}
-                width={interest.size}
-                height={interest.size}
+                width={interestSizes[interest.id]}
+                height={interestSizes[interest.id]}
                 loading="lazy"
                 decoding="async"
               />
@@ -153,16 +101,16 @@ const interests = [
     </section>
 
     <section class="connect" aria-labelledby="connect-heading">
-      <h2 id="connect-heading">Have a project in mind, a shared interest or a <span>question</span>?</h2>
+      <h2 id="connect-heading">{a.connect.before}<span>{a.connect.highlight}</span>{a.connect.after}</h2>
       <a class="connect-cta" href="mailto:madis.burmeister@mabux.me">
-        Let's talk <span aria-hidden="true">&rarr;</span>
+        {a.connect.cta} <span aria-hidden="true">&rarr;</span>
       </a>
     </section>
   </div>
 </Layout>
 
 <script>
-  import { getProfileAge } from "../utils/profile-age";
+  import { getProfileAge } from "../../utils/profile-age";
 
   const updateProfileAge = () => {
     document.querySelectorAll<HTMLElement>("[data-profile-age]").forEach((element) => {
@@ -328,7 +276,8 @@ const interests = [
   }
   .motivation-intro { padding-top: 155px; text-align: center; }
   .motivation h2 { font-size: 65px; line-height: 1.1; }
-  .motivation h2 span { text-decoration: underline var(--about-lime) 5px; text-underline-offset: 8px; }
+  /* Centre the highlighted word on the column even when it is wider than the column. */
+  .motivation h2 span { display: block; width: max-content; margin-left: 50%; transform: translateX(-50%); text-decoration: underline var(--about-lime) 5px; text-underline-offset: 8px; }
   .motivation-intro > p { margin: 90px 25px 0; font-size: 24px; line-height: 1.45; }
   mark { background: var(--about-lime); color: #000; }
   .interests { position: relative; min-height: 1000px; }

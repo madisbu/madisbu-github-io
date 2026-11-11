@@ -1,25 +1,27 @@
 ---
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import { useI18n } from "../i18n/astro";
+
+const { t, path, href } = useI18n(Astro.url);
+
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Projects", href: "/projects" },
-  { label: "About", href: "/about" },
-  { label: "Resume", href: "/resume" },
-  { label: "Contact", href: "/contact" },
-];
+  { label: t.nav.home, path: "/" },
+  { label: t.nav.projects, path: "/projects" },
+  { label: t.nav.about, path: "/about" },
+  { label: t.nav.resume, path: "/cv" },
+  { label: t.nav.contact, path: "/contact" },
+].map((item) => ({ ...item, href: href(item.path) }));
 
-const githubUrl = "https://github.com/madisbu";
-
-const { pathname } = Astro.url;
-const isActive = (href: string) => {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(href + "/");
+const isActive = (itemPath: string) => {
+  if (itemPath === "/") return path === "/";
+  return path === itemPath || path.startsWith(itemPath + "/");
 };
 ---
 
 <header data-site-header class="border-b border-border bg-body">
   <div class="header-shell relative mx-auto flex w-full max-w-5xl items-center px-4 py-3 sm:py-4">
     <!-- Logo -->
-    <a href="/" class="inline-flex shrink-0 items-center" aria-label="Mabux Home">
+    <a href={href("/")} class="inline-flex shrink-0 items-center" aria-label={t.nav.homeAria}>
       <picture>
         <source srcset="/mabux_logo_transparent.webp" type="image/webp" />
         <img src="/mabux_logo.png" alt="Mabux" width="80" height="80" class="brand-logo h-20 w-auto sm:h-20" loading="eager" decoding="async" />
@@ -27,15 +29,15 @@ const isActive = (href: string) => {
     </a>
 
     <!-- Desktop: centered nav -->
-    <nav aria-label="Main navigation" class="desktop-nav absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-sm font-bold tracking-widest uppercase sm:flex">
+    <nav aria-label={t.nav.mainLabel} class="desktop-nav absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-7 text-sm font-bold tracking-widest uppercase sm:flex">
       {
         navItems.map((item) => (
           <a
             href={item.href}
-            aria-current={isActive(item.href) ? "page" : undefined}
+            aria-current={isActive(item.path) ? "page" : undefined}
             class:list={[
               "rounded px-3 py-1.5 transition-colors",
-              isActive(item.href)
+              isActive(item.path)
                 ? "bg-[#EFF93B] text-black"
                 : "text-text-dark hover:text-primary",
             ]}
@@ -47,26 +49,18 @@ const isActive = (href: string) => {
     </nav>
 
     <!-- Right side -->
-    <div class="ml-auto flex items-center gap-3">
-      <!-- Desktop: GitHub button -->
-      <a
-        href={githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="desktop-github hidden items-center gap-2 rounded-sm border border-text-light px-4 py-1.5 text-sm font-bold tracking-wide text-text-dark transition-colors hover:bg-text-dark hover:text-body sm:inline-flex"
-      >
-        <svg class="h-4 w-4 fill-current" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 0-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-        </svg>
-        GitHub
-      </a>
+    <div class="ml-auto flex items-center gap-4 sm:gap-3">
+      <!-- Language switcher: always visible, set apart from the menu items -->
+      <div class="header-language">
+        <LanguageSwitcher />
+      </div>
 
       <!-- Mobile: hamburger button -->
       <button
         id="mobile-menu-open"
         type="button"
         class="mobile-menu-toggle min-h-11 min-w-11 p-2 text-text-dark sm:hidden"
-        aria-label="Open menu"
+        aria-label={t.nav.openMenu}
         aria-expanded="false"
         aria-controls="mobile-menu-overlay"
       >
@@ -77,9 +71,9 @@ const isActive = (href: string) => {
     </div>
   </div>
   <noscript>
-    <nav class="mobile-fallback-nav" aria-label="Main navigation">
+    <nav class="mobile-fallback-nav" aria-label={t.nav.mainLabel}>
       {navItems.map((item) => (
-        <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>
+        <a href={item.href} aria-current={isActive(item.path) ? "page" : undefined}>{item.label}</a>
       ))}
     </nav>
   </noscript>
@@ -99,22 +93,22 @@ const isActive = (href: string) => {
     id="mobile-menu-close"
     type="button"
     class="absolute right-5 top-5 text-2xl font-light text-text-dark"
-    aria-label="Close menu"
+    aria-label={t.nav.closeMenu}
   >
     ✕
   </button>
 
   <!-- Nav items -->
-  <nav aria-label="Main navigation" class="flex flex-1 flex-col items-center justify-center gap-4">
-    <p id="mobile-menu-title" class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">Menu</p>
+  <nav aria-label={t.nav.mainLabel} class="flex flex-1 flex-col items-center justify-center gap-4">
+    <p id="mobile-menu-title" class="mb-6 text-xl font-black tracking-widest uppercase text-text-dark">{t.nav.menu}</p>
     {
       navItems.map((item) => (
         <a
           href={item.href}
-          aria-current={isActive(item.href) ? "page" : undefined}
+          aria-current={isActive(item.path) ? "page" : undefined}
           class:list={[
             "w-64 rounded px-6 py-3 text-center text-sm font-bold tracking-widest uppercase transition-colors",
-            isActive(item.href)
+            isActive(item.path)
               ? "bg-[#EFF93B] text-black"
               : "text-text-dark hover:bg-light",
           ]}
@@ -123,22 +117,6 @@ const isActive = (href: string) => {
         </a>
       ))
     }
-    <a
-      href={githubUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="w-64 rounded px-6 py-3 text-center text-sm font-bold tracking-widest uppercase transition-colors text-text-dark hover:bg-light inline-flex items-center justify-center gap-2"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" aria-hidden="true">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-      </svg>
-      GITHUB
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3 opacity-60" aria-hidden="true">
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-        <polyline points="15 3 21 3 21 9"/>
-        <line x1="10" y1="14" x2="21" y2="3"/>
-      </svg>
-    </a>
   </nav>
 </div>
 
@@ -198,8 +176,7 @@ const isActive = (href: string) => {
   }
 
   @media (min-width: 640px) and (max-width: 767px) {
-    .desktop-nav,
-    .desktop-github {
+    .desktop-nav {
       display: none;
     }
 
@@ -222,13 +199,6 @@ const isActive = (href: string) => {
       padding-left: 0.6rem;
       padding-right: 0.6rem;
     }
-
-    .desktop-github {
-      gap: 0.45rem;
-      padding-left: 0.7rem;
-      padding-right: 0.7rem;
-      font-size: 0.8125rem;
-    }
   }
 
   @media
@@ -236,8 +206,7 @@ const isActive = (href: string) => {
     (min-width: 481px) and
     (max-width: 1023px) and
     (max-height: 480px) {
-    .desktop-nav,
-    .desktop-github {
+    .desktop-nav {
       display: none;
     }
 
@@ -306,10 +275,6 @@ const isActive = (href: string) => {
       font-size: 1rem;
     }
 
-    .desktop-github {
-      padding: 0.625rem 1.25rem;
-      font-size: 1rem;
-    }
   }
 
   @media (min-width: 3840px) {
@@ -327,10 +292,6 @@ const isActive = (href: string) => {
       font-size: 1.25rem;
     }
 
-    .desktop-github {
-      padding: 0.75rem 1.5rem;
-      font-size: 1.25rem;
-    }
   }
 
   @media (scripting: none) {
@@ -341,6 +302,20 @@ const isActive = (href: string) => {
 </style>
 
 <script>
+  import { LANGUAGE_KEY, serializeLanguage } from "../utils/language-preference";
+  import type { Locale } from "../i18n";
+
+  // Remember an explicit language choice so the home-page redirect never overrides it.
+  document.querySelectorAll<HTMLAnchorElement>("[data-language]").forEach((link) => {
+    link.addEventListener("click", () => {
+      try {
+        localStorage.setItem(LANGUAGE_KEY, serializeLanguage(link.dataset.language as Locale));
+      } catch {
+        // Storage can be unavailable; the switch itself still works.
+      }
+    });
+  });
+
   const openBtn = document.querySelector<HTMLButtonElement>("#mobile-menu-open");
   const closeBtn = document.querySelector<HTMLButtonElement>("#mobile-menu-close");
   const overlay = document.querySelector<HTMLElement>("#mobile-menu-overlay")!;

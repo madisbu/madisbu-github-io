@@ -1,4 +1,6 @@
 ---
+import { useI18n } from "../i18n/astro";
+
 export interface Props {
   title: string;
   description: string;
@@ -10,6 +12,7 @@ export interface Props {
 }
 
 const { title, description, category, filterKey, image, slug, index } = Astro.props;
+const { t, href } = useI18n(Astro.url);
 ---
 
 <article
@@ -18,7 +21,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
   data-filter-key={filterKey}
   style={`--stagger: ${index * 90}ms`}
 >
-  <a href={slug} class="project-card__link">
+  <a href={href(slug)} class="project-card__link">
     <div class="project-card__media">
       <img
         src={image}
@@ -42,7 +45,7 @@ const { title, description, category, filterKey, image, slug, index } = Astro.pr
       <h2 class="project-card__title">{title}</h2>
       <p class="project-card__description">{description}</p>
       <span class="project-card__action">
-        View project
+        {t.projects.viewProject}
         <svg viewBox="0 0 16 16" aria-hidden="true">
           <path d="M3 8h10M9 4l4 4-4 4"></path>
         </svg>

@@ -12,6 +12,7 @@
     "test:seo": "npm run build && node --test scripts/seo.test.mjs",
     "test:analytics": "playwright test",
     "images:hero": "node scripts/gen-hero.mjs",
+    "resume:et": "node scripts/build-resume-et.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

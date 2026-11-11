@@ -1,0 +1,79 @@
+---
+import { locales, type Locale } from "../i18n";
+import { useI18n } from "../i18n/astro";
+
+const { locale, t, alternate } = useI18n(Astro.url);
+
+// Language names are shown in their own language.
+const names: Record<Locale, string> = { en: "English", et: "Eesti" };
+---
+
+<div role="group" aria-label={t.language.label} class="language-switch">
+  {
+    locales.map((code) =>
+      code === locale ? (
+        <span lang={code} aria-current="true" class="language-switch__option is-current">
+          <span aria-hidden="true">{code.toUpperCase()}</span>
+          <span class="sr-only">{names[code]}</span>
+        </span>
+      ) : (
+        <a
+          href={alternate(code)}
+          lang={code}
+          hreflang={code}
+          data-language={code}
+          aria-label={names[code]}
+          title={names[code]}
+          class="language-switch__option"
+        >
+          {code.toUpperCase()}
+        </a>
+      )
+    )
+  }
+</div>
+
+<style>
+  /* A bordered toggle with a filled current option and the same corners as the page buttons (rounded-md). */
+  .language-switch {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    border: 1px solid var(--color-text-dark);
+    border-radius: 0.375rem;
+    background: var(--color-body);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
+
+  .language-switch__option {
+    display: inline-flex;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    padding-inline: 0.5rem;
+    color: var(--color-text-dark);
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  a.language-switch__option:hover {
+    background: var(--color-light);
+  }
+
+  .language-switch__option.is-current {
+    background: var(--color-dark);
+    color: #fff;
+  }
+
+  @media (min-width: 640px) {
+    .language-switch__option {
+      min-width: 2.25rem;
+      height: 1.875rem;
+    }
+  }
+</style>

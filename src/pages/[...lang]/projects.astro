@@ -1,52 +1,45 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ProjectCard from "../components/ProjectCard.astro";
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { localeStaticPaths } from "../../i18n";
+import { useI18n } from "../../i18n/astro";
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { t } = useI18n(Astro.url);
+const p = t.projects;
 
 const projects = [
   {
-    title: "Car Rental App Redesign",
-    description: "A friendlier mobile booking experience shaped around clarity, confidence, and fewer steps.",
-    category: "UX/UI Design",
+    id: "car-rental-app-redesign",
     filterKey: "ux-ui",
     image: "/images/projects/car-rental-app-redesign/cover.webp",
-    slug: "/projects/car-rental-app-redesign",
   },
   {
-    title: "Waste Disposal Website",
-    description: "A focused service website with a custom order form that makes a complex request feel simple.",
-    category: "Web Design",
+    id: "waste-disposal-website",
     filterKey: "web",
     image: "/images/projects/waste-disposal-website/cover.webp",
-    slug: "/projects/waste-disposal-website",
   },
   {
-    title: "Multistep Order Form",
-    description: "An MVP order flow that guides customers through a structured purchase without unnecessary friction.",
-    category: "Product Development",
+    id: "multistep-order-form",
     filterKey: "product",
     image: "/images/projects/multistep-order-form/cover.webp",
-    slug: "/projects/multistep-order-form",
   },
-];
+].map(({ id, ...project }) => ({ ...p.items[id as keyof typeof p.items], ...project, slug: `/projects/${id}` }));
 
-const filters = [
-  { key: "all", label: "ALL WORK" },
-  { key: "ux-ui", label: "UX/UI" },
-  { key: "web", label: "WEB" },
-  { key: "product", label: "PRODUCT" },
-];
-
-const pageDescription = "UX/UI, web design, and product development projects by Madis Burmeister.";
+const filters = (["all", "ux-ui", "web", "product"] as const).map((key) => ({ key, label: p.filters[key] }));
 ---
 
-<Layout title="Projects" description={pageDescription} wide>
+<Layout title={p.title} description={p.description} wide>
   <section class="projects-intro">
-    <h1>Projects<span aria-hidden="true">.</span></h1>
+    <h1>{p.heading}<span aria-hidden="true">.</span></h1>
   </section>
 
-  <section class="projects-section" aria-label="Portfolio projects">
+  <section class="projects-section" aria-label={p.sectionLabel}>
     <div class="projects-toolbar">
-      <div class="projects-filters" role="group" aria-label="Project categories">
+      <div class="projects-filters" role="group" aria-label={p.categoriesLabel}>
         {
           filters.map((filter, index) => (
             <button
@@ -62,7 +55,13 @@ const pageDescription = "UX/UI, web design, and product development projects by 
       </div>
     </div>
 
-    <p class="sr-only" role="status" data-project-status></p>
+    <p
+      class="sr-only"
+      role="status"
+      data-project-status
+      data-shown-one={p.shownOne}
+      data-shown-other={p.shownOther}
+    ></p>
     <div class="projects-grid">
       {projects.map((project, index) => <ProjectCard {...project} index={index} />)}
     </div>
@@ -140,7 +139,11 @@ const pageDescription = "UX/UI, web design, and product development projects by 
       });
 
       grid.classList.toggle("is-single-result", visibleCount === 1);
-      if (status) status.textContent = `${visibleCount} ${visibleCount === 1 ? "project" : "projects"} shown`;
+      if (status) {
+        // Templates arrive pre-translated from the page.
+        const template = visibleCount === 1 ? status.dataset.shownOne : status.dataset.shownOther;
+        status.textContent = (template ?? "").replace("{count}", String(visibleCount));
+      }
     };
 
     filters.forEach((filter) => {

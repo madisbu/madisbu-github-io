@@ -1,20 +1,20 @@
 ---
+import { useI18n } from "../i18n/astro";
+
 export interface Props {
   greetings?: string[];
   name?: string;
 }
 
-const {
-  greetings = ["Hello...", "你好...", "नमस्ते...", "Hola...", "مرحبا...", "Bonjour...", "নমস্কার...", "Olá...", "Tere..."],
-  name = "I'm Madis !",
-} = Astro.props;
+const { t } = useI18n(Astro.url);
+const { greetings = t.home.greetings, name = t.home.name } = Astro.props;
 ---
 
 <div class="text-center">
   <h1
     class="mobile-hero-sentence mb-2 text-balance text-center text-2xl font-black leading-[1.05] tracking-tight text-text-dark sm:mb-3 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl"
   >
-    <span class="sr-only">{greetings[0]} {name} UX Engineer from Estonia</span>
+    <span class="sr-only">{greetings[0]} {name} {t.home.role} {t.home.roleRest}</span>
     <span class="inline-flex flex-col items-center gap-y-1 sm:gap-y-2" aria-hidden="true">
       <span class="inline-flex flex-nowrap items-baseline justify-center gap-x-2 whitespace-nowrap" data-typing-root data-greetings={JSON.stringify(greetings)}>
         <span class="hero-sentence__typing">
@@ -23,7 +23,7 @@ const {
         <span>{name}</span>
       </span>
       <span class="whitespace-nowrap">
-        <span class="hero-sentence__underline">UX Engineer</span> from Estonia
+        <span class="hero-sentence__underline">{t.home.role}</span> {t.home.roleRest}
       </span>
     </span>
   </h1>

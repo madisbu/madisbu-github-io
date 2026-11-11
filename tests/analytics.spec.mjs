@@ -88,19 +88,19 @@ test("accept once, sanitize URLs, record safe intent events, and withdraw", asyn
   expect(queue.filter((args) => args[1] === "contact_click")).toEqual([
     ["event", "contact_click", { contact_method: "email" }],
   ]);
-  await page.goto(`${production}/resume/`);
+  await page.goto(`${production}/cv/`);
   await expect.poll(() => requests.length).toBe(2);
   await expect(page.getByRole("dialog")).not.toBeVisible();
   expect((await commands(page)).filter((args) => args[1] === "page_view")).toHaveLength(1);
   await page.evaluate(() => {
-    const link = document.querySelector('a[href="/resume.pdf"]');
+    const link = document.querySelector('a[href="/cv.pdf"]');
     link.addEventListener("click", (event) => event.preventDefault());
     link.click();
     document.cookie = "_ga=test; Path=/; Secure";
     document.cookie = "_ga_WN68N9308Y=test; Domain=.mabux.me; Path=/; Secure";
   });
   expect((await commands(page)).filter((args) => args[1] === "resume_download")).toEqual([
-    ["event", "resume_download", { file_name: "resume.pdf" }],
+    ["event", "resume_download", { file_name: "cv.pdf" }],
   ]);
   await page.getByRole("button", { name: "Cookies", exact: true }).click();
   await Promise.all([
@@ -168,7 +168,7 @@ test("mobile consent and persistent controls fit the viewport", async ({ context
   await page.getByRole("button", { name: "Reject analytics", exact: true }).click();
   await expect(page.getByRole("button", { name: "Cookies", exact: true })).toBeInViewport();
   await page.getByRole("link", { name: "Privacy", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Privacy & cookies" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Privacy policy & cookies" })).toBeVisible();
   await page.getByRole("button", { name: "Cookies", exact: true }).first().click();
   await expect(page.getByRole("dialog")).toBeVisible();
 });
@@ -260,6 +260,39 @@ test("privacy styling preserves touch targets, focus, and balanced responsive di
     await page.keyboard.press("Escape");
     await expect(settings).toBeFocused();
   }
+});
+
+test("Estonian consent dialog keeps the same safe behavior in Estonian", async ({ context, page }) => {
+  const requests = await mockProduction(context);
+  await page.goto(`${production}/et/`);
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Keeldu analüütikast", exact: true })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Nõustu analüütikaga", exact: true })).toBeEnabled();
+  expect(requests).toEqual([]);
+  await page.getByRole("button", { name: "Keeldu analüütikast", exact: true }).click();
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)).status, consentKey)).toBe("rejected");
+  await page.getByRole("button", { name: "Küpsised", exact: true }).click();
+  await expect(page.locator("[data-consent-status]")).toHaveText("Analüütika on välja lülitatud. Saad allpool oma valikut muuta.");
+  await expect(page.getByRole("link", { name: "Loe privaatsusteadet" })).toHaveAttribute("href", "/et/privacy/");
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("link", { name: "Privaatsus", exact: true })).toHaveAttribute("href", "/et/privacy/");
+  expect(requests).toEqual([]);
+});
+
+test("the Estonian resume download is recorded with its own file name", async ({ context, page }) => {
+  const requests = await mockProduction(context);
+  await page.goto(`${production}/et/cv/`);
+  await page.getByRole("button", { name: "Nõustu analüütikaga", exact: true }).click();
+  await expect.poll(() => requests.length).toBe(1);
+  await page.evaluate(() => {
+    const link = document.querySelector('a[href="/cv-et.pdf"]');
+    link.addEventListener("click", (event) => event.preventDefault());
+    link.click();
+  });
+  expect((await commands(page)).filter((args) => args[1] === "resume_download")).toEqual([
+    ["event", "resume_download", { file_name: "cv-et.pdf" }],
+  ]);
 });
 
 test("without JavaScript no Analytics loader is included", async ({ browser }) => {

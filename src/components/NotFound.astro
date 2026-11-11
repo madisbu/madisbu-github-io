@@ -1,0 +1,91 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n/astro";
+
+interface Props {
+  // GitHub Pages serves one 404 page for every path, so the English one hands /et/ paths to the Estonian page.
+  redirectEstonianPaths?: boolean;
+}
+
+const { redirectEstonianPaths = false } = Astro.props;
+const { t, href } = useI18n(Astro.url);
+const n = t.notFound;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Layout title={n.title} description={n.description} noindex>
+  {
+    redirectEstonianPaths && (
+      <script slot="head" is:inline define:vars={{ prefix: `${base}/et`, target: `${base}/et/404/` }}>
+        var path = location.pathname;
+        if (path === prefix || path.indexOf(prefix + "/") === 0) {
+          var root = document.documentElement;
+          root.style.visibility = "hidden";
+          setTimeout(function () { root.style.visibility = ""; }, 3000);
+          location.replace(target);
+        }
+      </script>
+    )
+  }
+  <section class="not-found" aria-labelledby="not-found-heading">
+    <p class="error-code">{n.code}</p>
+    <h1 id="not-found-heading">{n.heading}</h1>
+    <p class="error-message">{n.message}</p>
+    <nav aria-label={n.navLabel}>
+      <a class="home-link" href={href("/")}>{n.home}</a>
+      <a href={href("/projects")}>{n.projects} <span aria-hidden="true">&rarr;</span></a>
+    </nav>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    max-width: 38rem;
+    margin: clamp(1rem, 7vh, 5rem) auto;
+    text-align: center;
+  }
+
+  .error-code {
+    margin: 0 0 1rem;
+    color: var(--color-text-dark);
+    font-family: var(--font-secondary);
+    font-size: clamp(5rem, 20vw, 9rem);
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: underline #eff93b;
+    text-underline-offset: 0.1em;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+  }
+
+  .error-message {
+    margin: 1.5rem 0 2rem;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  nav a {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--color-text-dark);
+    border-radius: 0.375rem;
+    color: var(--color-text-dark);
+    font-weight: 700;
+  }
+
+  .home-link,
+  nav a:hover {
+    background: #eff93b;
+  }
+</style>

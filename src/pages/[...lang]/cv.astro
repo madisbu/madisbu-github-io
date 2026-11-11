@@ -1,0 +1,31 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ResumeHeader from "../../components/resume/ResumeHeader.astro";
+import ResumeSections from "../../components/resume/ResumeSections.astro";
+import Timeline from "../../components/resume/Timeline.astro";
+import { getResume } from "../../data/resume";
+import { localeStaticPaths } from "../../i18n";
+import { useI18n } from "../../i18n/astro";
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const { locale, t } = useI18n(Astro.url);
+const resume = getResume(locale);
+
+// Newest first, regardless of the order in the data file.
+const experience = [...resume.experience].sort((a, b) => b.start.localeCompare(a.start));
+---
+
+<Layout title={t.resume.title} description={t.resume.description(resume.name)}>
+  <ResumeHeader name={resume.name} title={resume.title} intro={resume.intro} resumeUrl={resume.resumeUrl} />
+  <Timeline items={experience} />
+  <ResumeSections
+    education={resume.education}
+    certifications={resume.certifications}
+    skills={resume.skills}
+    tools={resume.tools}
+    languages={resume.languages}
+  />
+</Layout>

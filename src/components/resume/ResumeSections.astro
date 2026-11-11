@@ -1,4 +1,5 @@
 ---
+import { useI18n } from "../../i18n/astro";
 import type { Certification, Education, Language, SkillGroup } from "../../types/resume";
 import { formatYearMonth } from "../../utils/resume-dates";
 
@@ -11,6 +12,9 @@ interface Props {
 }
 
 const { education, certifications, skills, tools, languages } = Astro.props;
+const ratedTools = tools.filter((group) => !group.unrated);
+const { t } = useI18n(Astro.url);
+const dates = t.resume.dates;
 ---
 
 <div class="resume-sections">
@@ -18,16 +22,16 @@ const { education, certifications, skills, tools, languages } = Astro.props;
     {
       education.length > 0 && (
         <section aria-labelledby="education-heading">
-          <h2 id="education-heading">Education</h2>
+          <h2 id="education-heading">{t.resume.education}</h2>
           <ul class="cert-list">
             {education.map((entry) => (
               <li>
                 <div>
                   {entry.start && (
                     <p class="muted small">
-                      <time datetime={entry.start}>{formatYearMonth(entry.start)}</time>
+                      <time datetime={entry.start}>{formatYearMonth(entry.start, dates)}</time>
                       {" – "}
-                      {entry.end ? <time datetime={entry.end}>{formatYearMonth(entry.end)}</time> : <span>Present</span>}
+                      {entry.end ? <time datetime={entry.end}>{formatYearMonth(entry.end, dates)}</time> : <span>{t.resume.present}</span>}
                     </p>
                   )}
                   <h3>{entry.degree}</h3>
@@ -36,11 +40,11 @@ const { education, certifications, skills, tools, languages } = Astro.props;
                 </div>
                 {entry.url && (
                   <a class="cert-link" href={entry.url} target="_blank" rel="noopener noreferrer">
-                    Diploma
+                    {t.resume.diploma}
                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17 17 7" /><path d="M8 7h9v9" />
                     </svg>
-                    <span class="sr-only"> for {entry.degree} (opens in a new tab)</span>
+                    <span class="sr-only">{t.resume.linkFor(entry.degree)}</span>
                   </a>
                 )}
               </li>
@@ -53,7 +57,7 @@ const { education, certifications, skills, tools, languages } = Astro.props;
     {
       certifications.length > 0 && (
         <section aria-labelledby="certifications-heading">
-          <h2 id="certifications-heading">Courses & Certifications</h2>
+          <h2 id="certifications-heading">{t.resume.certifications}</h2>
           <ul class="cert-list">
             {certifications.map((cert) => (
               <li>
@@ -63,11 +67,11 @@ const { education, certifications, skills, tools, languages } = Astro.props;
                 </div>
                 {cert.url && (
                   <a class="cert-link" href={cert.url} target="_blank" rel="noopener noreferrer">
-                    Certificate
+                    {t.resume.certificate}
                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M7 17 17 7" /><path d="M8 7h9v9" />
                     </svg>
-                    <span class="sr-only"> for {cert.name} (opens in a new tab)</span>
+                    <span class="sr-only">{t.resume.linkFor(cert.name)}</span>
                   </a>
                 )}
               </li>
@@ -82,7 +86,7 @@ const { education, certifications, skills, tools, languages } = Astro.props;
     {
       skills.length > 0 && (
         <section aria-labelledby="skills-heading">
-          <h2 id="skills-heading">Skills</h2>
+          <h2 id="skills-heading">{t.resume.skills}</h2>
           <div class="groups">
             {skills.map((group) => (
               <div>
@@ -102,7 +106,7 @@ const { education, certifications, skills, tools, languages } = Astro.props;
     {
       languages.length > 0 && (
         <section aria-labelledby="languages-heading">
-          <h2 id="languages-heading">Languages</h2>
+          <h2 id="languages-heading">{t.resume.languages}</h2>
           <dl class="languages">
             {languages.map((language) => (
               <div>
@@ -119,16 +123,18 @@ const { education, certifications, skills, tools, languages } = Astro.props;
   {
     tools.length > 0 && (
       <section aria-labelledby="tools-heading">
-        <h2 id="tools-heading">Tools</h2>
+        <h2 id="tools-heading">{t.resume.tools}</h2>
         <dl class="tools">
-          {tools.map((group, index) => (
+          {tools.map((group) => (
             <div>
               <dt>
-                <span class="level" aria-hidden="true">
-                  {tools.map((_, dot) => (
-                    <span class:list={["dot", dot < tools.length - index && "filled"]} />
-                  ))}
-                </span>
+                {!group.unrated && (
+                  <span class="level" aria-hidden="true">
+                    {ratedTools.map((_, dot) => (
+                      <span class:list={["dot", dot < ratedTools.length - ratedTools.indexOf(group) && "filled"]} />
+                    ))}
+                  </span>
+                )}
                 {group.title}
               </dt>
               <dd>

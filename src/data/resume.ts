@@ -1,11 +1,13 @@
+import type { Locale } from "../i18n";
 import type { ResumeData } from "../types/resume";
+import { resumeEt } from "./resume.et";
 
 export const resume: ResumeData = {
   name: "Madis Burmeister",
   title: "Senior Technical Project Manager",
   intro:
-    "IT Project Manager with nearly 15 years of experience delivering technical, cross-product projects across iGaming and Circular Tech, driven by a passion for UX & Web Design.",
-  resumeUrl: "/resume.pdf",
+    "A project manager with nearly 15 years of experience leading various online gambling and circular technology projects, with a strong interest in UX and web design.",
+  resumeUrl: "/cv.pdf",
   experience: [
     {
       id: "playtech-2025",
@@ -17,12 +19,11 @@ export const resume: ResumeData = {
       start: "2025-01",
       end: null,
       highlights: [
-        "Led a 1.5-year Nomad to Kubernetes migration",
-        "Modernized Playtech Open Platform (POP) and Games Platform as a Service (GPAS) hosting infrastructure",
-        "Delivered new architecture across 19 online gaming environments",
-        "Improved scalability, uptime and deployments",
+        "1.5-year program to migrate Playtech Open Platform (POP) infrastructure from VM-based (Virtual Machine) architecture to Kubernetes architecture.",
+        "Helped to roll out the new architecture across 13 new and 6 existing environments.",
+        "Improved environment scalability and operational uptime.",
       ],
-      tags: ["Kubernetes", "Nomad", "Infrastructure Migration"],
+      tags: ["Kubernetes", "Nomad", "Migration"],
     },
     {
       id: "foxway",
@@ -35,9 +36,9 @@ export const resume: ResumeData = {
       end: "2025-01",
       highlights: [
         "Led development of the Foxway e-commerce portal",
-        "Applied UI/UX best practices across the portal",
+        "Implemented UI/UX best practices throughout the platform.",
         "Managed ServiceNow XIMA partner integrations",
-        "Prioritized the backlog with product and dev teams",
+        "Set work priorities and backlogs in collaboration with product managers and developers.",
         "Ensured timely delivery of new features",
       ],
       tags: ["E-commerce", "UI/UX", "ServiceNow", "XIMA"],
@@ -50,24 +51,23 @@ export const resume: ResumeData = {
       kind: "break",
       start: "2022-07",
       end: "2023-04",
-      highlights: ["Took a year off for self-development and learning", "Was a full-time parent to my children"],
+      highlights: ["Took a one-year career break for self-development and education.", "Dedicated time to my family as a full-time parent."],
       tags: [],
     },
     {
       id: "playtech-2021",
       company: "Playtech",
       logo: "/logos/playtech.webp",
-      role: "Cross Product Technical Project Manager",
+      role: "Technical Project Manager",
       location: "Estonia",
       industry: "Online Gambling & iGaming",
       start: "2021-08",
       end: "2022-07",
       highlights: [
-        "Led medium to large iGaming projects",
-        "Partnered with top online gambling operators",
-        "Managed internal and external IT projects",
-        "Delivered products and third-party integrations",
-        "Ran platform and data migrations",
+        "Managed medium to large-scale iGaming projects.",
+        "Collaborated with leading online casino operators.",
+        "Delivered new products and executed third-party integrations.",
+        "Conducted platform and data migrations.",
       ],
       tags: ["iGaming", "Platform Integrations", "Data Migration"],
     },
@@ -81,11 +81,11 @@ export const resume: ResumeData = {
       start: "2020-06",
       end: "2021-07",
       highlights: [
-        "Led a year-long Payments as a Service (PaaS) project",
-        "Took it from idea through to the maintenance phase",
-        "Handled very complex business requirements",
-        "Joined design and agile sprints to ship increments",
-        "Worked with QA engineers to resolve defects",
+        "Led a platform-based payment method development and migration project (Payments as a Service).",
+        "Involved in the project lifecycle from the ideation phase through to final handover.",
+        "Participated in the analysis of complex business requirements.",
+        "Took part in design and agile sprints to deliver solutions incrementally.",
+        "Collaborated with quality assurance (QA) engineers and actively participated in testing processes.",
       ],
       tags: ["Payments as a Service", "Agile", "QA", "Data Migration"],
     },
@@ -99,29 +99,28 @@ export const resume: ResumeData = {
       start: "2019-10",
       end: "2020-02",
       highlights: [
-        "Analysed requirements for the Mooncascade website",
-        "Ran backlog refinement and prioritization sessions",
-        "Wrote user stories and logged defects",
-        "Organized sprint planning, stand-ups and retros",
-        "Worked closely with engineering and design teams",
+        "Analyzed requirements for the Mooncascade website.",
+        "Facilitated requirement refinement and prioritization sessions.",
+        "Wrote user stories and logged bugs.",
+        "Organized agile ceremonies, including sprint planning, daily stand-ups, and retrospectives.",
+        "Collaborated closely with the development and design teams.",
       ],
-      tags: ["Product Backlog", "User Stories", "Scrum"],
+      tags: ["Requirements", "User Stories", "Scrum"],
     },
     {
       id: "playtech-2017",
       company: "Playtech",
       logo: "/logos/playtech.webp",
-      role: "Cross Product Technical Project Manager",
+      role: "Technical Project Manager",
       location: "Estonia",
       industry: "Online Gambling & iGaming",
       start: "2017-01",
       end: "2019-09",
       highlights: [
-        "Led medium to large iGaming projects",
-        "Partnered with top online gambling operators",
-        "Managed internal and external IT projects",
-        "Delivered products and third-party integrations",
-        "Ran platform and data migrations",
+        "Managed medium to large-scale iGaming projects.",
+        "Collaborated with leading online casino operators.",
+        "Delivered new products and executed third-party integrations.",
+        "Conducted platform and data migrations.",
       ],
       tags: ["iGaming", "Platform Integrations", "Data Migration"],
     },
@@ -135,11 +134,11 @@ export const resume: ResumeData = {
       start: "2013-10",
       end: "2016-12",
       highlights: [
-        "Led API development and integration projects",
-        "Worked with various online gambling operators",
-        "Managed API documentation",
-        "Checked server logs during API implementation",
-        "Solved misconfigurations and network issues",
+        "Led API development and integration projects.",
+        "Collaborated with various online gambling (iGaming) operators.",
+        "Managed API documentation.",
+        "Analyzed server logs during API deployments.",
+        "Troubleshot and resolved configuration errors and network issues.",
       ],
       tags: ["API Integration", "API Documentation", "Troubleshooting"],
     },
@@ -153,9 +152,8 @@ export const resume: ResumeData = {
       start: "2012-12",
       end: "2013-05",
       highlights: [
-        "Installed event and party hire equipment",
-        "Set up marquees, tables and chairs",
-        "Owned equipment transport across Queensland",
+        "Installed and set up rental equipment for leisure events.",
+        "Transported event gear and equipment throughout Queensland.",
       ],
       tags: ["Party Hire", "Logistics", "Working Abroad"],
     },
@@ -169,9 +167,8 @@ export const resume: ResumeData = {
       start: "2009-10",
       end: "2012-11",
       highlights: [
-        "Supported internet, TV and mobile customers",
-        "Acted as the main point of contact for customers",
-        "Handled customer communication and service",
+        "Provided technical support to Telia customers regarding internet, TV, and mobile services.",
+        "Delivered exceptional customer service.",
       ],
       tags: ["Technical Support", "Customer Service"],
     },
@@ -206,7 +203,6 @@ export const resume: ResumeData = {
         "Project Management",
         "Program Management",
         "Stakeholder Management",
-        "Presentation Skills",
         "Agile",
         "Scrum",
         "Product Backlog",
@@ -233,7 +229,7 @@ export const resume: ResumeData = {
     },
     {
       title: "Technical",
-      skills: ["HTML", "CSS", "JavaScript", "XML", "JSON", "REST", "Node.js", "Vue.js", "Google Maps API", "Firebase", "WordPress", "Wix", "Kubernetes", "Nomad", "ServiceNow", "XIMA", "Troubleshooting", "Technical Support"],
+      skills: ["HTML", "CSS", "JavaScript", "XML", "JSON", "REST", "Node.js", "Vue.js", "Google Maps API", "Firebase", "Google Cloud", "WordPress", "Wix", "SEO", "Kubernetes", "Nomad", "ServiceNow", "XIMA", "Troubleshooting", "Technical Support"],
     },
     {
       title: "Soft Skills",
@@ -250,13 +246,13 @@ export const resume: ResumeData = {
     },
   ],
   tools: [
-    { title: "Excellent", skills: ["Google Workspace", "Microsoft 365", "TeamGantt", "Miro"] },
-    { title: "Good", skills: ["Jira", "Confluence", "Bitbucket", "GitHub", "Monday", "Trello", "Proto.io"] },
+    { title: "Excellent", skills: ["Google Workspace", "Microsoft 365", "Jira", "Confluence", "Miro"] },
+    { title: "Good", skills: ["TeamGantt", "Bitbucket", "GitHub", "Monday", "Trello", "Proto.io", "GitHub Actions", "Google Forms"] },
     {
       title: "Average",
-      skills: ["Figma", "Google Analytics", "Hotjar", "Lookback", "Postman", "Canva", "Visual Studio Code"],
+      skills: ["Figma", "Google Analytics", "VS Code", "Copilot", "Claude", "OpenAI", "Cursor", "Lookback"],
     },
-    { title: "Beginner", skills: ["Google Cloud Platform"] },
+    { title: "Beginner", skills: ["Google Cloud Platform", "Maps JS API"] },
   ],
   languages: [
     { name: "Estonian", level: "Native" },
@@ -264,3 +260,7 @@ export const resume: ResumeData = {
     { name: "Spanish", level: "Beginner" },
   ],
 };
+
+export function getResume(locale: Locale): ResumeData {
+  return locale === "et" ? resumeEt : resume;
+}

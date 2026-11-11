@@ -2,6 +2,9 @@
 import BackToTop from "../components/BackToTop.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import { dictionaries, hasTranslation, locales, localizedPath, type Locale } from "../i18n";
+import { useI18n } from "../i18n/astro";
+import { LANGUAGE_KEY } from "../utils/language-preference";
 import "../styles/global.css";
 
 export interface Props {
@@ -17,10 +20,12 @@ export interface Props {
 
 const siteName = "Mabux";
 const baseUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://www.mabux.me";
+const { locale, t, path } = useI18n(Astro.url);
+const base = import.meta.env.BASE_URL;
 
 const {
-  title = "Madis Burmeister - UX & Web Design",
-  description = "The portfolio of Madis Burmeister, a UX engineer and technical project manager based in Estonia.",
+  title = t.site.defaultTitle,
+  description = t.site.defaultDescription,
   ogImage = "/images/hero-1200.webp",
   canonicalUrl,
   wide = false,
@@ -32,9 +37,19 @@ const {
 const resolvedTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const resolvedCanonicalUrl = canonicalUrl ?? new URL(Astro.url.pathname, baseUrl).toString();
 const resolvedOgImage = ogImage ? new URL(ogImage, baseUrl).toString() : undefined;
-const isHomePage = Astro.url.pathname === "/";
+const isHomePage = path === "/";
+// Only the English home page auto-selects a language; deep links always open as shared.
+const redirectsByLanguage = isHomePage && locale === "en";
 const siteUrl = new URL(import.meta.env.BASE_URL, baseUrl);
 const sitemapUrl = new URL("sitemap-index.xml", siteUrl);
+const withTrailingSlash = (value: string) => (value.endsWith("/") ? value : `${value}/`);
+// Language alternates (matching the trailing-slash style of the canonical URL) for pages that exist in every locale.
+const alternates = noindex || !hasTranslation(path)
+  ? []
+  : locales.map((alternate: Locale) => ({
+      locale: alternate,
+      href: new URL(withTrailingSlash(localizedPath(alternate, path, base)), baseUrl).toString(),
+    }));
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -44,7 +59,7 @@ const structuredData = {
       url: siteUrl.href,
       name: siteName,
       alternateName: "Madis Burmeister",
-      inLanguage: "en",
+      inLanguage: locale,
       author: { "@id": `${siteUrl}#person` },
     },
     {
@@ -52,17 +67,52 @@ const structuredData = {
       "@id": `${siteUrl}#person`,
       name: "Madis Burmeister",
       url: siteUrl.href,
-      jobTitle: "Senior Technical Project Manager",
+      jobTitle: t.site.jobTitle,
     },
   ],
 };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={t.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    {
+      redirectsByLanguage && (
+        <script
+          is:inline
+          define:vars={{ key: LANGUAGE_KEY, target: localizedPath("et", "/", base) }}
+        >
+          // Estonian browsers (or a saved Estonian choice) opening the home page get the Estonian version. The page is hidden
+          // first so no English content flashes before the redirect.
+          (function () {
+            // Moving around the site (for example using the language switch) never triggers the redirect.
+            try {
+              if (document.referrer && new URL(document.referrer).origin === location.origin) return;
+            } catch (error) {}
+            var saved = null;
+            try {
+              var parsed = JSON.parse(localStorage.getItem(key));
+              if (parsed && parsed.version === 1 && (parsed.language === "en" || parsed.language === "et")) {
+                saved = parsed.language;
+              }
+            } catch (error) {
+              // Blocked storage or an invalid value counts as no saved choice.
+            }
+            var first = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+            var language = saved || (first.toLowerCase().split("-")[0] === "et" ? "et" : "en");
+            if (language !== "et") return;
+            var root = document.documentElement;
+            root.style.visibility = "hidden";
+            // Never leave the page blank if the navigation is blocked.
+            setTimeout(function () { root.style.visibility = ""; }, 3000);
+            location.replace(target);
+          })();
+        </script>
+      )
+    }
+    <slot name="head" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {preconnectOrigins.map((origin) => <link rel="preconnect" href={origin} crossorigin />)}
@@ -78,9 +128,15 @@ const structuredData = {
     <meta name="author" content="Madis Burmeister" />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={resolvedCanonicalUrl} />
+    {alternates.map((alternate) => <link rel="alternate" hreflang={alternate.locale} href={alternate.href} />)}
+    {alternates.length > 0 && <link rel="alternate" hreflang="x-default" href={alternates[0].href} />}
     <link rel="sitemap" type="application/xml" href={sitemapUrl.href} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={t.ogLocale} />
+    {alternates.filter((alternate) => alternate.locale !== locale).map((alternate) => (
+      <meta property="og:locale:alternate" content={dictionaries[alternate.locale].ogLocale} />
+    ))}
     <meta property="og:title" content={resolvedTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={resolvedCanonicalUrl} />
@@ -102,7 +158,7 @@ const structuredData = {
       isHomePage && "home-page overflow-hidden lg:overflow-visible",
     ]}
   >
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{t.site.skipLink}</a>
     <Header />
     <main
       id="main-content"

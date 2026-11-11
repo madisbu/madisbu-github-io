@@ -1,4 +1,5 @@
 ---
+import { useI18n } from "../../i18n/astro";
 import type { Experience } from "../../types/resume";
 import { formatDuration, formatYearMonth, initials } from "../../utils/resume-dates";
 
@@ -8,16 +9,14 @@ interface Props {
 }
 
 const { item, side } = Astro.props;
+const { t } = useI18n(Astro.url);
+const dates = t.resume.dates;
 const isCurrent = item.end === null;
 const isBreak = item.kind === "break";
 const startYear = item.start.slice(0, 4);
-const endYear = item.end ? item.end.slice(0, 4) : "Now";
+const endYear = item.end ? item.end.slice(0, 4) : t.resume.now;
 
-const flags: Record<string, string> = {
-  Estonia: "/flags/estonia.svg",
-  Spain: "/flags/spain.svg",
-  Australia: "/flags/australia.svg",
-};
+const flags = t.resume.countryFlags;
 const country = item.location?.split(",").pop()?.trim();
 const flag = country ? flags[country] : undefined;
 ---
@@ -43,8 +42,8 @@ const flag = country ? flags[country] : undefined;
   <article class="tl-card">
     <div class="tl-head">
       <h3>{item.role}</h3>
-      {isCurrent && <span class="tl-badge">Current</span>}
-      {isBreak && <span class="tl-badge tl-badge-break">Career break</span>}
+      {isCurrent && <span class="tl-badge">{t.resume.current}</span>}
+      {isBreak && <span class="tl-badge tl-badge-break">{t.resume.careerBreak}</span>}
     </div>
     <p class="tl-company">
       {item.company}
@@ -60,10 +59,10 @@ const flag = country ? flags[country] : undefined;
     </p>
     {item.industry && <p class="tl-industry">{item.industry}</p>}
     <p class="tl-dates">
-      <time datetime={item.start}>{formatYearMonth(item.start)}</time>
+      <time datetime={item.start}>{formatYearMonth(item.start, dates)}</time>
       {" – "}
-      {item.end ? <time datetime={item.end}>{formatYearMonth(item.end)}</time> : <span>Present</span>}
-      <span class="tl-duration">· {formatDuration(item.start, item.end)}</span>
+      {item.end ? <time datetime={item.end}>{formatYearMonth(item.end, dates)}</time> : <span>{t.resume.present}</span>}
+      <span class="tl-duration">· {formatDuration(item.start, item.end, new Date(), dates)}</span>
     </p>
 
     {
@@ -77,7 +76,7 @@ const flag = country ? flags[country] : undefined;
     }
     {
       item.tags.length > 0 && (
-        <ul class="tl-tags" aria-label="Skills and tools">
+        <ul class="tl-tags" aria-label={t.resume.tagsLabel}>
           {item.tags.map((tag) => (
             <li>{tag}</li>
           ))}

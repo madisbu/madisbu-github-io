@@ -1,7 +1,9 @@
 ---
 import AnalyticsConsent from "./AnalyticsConsent.astro";
+import { useI18n } from "../i18n/astro";
 
-const copyrightText = `Copyright © Madis Burmeister ${new Date().getFullYear()}`;
+const { t } = useI18n(Astro.url);
+const copyrightText = t.footer.copyright(new Date().getFullYear());
 
 const desktopSocials = [
   {
@@ -18,12 +20,12 @@ const desktopSocials = [
 
 const mobileQuickLinks = [
   {
-    label: "WhatsApp",
+    label: t.footer.whatsapp,
     href: "https://api.whatsapp.com/send?phone=3725130102",
     icon: "whatsapp",
   },
   {
-    label: "Email",
+    label: t.footer.email,
     href: "mailto:madis.burmeister@mabux.me",
     icon: "email",
   },
@@ -41,7 +43,7 @@ const mobileQuickLinks = [
 
     <AnalyticsConsent />
 
-    <nav aria-label="Social links" class="desktop-footer-socials hidden justify-self-end sm:block">
+    <nav aria-label={t.footer.socialLabel} class="desktop-footer-socials hidden justify-self-end sm:block">
       <ul class="flex items-center gap-4">
         {
           desktopSocials.map((item) => (
@@ -72,7 +74,7 @@ const mobileQuickLinks = [
   </div>
 
   <div data-mobile-quick-links class="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-body sm:hidden">
-    <nav aria-label="Mobile quick links" class="mx-auto grid w-full max-w-5xl grid-cols-3 px-4 py-2">
+    <nav aria-label={t.footer.quickLinksLabel} class="mx-auto grid w-full max-w-5xl grid-cols-3 px-4 py-2">
       {
         mobileQuickLinks.map((item) => (
           <a
